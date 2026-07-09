@@ -1,0 +1,12 @@
+{
+  "name": "el-club-functions",
+  "private": true,
+  "engines": {
+    "node": "20"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.106.2",
+    "firebase-functions": "^6.1.2"
+  }
+}

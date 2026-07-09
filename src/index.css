@@ -1,0 +1,63 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "Magic Retro";
+  src: url("./assets/fonts/MagicRetro.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --club-cream: #eadac8;
+  --club-green: #084739;
+  --club-brass: #b8863f;
+  --club-rose: #c98577;
+  --club-sand: #f4efe8;
+  --club-paper: #fbf8f3;
+  --club-ink: #1f2a26;
+  --club-muted: #5e6b65;
+  --font-display: "Magic Retro", ui-serif, Georgia, serif;
+  --font-text: "Gorditas", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-text);
+  color: var(--club-ink);
+  background: radial-gradient(
+      1200px 600px at 10% 0%,
+      rgba(234, 218, 200, 0.65),
+      rgba(234, 218, 200, 0) 60%
+    ),
+    linear-gradient(180deg, var(--club-paper), var(--club-sand));
+}
+
+::selection {
+  background: rgba(8, 71, 57, 0.18);
+}
+
+:focus-visible {
+  outline: 2px solid var(--club-green);
+  outline-offset: 3px;
+  border-radius: 0.5rem;
+}
