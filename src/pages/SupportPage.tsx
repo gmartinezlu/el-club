@@ -6,6 +6,7 @@ import { MarketingLayout } from "../layouts/MarketingLayout";
 import { createSupportTicket } from "../support/service";
 import { useSessionStore } from "../store/sessionStore";
 import { getErrorMessage } from "../utils/errors";
+import { Highlight } from "../components/ui/Typography";
 
 export function SupportPage() {
   const user = useSessionStore((s) => s.user);
@@ -40,7 +41,7 @@ export function SupportPage() {
         <section className="rounded-3xl border border-club-green/10 bg-club-green p-7 text-club-paper shadow-soft md:p-10">
           <HeartHandshake className="h-7 w-7" strokeWidth={1.5} />
           <h1 className="mt-8 font-display text-4xl leading-tight md:text-5xl">
-            Soporte humano para seguir con calma.
+            Soporte humano para <Highlight>seguir con calma</Highlight>.
           </h1>
           <p className="mt-4 text-sm leading-relaxed text-club-paper/80">
             Si algo no funciona, si necesitas ayuda con una cita o si quieres

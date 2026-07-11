@@ -18,6 +18,7 @@ import {
 } from "../../patient/utils/formatDate";
 import { usePsychologistAppointments } from "../hooks/usePsychologistAppointments";
 import { EmptyState } from "../../components/ui/EmptyState";
+import { PageTitle } from "../../components/ui/Typography";
 
 export function PsychologistPatientsPage() {
   const { patientId } = useParams<{ patientId?: string }>();
@@ -54,7 +55,7 @@ export function PsychologistPatientsPage() {
     <div className="space-y-10">
       <header className="space-y-2">
         <p className="text-sm font-medium text-club-green">Relaciones</p>
-        <h1 className="font-display text-4xl text-club-green">Personas</h1>
+        <PageTitle>Personas</PageTitle>
         <p className="max-w-lg text-sm leading-relaxed text-club-muted">
           Personas con las que has compartido sesión en El Club.
         </p>
@@ -163,9 +164,7 @@ function PatientDetail({
 
       <header className="space-y-2">
         <p className="text-sm font-medium text-club-green">Acompañamiento</p>
-        <h1 className="font-display text-4xl text-club-green">
-          {patientName}
-        </h1>
+        <PageTitle>{patientName}</PageTitle>
         <p className="max-w-2xl text-sm leading-relaxed text-club-muted">
           Historial de encuentros, notas privadas y preparación de próximas
           sesiones.

@@ -1,5 +1,6 @@
 ﻿import type { ReactNode } from "react";
 import { GlassCard } from "./GlassCard";
+import { CardTitle } from "../ui/Typography";
 
 export function FeatureCard({
   title,
@@ -18,7 +19,7 @@ export function FeatureCard({
             {icon}
           </div>
         ) : null}
-        <h3 className="font-display text-xl text-club-green">{title}</h3>
+        <CardTitle>{title}</CardTitle>
         <p className="text-sm leading-relaxed text-club-muted">
           {description}
         </p>

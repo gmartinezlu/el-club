@@ -1,5 +1,6 @@
 ﻿import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import { CardTitle } from "./../ui/Typography";
 
 export type ExperienceCardData = {
   title: string;
@@ -41,9 +42,9 @@ export function ExperienceCard({
           <p className="text-xs uppercase tracking-[0.18em] text-club-muted">
             {experience.category} Â· {experience.date}
           </p>
-          <h3 className="mt-2 font-display text-2xl text-club-green">
+          <CardTitle className="mt-2 text-2xl">
             {experience.title}
-          </h3>
+          </CardTitle>
         </div>
         <Link
           to="/experiencias"

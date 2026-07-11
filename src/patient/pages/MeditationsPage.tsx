@@ -5,6 +5,7 @@ import { fetchMeditations } from "../../resources/service";
 import type { EmotionalResource } from "../../resources/types";
 import { MeditationPlayer } from "../components/MeditationPlayer";
 import { EmotionalGlass } from "../components/EmotionalGlass";
+import { PageTitle } from "../../components/ui/Typography";
 
 export function PatientMeditationsPage() {
   const [searchParams] = useSearchParams();
@@ -48,7 +49,7 @@ export function PatientMeditationsPage() {
     <div className="space-y-10">
       <header className="space-y-2">
         <p className="text-sm font-medium text-club-green">Calma</p>
-        <h1 className="font-display text-4xl text-club-green">Meditaciones</h1>
+        <PageTitle>Meditaciones</PageTitle>
         <p className="max-w-lg text-sm leading-relaxed text-club-muted">
           Audios breves para volver al cuerpo. Sin exigencia, solo presencia.
         </p>

@@ -8,6 +8,7 @@ import {
 import type { AppNotification } from "./types";
 import { useSessionStore } from "../store/sessionStore";
 import { getErrorMessage } from "../utils/errors";
+import { PageTitle } from "../components/ui/Typography";
 
 function formatNotificationDate(iso: string): string {
   return new Date(iso).toLocaleString("es-CO", {
@@ -85,9 +86,7 @@ export function NotificationsPage() {
     <div className="space-y-8">
       <header className="space-y-2">
         <p className="text-sm font-medium text-club-green">Acompañamiento</p>
-        <h1 className="font-display text-4xl text-club-green">
-          Notificaciones
-        </h1>
+        <PageTitle>Notificaciones</PageTitle>
         <p className="max-w-2xl text-sm leading-relaxed text-club-muted">
           Avisos suaves sobre solicitudes, citas, Meet y actualizaciones importantes.
         </p>

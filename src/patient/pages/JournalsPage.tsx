@@ -12,6 +12,7 @@ import { useSessionStore } from "../../store/sessionStore";
 import { getErrorMessage } from "../../utils/errors";
 import { JOURNAL_PROMPTS } from "../content/journalPrompts";
 import { EmotionalGlass } from "../components/EmotionalGlass";
+import { CardTitle, PageTitle } from "../../components/ui/Typography";
 
 type JournalForm = {
   id: string | null;
@@ -135,7 +136,7 @@ export function PatientJournalsPage() {
     <div className="space-y-10">
       <header className="space-y-2">
         <p className="text-sm font-medium text-club-green">Escritura</p>
-        <h1 className="font-display text-4xl text-club-green">Journal</h1>
+        <PageTitle>Journal</PageTitle>
         <p className="max-w-lg text-sm leading-relaxed text-club-muted">
           Escribe sin presión. Este espacio es solo para ti.
         </p>
@@ -274,9 +275,9 @@ function JournalEntryCard({
       ].join(" ")}
     >
       <p className="text-xs text-club-muted">{formatJournalDate(entry.createdAt)}</p>
-      <h3 className="mt-2 font-display text-xl text-club-green">
+      <CardTitle className="mt-2">
         {entry.title || "Entrada sin título"}
-      </h3>
+      </CardTitle>
       <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-club-muted">
         {entry.body}
       </p>

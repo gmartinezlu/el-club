@@ -9,6 +9,7 @@ import {
 import type { EmotionalResource, ResourceType } from "../../resources/types";
 import { getErrorMessage } from "../../utils/errors";
 import { EmptyState } from "../../components/ui/EmptyState";
+import { PageTitle } from "../../components/ui/Typography";
 
 const RESOURCE_TYPES: { value: ResourceType; label: string }[] = [
   { value: "article", label: "Artículo" },
@@ -146,7 +147,7 @@ export function AdminContentPage() {
     <div className="space-y-8">
       <header className="space-y-2">
         <p className="text-sm font-medium text-club-green">Biblioteca</p>
-        <h1 className="font-display text-4xl text-club-green">Contenido</h1>
+        <PageTitle>Contenido</PageTitle>
         <p className="max-w-2xl text-sm leading-relaxed text-club-muted">
           Gestiona artículos, meditaciones, audios y ejercicios que acompañan a
           personas dentro de El Club.

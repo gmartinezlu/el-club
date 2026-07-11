@@ -18,6 +18,7 @@ import {
 import { getErrorMessage } from "../../utils/errors";
 import { createSignedDocumentUrl } from "../../psychologist/documents";
 import { EmptyState } from "../../components/ui/EmptyState";
+import { PageTitle } from "../../components/ui/Typography";
 
 type ApprovalFilter =
   | "pending"
@@ -146,9 +147,7 @@ export function AdminPsychologistsPage() {
     <div className="space-y-8">
       <header className="space-y-2">
         <p className="text-sm font-medium text-club-green">Equipo clínico</p>
-        <h1 className="font-display text-4xl text-club-green">
-          Aprobación de psicólogas
-        </h1>
+        <PageTitle>Aprobación de psicólogas</PageTitle>
         <p className="max-w-2xl text-sm leading-relaxed text-club-muted">
           Revisa credenciales, soportes profesionales y el estado de cada
           postulación antes de abrir el perfil a personas.

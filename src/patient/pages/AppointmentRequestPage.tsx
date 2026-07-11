@@ -24,6 +24,7 @@ import { getErrorMessage } from "../../utils/errors";
 import { EmotionalGlass } from "../components/EmotionalGlass";
 import { PatientFlowSteps } from "../components/PatientFlowSteps";
 import { EmptyState } from "../../components/ui/EmptyState";
+import { Highlight, PageTitle } from "../../components/ui/Typography";
 import {
   formatSessionDate,
   formatSessionRange,
@@ -181,9 +182,9 @@ export function PatientAppointmentRequestPage() {
             <p className="mt-5 text-sm font-medium text-club-green">
               Solicitud enviada
             </p>
-            <h1 className="mt-1 font-display text-4xl text-club-green">
-              Tu cita fue solicitada
-            </h1>
+            <PageTitle className="mt-1">
+              Tu cita fue <Highlight>solicitada</Highlight>
+            </PageTitle>
             <p className="mt-3 max-w-2xl text-sm leading-relaxed text-club-muted">
               EL profesional revisará tu solicitud. El pago se coordina
               directamente con el/ella según sus métodos disponibles.

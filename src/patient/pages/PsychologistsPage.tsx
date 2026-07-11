@@ -14,6 +14,7 @@ import {
   WalletCards,
 } from "lucide-react";
 import { EmptyState } from "../../components/ui/EmptyState";
+import { CardTitle, PageTitle } from "../../components/ui/Typography";
 import {
   fetchBookableAvailability,
   type AvailabilitySlot,
@@ -159,9 +160,9 @@ export function PatientPsychologistsPage() {
         ) : (
           <p className="text-sm font-medium text-club-green">Terapia</p>
         )}
-        <h1 className="font-display text-4xl text-club-green">
+        <PageTitle>
           {isDetailView ? "Perfil de especialista" : "Encuentra tu psicóloga"}
-        </h1>
+        </PageTitle>
         <p className="max-w-2xl text-sm leading-relaxed text-club-muted">
           {isDetailView
             ? "Conoce su enfoque, revisa horarios disponibles y reserva tu primer espacio con calma."
@@ -354,9 +355,9 @@ function PsychologistFullProfile({
         </div>
 
         <section className="rounded-3xl border border-club-green/10 bg-white/50 p-5">
-          <h3 className="font-display text-2xl text-club-green">
+          <CardTitle className="text-2xl">
             Pago gestionado por el profesional
-          </h3>
+          </CardTitle>
           <p className="mt-2 text-sm leading-relaxed text-club-muted">
             EL CLUB no procesa pagos de sesiones. Una vez solicites tu cita, el
             profesional te compartirá sus métodos de pago y confirmará contigo
@@ -377,9 +378,9 @@ function PsychologistFullProfile({
         </section>
 
         <section>
-          <h3 className="font-display text-2xl text-club-green">
+          <CardTitle className="text-2xl">
             Áreas de acompañamiento
-          </h3>
+          </CardTitle>
           <div className="mt-3 flex flex-wrap gap-2">
             {psychologist.specialties.map((item) => (
               <span
@@ -393,16 +394,16 @@ function PsychologistFullProfile({
         </section>
 
         <section>
-          <h3 className="font-display text-2xl text-club-green">Idiomas</h3>
+          <CardTitle className="text-2xl">Idiomas</CardTitle>
           <p className="mt-2 text-sm text-club-muted">
             {psychologist.languages.join(", ")}
           </p>
         </section>
 
         <section className="rounded-3xl border border-club-green/10 bg-white/50 p-5">
-          <h3 className="font-display text-2xl text-club-green">
+          <CardTitle className="text-2xl">
             Cómo se siente este espacio
-          </h3>
+          </CardTitle>
           <p className="mt-2 text-sm leading-relaxed text-club-muted">
             Una primera sesión para ordenar lo que estás viviendo, hacer
             preguntas con tranquilidad y decidir el ritmo de acompañamiento que

@@ -7,6 +7,7 @@ import { usePatientAppointments } from "../hooks/usePatientAppointments";
 import { formatSessionDate, formatSessionRange } from "../utils/formatDate";
 import { EmotionalGlass } from "../components/EmotionalGlass";
 import { EmptyState } from "../../components/ui/EmptyState";
+import { PageTitle } from "../../components/ui/Typography";
 
 export function PatientSessionsPage() {
   const { appointments, history, loading, error } = usePatientAppointments();
@@ -29,7 +30,7 @@ export function PatientSessionsPage() {
     <div className="space-y-10">
       <header className="space-y-2">
         <p className="text-sm font-medium text-club-green">Tu camino</p>
-        <h1 className="font-display text-4xl text-club-green">Sesiones</h1>
+        <PageTitle>Sesiones</PageTitle>
         <p className="max-w-lg text-sm leading-relaxed text-club-muted">
           Tus solicitudes, citas confirmadas y accesos a Meet en un solo lugar.
         </p>

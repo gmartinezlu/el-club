@@ -4,6 +4,7 @@ import {
   getFirstName,
   getTimeGreeting,
 } from "../utils/greetings";
+import { Highlight, PageTitle } from "../../components/ui/Typography";
 
 export function WelcomeGreeting({ fullName }: { fullName: string | null }) {
   const greeting = getTimeGreeting();
@@ -18,9 +19,15 @@ export function WelcomeGreeting({ fullName }: { fullName: string | null }) {
       className="space-y-4"
     >
       <p className="text-sm font-medium text-club-green/90">{greeting}</p>
-      <h1 className="font-display text-4xl leading-[1.05] tracking-tight text-club-green md:text-5xl">
-        {name === "bienvenida" ? "Bienvenida a El Club" : `${greeting}, ${name}`}
-      </h1>
+      <PageTitle className="leading-[1.05] tracking-tight md:text-5xl">
+        {name === "bienvenida" ? (
+          <>
+            Bienvenida a <Highlight>El Club</Highlight>
+          </>
+        ) : (
+          `${greeting}, ${name}`
+        )}
+      </PageTitle>
       <p className="max-w-xl text-base leading-relaxed text-club-muted md:text-lg">
         Este es tu refugio. Respira, explora y avanza a tu ritmo.
       </p>

@@ -14,6 +14,7 @@ import {
 } from "../../services/supabase/googleCalendar";
 import { useSessionStore } from "../../store/sessionStore";
 import { getErrorMessage } from "../../utils/errors";
+import { PageTitle } from "../../components/ui/Typography";
 import {
   createSignedDocumentUrl,
   uploadPsychologistDocument,
@@ -261,7 +262,7 @@ export function PsychologistSettingsPage() {
     <div className="space-y-8">
       <header className="space-y-2">
         <p className="text-sm font-medium text-club-green">Perfil profesional</p>
-        <h1 className="font-display text-4xl text-club-green">Configuración</h1>
+        <PageTitle>Configuración</PageTitle>
         <p className="max-w-2xl text-sm leading-relaxed text-club-muted">
           Completa la información que revisa el equipo de El Club y que verán
           las personas cuando tu perfil esté aprobado.

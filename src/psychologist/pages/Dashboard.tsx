@@ -37,6 +37,7 @@ import { STATUS_LABELS } from "../../appointments/utils";
 import { useSessionStore } from "../../store/sessionStore";
 import { getErrorMessage } from "../../utils/errors";
 import { usePsychologistAppointments } from "../hooks/usePsychologistAppointments";
+import { Highlight, PageTitle } from "../../components/ui/Typography";
 import {
   formatSessionDate,
   formatSessionRange,
@@ -239,9 +240,9 @@ export function PsychologistDashboardPage() {
     <div className="space-y-8">
       <header className="space-y-2">
         <p className="text-sm font-medium text-club-green">Agenda</p>
-        <h1 className="font-display text-4xl text-club-green">
-          Tu día, con claridad
-        </h1>
+        <PageTitle>
+          Tu día, con <Highlight>claridad</Highlight>
+        </PageTitle>
         <p className="max-w-2xl text-sm leading-relaxed text-club-muted">
           Citas, notas privadas y acceso a Meet en una sola vista de trabajo.
         </p>

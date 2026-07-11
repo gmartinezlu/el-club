@@ -2,6 +2,7 @@
 import { Link } from "react-router-dom";
 import { usePatientResources } from "../hooks/usePatientResources";
 import { EmotionalGlass } from "../components/EmotionalGlass";
+import { PageTitle } from "../../components/ui/Typography";
 
 const TYPE_LABEL: Record<string, string> = {
   meditation: "Meditación",
@@ -18,9 +19,7 @@ export function PatientResourcesPage() {
     <div className="space-y-10">
       <header className="space-y-2">
         <p className="text-sm font-medium text-club-green">Acompañamiento</p>
-        <h1 className="font-display text-4xl text-club-green">
-          Recursos emocionales
-        </h1>
+        <PageTitle>Recursos emocionales</PageTitle>
         <p className="max-w-lg text-sm leading-relaxed text-club-muted">
           Lecturas, ejercicios y audios curados para momentos difíciles y días
           tranquilos.

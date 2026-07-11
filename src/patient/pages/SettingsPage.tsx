@@ -9,6 +9,7 @@ import { updateUserProfile } from "../../services/supabase/users";
 import { useSessionStore } from "../../store/sessionStore";
 import { getErrorMessage } from "../../utils/errors";
 import { EmotionalGlass } from "../components/EmotionalGlass";
+import { PageTitle } from "../../components/ui/Typography";
 
 function splitList(value: string): string[] {
   return value
@@ -106,7 +107,7 @@ export function PatientSettingsPage() {
     <div className="space-y-10">
       <header className="space-y-2">
         <p className="text-sm font-medium text-club-green">Tu espacio</p>
-        <h1 className="font-display text-4xl text-club-green">Ajustes</h1>
+        <PageTitle>Ajustes</PageTitle>
         <p className="max-w-lg text-sm leading-relaxed text-club-muted">
           Tu perfil y preferencias emocionales, siempre editables.
         </p>

@@ -13,6 +13,7 @@ import {
   type AdminSupportTicket,
 } from "../services/operations";
 import { EmptyState } from "../../components/ui/EmptyState";
+import { PageTitle } from "../../components/ui/Typography";
 
 export function AdminSupportPage() {
   const [tickets, setTickets] = useState<AdminSupportTicket[]>([]);
@@ -90,7 +91,7 @@ export function AdminSupportPage() {
     <div className="space-y-8">
       <header className="space-y-2">
         <p className="text-sm font-medium text-club-green">Cuidado operativo</p>
-        <h1 className="font-display text-4xl text-club-green">Soporte</h1>
+        <PageTitle>Soporte</PageTitle>
         <p className="max-w-2xl text-sm leading-relaxed text-club-muted">
           Responde tickets y envía una notificación directa al usuario.
         </p>

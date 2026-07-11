@@ -11,6 +11,7 @@ import {
   Wind,
 } from "lucide-react";
 import { MarketingLayout } from "../layouts/MarketingLayout";
+import { Highlight } from "../components/ui/Typography";
 import { FeatureCard } from "../components/landing/FeatureCard";
 import { Section } from "../components/landing/Section";
 import { PsychologistCard } from "../components/landing/PsychologistCard";
@@ -369,7 +370,7 @@ export function LandingPage() {
                   El primer paso se siente ligero
                 </p>
                 <h3 className="font-display text-4xl leading-tight text-club-paper">
-                  Entra a El Club y comienza a respirar.
+                  Entra a El Club y comienza a <Highlight>respirar</Highlight>.
                 </h3>
                 <p className="text-sm leading-relaxed text-club-cream/75">
                   Terapia, recursos y acompañamiento emocional en un espacio

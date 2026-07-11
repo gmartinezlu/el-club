@@ -16,6 +16,7 @@ import {
   type CrisisMessage,
   type CrisisThread,
 } from "./service";
+import { PageTitle } from "../components/ui/Typography";
 
 export function CrisisChatPage({ mode }: { mode: "patient" | "psychologist" }) {
   const user = useSessionStore((s) => s.user);
@@ -104,9 +105,7 @@ export function CrisisChatPage({ mode }: { mode: "patient" | "psychologist" }) {
         <p className="text-sm font-medium text-club-green">
           Intervencion en crisis
         </p>
-        <h1 className="font-display text-4xl text-club-green">
-          Chat de apoyo
-        </h1>
+        <PageTitle>Chat de apoyo</PageTitle>
         <p className="max-w-2xl text-sm leading-relaxed text-club-muted">
           Un canal breve para acompañamiento entre sesiones. No reemplaza
           servicios de emergencia.

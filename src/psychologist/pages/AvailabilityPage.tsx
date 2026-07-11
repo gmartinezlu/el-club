@@ -12,6 +12,7 @@ import { useSessionStore } from "../../store/sessionStore";
 import { getErrorMessage } from "../../utils/errors";
 import { WeekAvailabilityGrid } from "../components/WeekAvailabilityGrid";
 import { addDays, getMonday, slotKey } from "../utils/weekGrid";
+import { PageTitle } from "../../components/ui/Typography";
 
 function DurationSelect({
   duration,
@@ -152,9 +153,7 @@ export function PsychologistAvailabilityPage() {
       <header className="grid gap-5 lg:grid-cols-[1fr,360px] lg:items-end">
         <div className="space-y-2">
           <p className="text-sm font-medium text-club-green">Agenda</p>
-          <h1 className="font-display text-4xl text-club-green">
-            Disponibilidad
-          </h1>
+          <PageTitle>Disponibilidad</PageTitle>
           <p className="max-w-2xl text-sm leading-relaxed text-club-muted">
             Haz clic y arrastra sobre la cuadrícula para publicar horarios.
             Vuelve a hacer clic sobre uno publicado para quitarlo.
