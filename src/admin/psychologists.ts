@@ -91,7 +91,7 @@ export async function fetchAdminPsychologists(): Promise<AdminPsychologist[]> {
 
   return ((data ?? []) as unknown as AdminPsychologistRow[]).map((row) => ({
     userId: row.user_id,
-    fullName: row.profile?.full_name?.trim() || "PsicÃ³loga sin nombre",
+    fullName: row.profile?.full_name?.trim() || "Psicóloga sin nombre",
     avatarUrl: row.profile?.avatar_url ?? null,
     bio: row.bio,
     specialties: row.specialties ?? [],

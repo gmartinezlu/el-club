@@ -59,7 +59,7 @@ export function PsychologistNotesPage() {
         <p className="text-sm font-medium text-club-green">Seguimiento</p>
         <h1 className="font-display text-4xl text-club-green">Notas</h1>
         <p className="max-w-2xl text-sm leading-relaxed text-club-muted">
-          Observaciones privadas por sesiÃ³n, ordenadas para preparar el prÃ³ximo encuentro.
+          Observaciones privadas por sesión, ordenadas para preparar el próximo encuentro.
         </p>
       </header>
 
@@ -69,7 +69,7 @@ export function PsychologistNotesPage() {
         </p>
       ) : null}
 
-      <label className="flex max-w-xl items-center gap-3 rounded-3xl border border-club-green/10 bg-white/45 px-4 py-3 shadow-soft backdrop-blur">
+      <label className="flex max-w-xl items-center gap-3 rounded-3xl border border-club-green/10 bg-white/50 px-4 py-3 shadow-soft backdrop-blur">
         <Search className="h-4 w-4 text-club-green" strokeWidth={1.5} />
         <input
           value={query}
@@ -82,9 +82,9 @@ export function PsychologistNotesPage() {
       {loading ? (
         <div className="h-52 animate-pulse rounded-3xl bg-club-green/5" />
       ) : filtered.length === 0 ? (
-        <div className="rounded-3xl border border-club-green/10 bg-white/35 p-6">
+        <div className="rounded-3xl border border-club-green/10 bg-white/50 p-6">
           <p className="text-sm text-club-muted">
-            No hay sesiones que coincidan con la bÃºsqueda.
+            No hay sesiones que coincidan con la búsqueda.
           </p>
         </div>
       ) : (
@@ -119,14 +119,14 @@ function NoteCard({
   );
 
   return (
-    <article className="rounded-3xl border border-club-green/10 bg-white/40 p-5 shadow-soft backdrop-blur">
+    <article className="rounded-3xl border border-club-green/10 bg-white/50 p-5 shadow-soft backdrop-blur">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <p className="font-display text-2xl text-club-green">
             {appointment.patientName}
           </p>
           <p className="mt-1 capitalize text-sm text-club-muted">
-            {formatSessionDate(appointment.startsAt)} Â·{" "}
+            {formatSessionDate(appointment.startsAt)} ·{" "}
             {formatSessionRange(appointment.startsAt, appointment.endsAt)}
           </p>
         </div>
@@ -143,7 +143,7 @@ function NoteCard({
         value={notes}
         onChange={(e) => setNotes(e.target.value)}
         rows={5}
-        placeholder="Avances, hipÃ³tesis, tareas acordadas, prÃ³ximos temas..."
+        placeholder="Avances, hipótesis, tareas acordadas, próximos temas..."
         className="mt-2 w-full resize-none rounded-2xl border border-club-green/10 bg-white/60 px-4 py-3 text-sm leading-relaxed text-club-ink outline-none ring-club-green/10 focus:ring-2"
       />
       <div className="mt-3 flex items-center justify-between gap-2">
@@ -156,7 +156,7 @@ function NoteCard({
           {autoSaving ? "Guardando..." : "Guardar nota"}
         </button>
         {hasUnsavedChanges && !autoSaving ? (
-          <p className="text-xs text-amber-700">Guardando automÃ¡ticamente...</p>
+          <p className="text-xs text-amber-700">Guardando automáticamente...</p>
         ) : null}
       </div>
     </article>

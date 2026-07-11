@@ -15,7 +15,7 @@ export function AuthLayout() {
       </header>
 
       <main className="mx-auto w-full max-w-2xl px-5 pb-16">
-        <div className="rounded-3xl border border-club-green/10 bg-white/35 p-5 shadow-soft backdrop-blur md:p-8">
+        <div className="rounded-3xl border border-club-green/10 bg-white/50 p-5 shadow-soft backdrop-blur md:p-8">
           <Outlet />
         </div>
       </main>

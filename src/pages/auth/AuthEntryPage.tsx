@@ -29,7 +29,7 @@ const PORTAL_COPY = {
   },
   patient: {
     title: "Tu espacio en El Club",
-    description: "Inicia sesiÃ³n o crea tu cuenta para empezar con calma.",
+    description: "Inicia sesión o crea tu cuenta para empezar con calma.",
     portals: [PORTALS[0]],
   },
   psychologist: {
@@ -59,7 +59,7 @@ export function AuthEntryPage({
         {copy.portals.map((portalItem) => (
           <div
             key={portalItem.title}
-            className="rounded-3xl border border-club-green/10 bg-white/45 p-5 shadow-soft backdrop-blur"
+            className="rounded-3xl border border-club-green/10 bg-white/50 p-5 shadow-soft backdrop-blur"
           >
             <h2 className="font-display text-2xl text-club-green">
               {portalItem.title}
@@ -72,7 +72,7 @@ export function AuthEntryPage({
                 to={portalItem.loginTo}
                 className="rounded-2xl border border-club-green/15 bg-white/60 px-4 py-2 text-sm text-club-green transition hover:bg-white/80"
               >
-                Iniciar sesiÃ³n
+                Iniciar sesión
               </Link>
               {portalItem.registerTo ? (
                 <Link

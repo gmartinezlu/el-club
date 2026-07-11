@@ -51,7 +51,7 @@ export function LegalPage({ type }: { type: "privacy" | "terms" }) {
   return (
     <MarketingLayout>
       <main className="mx-auto w-full max-w-5xl px-5 py-16 md:px-8">
-        <div className="rounded-3xl border border-club-green/10 bg-white/35 p-6 shadow-soft backdrop-blur md:p-10">
+        <div className="rounded-3xl border border-club-green/10 bg-white/50 p-6 shadow-soft backdrop-blur md:p-10">
           <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-club-green/10 text-club-green">
             <ShieldCheck className="h-6 w-6" strokeWidth={1.5} />
           </div>
@@ -69,7 +69,7 @@ export function LegalPage({ type }: { type: "privacy" | "terms" }) {
             {content.sections.map(([title, body]) => (
               <section
                 key={title}
-                className="rounded-3xl border border-club-green/10 bg-white/45 p-5"
+                className="rounded-3xl border border-club-green/10 bg-white/50 p-5"
               >
                 <h2 className="font-display text-2xl text-club-green">
                   {title}

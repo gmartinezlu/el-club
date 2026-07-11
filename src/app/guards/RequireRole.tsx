@@ -32,7 +32,7 @@ export function RequireRole({
     return <Navigate to={loginPathForRole(role)} replace />;
   }
 
-  // Si el usuario estÃ¡ autenticado pero aÃºn no eligiÃ³ rol/onboarding.
+  // Si el usuario está autenticado pero aún no eligió rol/onboarding.
   if (!userRole) {
     return <Navigate to="/auth/onboarding" replace />;
   }

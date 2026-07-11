@@ -1,6 +1,8 @@
 ﻿import { lazy, Suspense } from "react";
 import type { ComponentType } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
+import { MotionConfig } from "framer-motion";
+import { Toaster } from "sonner";
 import { AuthLayout } from "../layouts/auth/AuthLayout";
 import { PatientLayout } from "../layouts/role/PatientLayout";
 import { PsychologistLayout } from "../layouts/role/PsychologistLayout";
@@ -166,7 +168,20 @@ function RouteFallback() {
 
 export default function App() {
   return (
+    <MotionConfig reducedMotion="user">
     <Suspense fallback={<RouteFallback />}>
+      <Toaster
+        position="top-center"
+        toastOptions={{
+          style: {
+            borderRadius: "1rem",
+            border: "1px solid rgba(8, 71, 57, 0.1)",
+            background: "rgba(255, 255, 255, 0.9)",
+            color: "#1f2a26",
+            boxShadow: "0 12px 32px -12px rgba(8, 71, 57, 0.25)",
+          },
+        }}
+      />
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/experiencias" element={<ExperiencesPage />} />
@@ -291,5 +306,6 @@ export default function App() {
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Suspense>
+    </MotionConfig>
   );
 }

@@ -7,10 +7,13 @@ import {
   Check,
   Clock,
   Languages,
+  SearchX,
   ShieldCheck,
   Sparkles,
+  Users,
   WalletCards,
 } from "lucide-react";
+import { EmptyState } from "../../components/ui/EmptyState";
 import {
   fetchBookableAvailability,
   type AvailabilitySlot,
@@ -175,23 +178,18 @@ export function PatientPsychologistsPage() {
       {loading ? (
         <div className="h-72 animate-pulse rounded-3xl bg-club-green/5" />
       ) : psychologists.length === 0 ? (
-        <EmotionalGlass className="p-8">
-          <p className="font-display text-2xl text-club-green">
-            Aún no hay psicólogas aprobadas
-          </p>
-          <p className="mt-2 text-sm text-club-muted">
-            Cuando el equipo apruebe perfiles, aparecerán aquí para agendar.
-          </p>
-        </EmotionalGlass>
+        <EmptyState
+          icon={Users}
+          title="Aún no hay psicólogas aprobadas"
+          description="Cuando el equipo apruebe perfiles, aparecerán aquí para agendar."
+        />
       ) : isDetailView && !selectedPsychologist ? (
-        <EmotionalGlass className="p-8">
-          <p className="font-display text-2xl text-club-green">
-            No encontramos este perfil
-          </p>
-          <p className="mt-2 text-sm text-club-muted">
-            Puede que aún no esté aprobado o que haya sido pausado.
-          </p>
-        </EmotionalGlass>
+        <EmptyState
+          icon={SearchX}
+          title="No encontramos este perfil"
+          description="Puede que aún no esté aprobado o que haya sido pausado."
+          action={{ label: "Ver todas las psicólogas", to: "/patient/psychologists" }}
+        />
       ) : (
         <div
           className={
@@ -257,7 +255,7 @@ function PsychologistOption({
         "rounded-3xl border p-5 shadow-soft backdrop-blur transition",
         selected
           ? "border-club-green/25 bg-club-green/10"
-          : "border-club-green/10 bg-white/40 hover:bg-white/60",
+          : "border-club-green/10 bg-white/50 hover:bg-white/60",
       ].join(" ")}
     >
       <button type="button" onClick={onSelect} className="w-full text-left">
@@ -355,7 +353,7 @@ function PsychologistFullProfile({
           />
         </div>
 
-        <section className="rounded-3xl border border-club-green/10 bg-white/45 p-5">
+        <section className="rounded-3xl border border-club-green/10 bg-white/50 p-5">
           <h3 className="font-display text-2xl text-club-green">
             Pago gestionado por el profesional
           </h3>
@@ -401,7 +399,7 @@ function PsychologistFullProfile({
           </p>
         </section>
 
-        <section className="rounded-3xl border border-club-green/10 bg-white/45 p-5">
+        <section className="rounded-3xl border border-club-green/10 bg-white/50 p-5">
           <h3 className="font-display text-2xl text-club-green">
             Cómo se siente este espacio
           </h3>
@@ -445,7 +443,7 @@ function BookingPanel({
       </p>
 
       {selectedPsychologist ? (
-        <div className="mt-5 rounded-2xl border border-club-green/10 bg-white/45 p-4">
+        <div className="mt-5 rounded-2xl border border-club-green/10 bg-white/50 p-4">
           <p className="text-xs text-club-muted">Especialista seleccionada</p>
           <p className="mt-1 font-display text-2xl text-club-green">
             {selectedPsychologist.fullName}
@@ -545,7 +543,7 @@ function MiniFact({
   value: string;
 }) {
   return (
-    <div className="rounded-3xl border border-club-green/10 bg-white/45 p-4">
+    <div className="rounded-3xl border border-club-green/10 bg-white/50 p-4">
       <div className="flex items-center gap-2 text-club-green">
         {icon}
         <p className="text-xs text-club-muted">{label}</p>

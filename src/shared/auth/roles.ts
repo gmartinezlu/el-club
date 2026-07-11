@@ -2,6 +2,6 @@
 
 export const ROLE_LABELS: Record<AppRole, string> = {
   patient: "Mi espacio",
-  psychologist: "PsicÃ³loga",
+  psychologist: "Psicóloga",
   admin: "Administrador",
 };

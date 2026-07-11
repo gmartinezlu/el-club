@@ -4,8 +4,8 @@ import { AnimatePresence, motion } from "framer-motion";
 
 const LINKS = [
   { href: "#beneficios", label: "Beneficios" },
-  { href: "#como-funciona", label: "Como funciona" },
-  { href: "#psicólogas", label: "psicólogas" },
+  { href: "#como-funciona", label: "Cómo funciona" },
+  { href: "#psicólogas", label: "Psicólogas" },
   { href: "#recursos", label: "Recursos" },
 ];
 
@@ -39,9 +39,9 @@ export function NavBar() {
         <div className="flex items-center gap-3">
           <Link
             to="/auth/patient/login"
-            className="hidden rounded-2xl border border-club-green/15 bg-white/40 px-4 py-2 text-sm text-club-green shadow-soft backdrop-blur transition hover:translate-y-[-1px] sm:inline-flex"
+            className="hidden rounded-2xl border border-club-green/15 bg-white/50 px-4 py-2 text-sm text-club-green shadow-soft backdrop-blur transition hover:translate-y-[-1px] sm:inline-flex"
           >
-            Iniciar sesiÃ³n
+            Iniciar sesión
           </Link>
           <Link
             to="/auth/patient/register"
@@ -55,7 +55,7 @@ export function NavBar() {
             aria-label={open ? "Cerrar menu" : "Abrir menu"}
             aria-expanded={open}
             onClick={() => setOpen((v) => !v)}
-            className="inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-club-green/15 bg-white/40 text-club-green shadow-soft backdrop-blur md:hidden"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-2xl border border-club-green/15 bg-white/50 text-club-green shadow-soft backdrop-blur md:hidden"
           >
             <svg
               width="20"
@@ -110,7 +110,7 @@ export function NavBar() {
                   onClick={() => setOpen(false)}
                   className="rounded-2xl border border-club-green/15 bg-white/60 px-4 py-3 text-center text-sm text-club-green shadow-soft"
                 >
-                  Iniciar sesiÃ³n
+                  Iniciar sesión
                 </Link>
                 <Link
                   to="/auth/patient/register"

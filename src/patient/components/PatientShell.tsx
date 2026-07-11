@@ -4,7 +4,7 @@ import { useSessionStore } from "../../store/sessionStore";
 
 const NAV = [
   { to: "/patient", label: "Inicio", end: true },
-  { to: "/patient/psychologists", label: "PsicÃ³logas", end: false },
+  { to: "/patient/psychologists", label: "Psicólogas", end: false },
   { to: "/patient/resources", label: "Recursos", end: false },
   { to: "/patient/journals", label: "Journal", end: false },
   { to: "/patient/meditations", label: "Meditar", end: false },

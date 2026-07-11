@@ -287,13 +287,13 @@ export function LandingPage() {
 
         <Section
           id="journaling"
-          eyebrow="Practicas"
+          eyebrow="Prácticas"
           title="Journaling y meditación, con intención"
           subtitle="Ejercicios simples que no se sienten técnicos. Solo calma y claridad."
         >
           <div className="grid gap-4 lg:grid-cols-2">
             <GlassCard>
-              <p className="font-display text-3xl text-club-green">Journal</p>
+              <p className="font-display text-2xl text-club-green">Journal</p>
               <p className="mt-3 text-sm text-club-muted">
                 Prompts que acompañan sin presionar. Escribir para soltar,
                 nombrar y volver.
@@ -306,7 +306,7 @@ export function LandingPage() {
             </GlassCard>
 
             <GlassCard>
-              <p className="font-display text-3xl text-club-green">
+              <p className="font-display text-2xl text-club-green">
                 Meditación
               </p>
               <p className="mt-3 text-sm text-club-muted">
@@ -385,7 +385,7 @@ export function LandingPage() {
                   Crear cuenta
                 </Link>
                 <a
-                  href="#beneficios"
+                  href="#como-funciona"
                   className="rounded-2xl border border-club-cream/30 px-6 py-3 text-center text-base text-club-paper transition hover:bg-white/10"
                 >
                   Ver cómo funciona

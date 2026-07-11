@@ -30,7 +30,7 @@ export function useAdminStats() {
       } catch (e) {
         if (!cancelled) {
           setError(
-            e instanceof Error ? e.message : "No se pudieron cargar mÃ©tricas",
+            e instanceof Error ? e.message : "No se pudieron cargar métricas",
           );
         }
       } finally {

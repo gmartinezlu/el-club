@@ -14,7 +14,7 @@ export function SessionHistoryPreview({
   return (
     <EmotionalGlass className="p-6 md:p-8">
       <div className="flex items-end justify-between gap-4">
-        <p className="font-display text-2xl text-club-green">Historial reciente</p>
+        <p className="font-display text-xl text-club-green">Historial reciente</p>
         <Link
           to="/patient/sessions"
           className="text-sm text-club-green hover:underline"
@@ -32,7 +32,7 @@ export function SessionHistoryPreview({
           {items.map((s) => (
             <li
               key={s.id}
-              className="flex items-center justify-between gap-4 rounded-2xl border border-club-green/5 bg-white/35 px-4 py-3"
+              className="flex items-center justify-between gap-4 rounded-2xl border border-club-green/5 bg-white/50 px-4 py-3"
             >
               <div>
                 <p className="font-medium text-club-ink">

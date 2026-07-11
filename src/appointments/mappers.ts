@@ -71,7 +71,7 @@ export function toPatientView(appointment: Appointment): PatientAppointmentView 
     paymentMarkedPaidAt: appointment.paymentMarkedPaidAt,
     psychologistId: appointment.psychologistId,
     psychologistName:
-      appointment.psychologist.fullName?.trim() || "Tu psicÃ³loga",
+      appointment.psychologist.fullName?.trim() || "Tu psicóloga",
     psychologistAvatarUrl: appointment.psychologist.avatarUrl,
   };
 }

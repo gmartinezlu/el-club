@@ -22,7 +22,7 @@ export function ExperienceCard({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.25 }}
       transition={{ delay: index * 0.04, duration: 0.45, ease: "easeOut" }}
-      className="group overflow-hidden rounded-3xl border border-club-green/10 bg-white/45 shadow-soft backdrop-blur"
+      className="group overflow-hidden rounded-3xl border border-club-green/10 bg-white/50 shadow-soft backdrop-blur"
     >
       <div className="relative aspect-[4/3] overflow-hidden">
         <img

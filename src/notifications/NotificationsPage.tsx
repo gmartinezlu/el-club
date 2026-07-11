@@ -61,7 +61,7 @@ export function NotificationsPage() {
       await markNotificationRead({ id, userId });
       await loadNotifications();
     } catch (e) {
-      setError(getErrorMessage(e, "No se pudo marcar como leÃ­da"));
+      setError(getErrorMessage(e, "No se pudo marcar como leída"));
     } finally {
       setSaving(false);
     }
@@ -75,7 +75,7 @@ export function NotificationsPage() {
       await markAllNotificationsRead(userId);
       await loadNotifications();
     } catch (e) {
-      setError(getErrorMessage(e, "No se pudieron marcar como leÃ­das"));
+      setError(getErrorMessage(e, "No se pudieron marcar como leídas"));
     } finally {
       setSaving(false);
     }
@@ -84,7 +84,7 @@ export function NotificationsPage() {
   return (
     <div className="space-y-8">
       <header className="space-y-2">
-        <p className="text-sm font-medium text-club-green">AcompaÃ±amiento</p>
+        <p className="text-sm font-medium text-club-green">Acompañamiento</p>
         <h1 className="font-display text-4xl text-club-green">
           Notificaciones
         </h1>
@@ -99,7 +99,7 @@ export function NotificationsPage() {
         </p>
       ) : null}
 
-      <div className="flex flex-wrap items-center justify-between gap-3 rounded-3xl border border-club-green/10 bg-white/40 p-5 shadow-soft backdrop-blur">
+      <div className="flex flex-wrap items-center justify-between gap-3 rounded-3xl border border-club-green/10 bg-white/50 p-5 shadow-soft backdrop-blur">
         <div className="flex items-center gap-3">
           <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-club-green/10 text-club-green">
             <Bell className="h-5 w-5" strokeWidth={1.5} />
@@ -109,7 +109,7 @@ export function NotificationsPage() {
               {unreadCount} sin leer
             </p>
             <p className="text-sm text-club-muted">
-              MantÃ©n tu espacio al dÃ­a sin ruido.
+              Mantén tu espacio al día sin ruido.
             </p>
           </div>
         </div>
@@ -120,16 +120,16 @@ export function NotificationsPage() {
           className="inline-flex items-center gap-2 rounded-2xl border border-club-green/15 bg-white/55 px-4 py-2 text-sm text-club-green transition hover:bg-white/80 disabled:opacity-60"
         >
           <CheckCheck className="h-4 w-4" strokeWidth={1.5} />
-          Marcar todo leÃ­do
+          Marcar todo leído
         </button>
       </div>
 
       {loading ? (
         <div className="h-64 animate-pulse rounded-3xl bg-club-green/5" />
       ) : notifications.length === 0 ? (
-        <div className="rounded-3xl border border-club-green/10 bg-white/35 p-6">
+        <div className="rounded-3xl border border-club-green/10 bg-white/50 p-6">
           <p className="text-sm text-club-muted">
-            AÃºn no tienes notificaciones.
+            Aún no tienes notificaciones.
           </p>
         </div>
       ) : (
@@ -140,7 +140,7 @@ export function NotificationsPage() {
               className={[
                 "rounded-3xl border p-5 shadow-soft backdrop-blur",
                 notification.readAt
-                  ? "border-club-green/10 bg-white/35"
+                  ? "border-club-green/10 bg-white/50"
                   : "border-club-green/20 bg-club-green/10",
               ].join(" ")}
             >
@@ -163,7 +163,7 @@ export function NotificationsPage() {
                     onClick={() => void markOne(notification.id)}
                     className="rounded-2xl bg-club-green px-4 py-2 text-sm text-club-paper transition hover:opacity-95 disabled:opacity-60"
                   >
-                    LeÃ­da
+                    Leída
                   </button>
                 ) : null}
               </div>

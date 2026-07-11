@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { motion } from "framer-motion";
 import { Edit3, Plus, Save, Trash2 } from "lucide-react";
+import { toast } from "sonner";
 import {
   createJournalEntry,
   deleteJournalEntry,
@@ -53,7 +53,6 @@ export function PatientJournalsPage() {
   const [form, setForm] = useState<JournalForm>(EMPTY_FORM);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [saved, setSaved] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const selectedEntry = useMemo(
@@ -87,7 +86,6 @@ export function PatientJournalsPage() {
   async function saveEntry() {
     if (!patientId || !form.body.trim()) return;
     setSaving(true);
-    setSaved(false);
     setError(null);
     try {
       const payload = {
@@ -104,7 +102,7 @@ export function PatientJournalsPage() {
       }
 
       setForm(EMPTY_FORM);
-      setSaved(true);
+      toast.success("Guardado con cariño.");
       await loadEntries();
     } catch (e) {
       setError(getErrorMessage(e, "No se pudo guardar esta entrada"));
@@ -149,16 +147,6 @@ export function PatientJournalsPage() {
         </p>
       ) : null}
 
-      {saved ? (
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="rounded-2xl border border-club-green/10 bg-club-green/10 px-4 py-3 text-sm text-club-green"
-        >
-          Guardado con cariño.
-        </motion.p>
-      ) : null}
-
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr),340px]">
         <EmotionalGlass className="p-6 md:p-8">
           <div className="flex flex-wrap items-start justify-between gap-4">
@@ -188,7 +176,7 @@ export function PatientJournalsPage() {
               value={form.title}
               onChange={(e) => setForm({ ...form, title: e.target.value })}
               placeholder="Ej. Lo que necesito soltar hoy"
-              className="w-full rounded-2xl border border-club-green/10 bg-white/50 px-4 py-3 text-sm text-club-ink outline-none ring-club-green/10 placeholder:text-club-muted/60 focus:ring-2"
+              className="w-full rounded-2xl border border-club-green/10 bg-white/50 px-4 py-3 text-sm text-club-ink outline-none ring-club-green/10 placeholder:text-club-muted/80 focus:ring-2"
             />
           </label>
 
@@ -197,7 +185,7 @@ export function PatientJournalsPage() {
             onChange={(e) => setForm({ ...form, body: e.target.value })}
             placeholder="Empieza cuando quieras. No hay prisa."
             rows={10}
-            className="mt-4 w-full resize-none rounded-2xl border border-club-green/10 bg-white/50 px-4 py-4 text-sm leading-relaxed text-club-ink outline-none ring-club-green/10 placeholder:text-club-muted/60 focus:ring-2"
+            className="mt-4 w-full resize-none rounded-2xl border border-club-green/10 bg-white/50 px-4 py-4 text-sm leading-relaxed text-club-ink outline-none ring-club-green/10 placeholder:text-club-muted/80 focus:ring-2"
           />
 
           <div className="mt-4 grid gap-4 sm:grid-cols-[160px,1fr] sm:items-end">
@@ -282,7 +270,7 @@ function JournalEntryCard({
         "rounded-3xl border p-4 shadow-soft backdrop-blur",
         selected
           ? "border-club-green/25 bg-club-green/10"
-          : "border-club-green/10 bg-white/40",
+          : "border-club-green/10 bg-white/50",
       ].join(" ")}
     >
       <p className="text-xs text-club-muted">{formatJournalDate(entry.createdAt)}</p>

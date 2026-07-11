@@ -1,11 +1,12 @@
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { CalendarPlus, ClipboardCheck, Video } from "lucide-react";
+import { CalendarPlus, ClipboardCheck, History, Video } from "lucide-react";
 import { STATUS_LABELS } from "../../appointments/utils";
 import { usePatientAppointments } from "../hooks/usePatientAppointments";
 import { formatSessionDate, formatSessionRange } from "../utils/formatDate";
 import { EmotionalGlass } from "../components/EmotionalGlass";
+import { EmptyState } from "../../components/ui/EmptyState";
 
 export function PatientSessionsPage() {
   const { appointments, history, loading, error } = usePatientAppointments();
@@ -34,7 +35,7 @@ export function PatientSessionsPage() {
         </p>
       </header>
 
-      <div className="rounded-3xl border border-club-green/10 bg-white/45 p-4 text-sm leading-relaxed text-club-muted shadow-soft backdrop-blur">
+      <div className="rounded-3xl border border-club-green/10 bg-white/50 p-4 text-sm leading-relaxed text-club-muted shadow-soft backdrop-blur">
         Coordina el pago directamente con tu especialista. EL CLUB no solicita
         pagos por WhatsApp ni procesa dinero de sesiones dentro de la
         plataforma.
@@ -71,17 +72,12 @@ export function PatientSessionsPage() {
           <section className="space-y-4">
             <h2 className="font-display text-xl text-club-green">Anteriores</h2>
             {history.length === 0 && upcoming.length === 0 ? (
-              <EmotionalGlass className="p-6">
-                <p className="text-sm text-club-muted">
-                  Aún no hay sesiones en tu historial.
-                </p>
-                <Link
-                  to="/patient/psychologists"
-                  className="mt-4 inline-flex rounded-2xl bg-club-green px-4 py-2 text-sm text-club-paper transition hover:opacity-95"
-                >
-                  Encontrar especialista
-                </Link>
-              </EmotionalGlass>
+              <EmptyState
+                icon={History}
+                title="Aún no hay sesiones en tu historial"
+                description="Cuando agendes tu primera cita, aparecerá aquí."
+                action={{ label: "Encontrar especialista", to: "/patient/psychologists" }}
+              />
             ) : history.length === 0 ? (
               <p className="text-sm text-club-muted">
                 Tus sesiones completadas aparecerán aquí.

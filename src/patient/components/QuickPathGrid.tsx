@@ -6,14 +6,14 @@ import { EmotionalGlass } from "./EmotionalGlass";
 const paths = [
   {
     to: "/patient/psychologists",
-    label: "PsicÃ³logas",
-    description: "Encuentra y agenda sesiÃ³n",
+    label: "Psicólogas",
+    description: "Encuentra y agenda sesión",
     icon: UserRoundSearch,
   },
   {
     to: "/patient/resources",
     label: "Recursos",
-    description: "ArtÃ­culos y guÃ­as curadas",
+    description: "Artículos y guías curadas",
     icon: BookOpen,
   },
   {

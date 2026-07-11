@@ -10,7 +10,7 @@ export default {
           sand: "#f4efe8",
           paper: "#fbf8f3",
           ink: "#1f2a26",
-          muted: "#5e6b65",
+          muted: "#44504a",
           brass: "#b8863f",
           rose: "#c98577",
         },

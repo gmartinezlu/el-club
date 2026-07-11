@@ -16,13 +16,13 @@ export function MoodCheckIn() {
   return (
     <EmotionalGlass className="p-6 md:p-8">
       <p className="text-xs font-medium uppercase tracking-wider text-club-muted">
-        Seguimiento emocional Â· opcional
+        Seguimiento emocional · opcional
       </p>
       <p className="mt-2 font-display text-2xl text-club-green">
-        Â¿CÃ³mo te sientes hoy?
+        ¿Cómo te sientes hoy?
       </p>
       <p className="mt-2 text-sm text-club-muted">
-        Sin presiÃ³n. Solo para ti.
+        Sin presión. Solo para ti.
       </p>
 
       <div className="mt-6 flex flex-wrap gap-2">

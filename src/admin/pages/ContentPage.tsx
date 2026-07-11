@@ -1,5 +1,6 @@
 ﻿import { useCallback, useEffect, useMemo, useState } from "react";
-import { Edit3, Plus, Save, Trash2 } from "lucide-react";
+import { Edit3, FolderOpen, Plus, Save, Trash2 } from "lucide-react";
+import { toast } from "sonner";
 import {
   deleteResourceAdmin,
   fetchAllResourcesAdmin,
@@ -7,6 +8,7 @@ import {
 } from "../../resources/service";
 import type { EmotionalResource, ResourceType } from "../../resources/types";
 import { getErrorMessage } from "../../utils/errors";
+import { EmptyState } from "../../components/ui/EmptyState";
 
 const RESOURCE_TYPES: { value: ResourceType; label: string }[] = [
   { value: "article", label: "Artículo" },
@@ -67,7 +69,6 @@ export function AdminContentPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [saved, setSaved] = useState(false);
 
   const loadResources = useCallback(async () => {
     setLoading(true);
@@ -97,7 +98,6 @@ export function AdminContentPage() {
 
   async function saveResource() {
     setSaving(true);
-    setSaved(false);
     setError(null);
     try {
       await upsertResourceAdmin({
@@ -114,7 +114,7 @@ export function AdminContentPage() {
         sortOrder: Number(form.sortOrder || 0),
       });
       setForm(EMPTY_FORM);
-      setSaved(true);
+      toast.success("Recurso guardado.");
       await loadResources();
     } catch (e) {
       setError(getErrorMessage(e, "No se pudo guardar el recurso"));
@@ -158,11 +158,6 @@ export function AdminContentPage() {
           {error}
         </p>
       ) : null}
-      {saved ? (
-        <p className="rounded-2xl border border-club-green/10 bg-club-green/10 px-4 py-3 text-sm text-club-green">
-          Recurso guardado.
-        </p>
-      ) : null}
 
       <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr),380px]">
         <section className="space-y-4">
@@ -174,7 +169,7 @@ export function AdminContentPage() {
                 "rounded-2xl border px-4 py-2 text-sm transition",
                 filter === "all"
                   ? "border-club-green/20 bg-club-green/10 text-club-green"
-                  : "border-club-green/10 bg-white/45 text-club-muted hover:bg-white/70",
+                  : "border-club-green/10 bg-white/50 text-club-muted hover:bg-white/70",
               ].join(" ")}
             >
               Todos
@@ -188,7 +183,7 @@ export function AdminContentPage() {
                   "rounded-2xl border px-4 py-2 text-sm transition",
                   filter === item.value
                     ? "border-club-green/20 bg-club-green/10 text-club-green"
-                    : "border-club-green/10 bg-white/45 text-club-muted hover:bg-white/70",
+                    : "border-club-green/10 bg-white/50 text-club-muted hover:bg-white/70",
                 ].join(" ")}
               >
                 {item.label}
@@ -199,11 +194,11 @@ export function AdminContentPage() {
           {loading ? (
             <div className="h-72 animate-pulse rounded-3xl bg-club-green/5" />
           ) : filteredResources.length === 0 ? (
-            <div className="rounded-3xl border border-club-green/10 bg-white/35 p-6">
-              <p className="text-sm text-club-muted">
-                No hay recursos para este filtro.
-              </p>
-            </div>
+            <EmptyState
+              icon={FolderOpen}
+              title="No hay recursos para este filtro"
+              description="Prueba otro filtro o crea un nuevo recurso desde el panel."
+            />
           ) : (
             <div className="grid gap-4">
               {filteredResources.map((resource) => (
@@ -219,7 +214,7 @@ export function AdminContentPage() {
           )}
         </section>
 
-        <aside className="rounded-3xl border border-club-green/10 bg-white/40 p-5 shadow-soft backdrop-blur xl:sticky xl:top-24 xl:self-start">
+        <aside className="rounded-3xl border border-club-green/10 bg-white/50 p-5 shadow-soft backdrop-blur xl:sticky xl:top-24 xl:self-start">
           <div className="flex items-center justify-between gap-4">
             <h2 className="font-display text-2xl text-club-green">
               {form.id ? "Editar recurso" : "Nuevo recurso"}
@@ -364,7 +359,7 @@ function ResourceAdminCard({
   onDelete: () => void;
 }) {
   return (
-    <article className="rounded-3xl border border-club-green/10 bg-white/40 p-5 shadow-soft backdrop-blur">
+    <article className="rounded-3xl border border-club-green/10 bg-white/50 p-5 shadow-soft backdrop-blur">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <div className="flex flex-wrap items-center gap-2">
@@ -383,7 +378,7 @@ function ResourceAdminCard({
               {resource.isPublished ? "Publicado" : "Oculto"}
             </span>
           </div>
-          <h2 className="mt-3 font-display text-2xl text-club-green">
+          <h2 className="mt-3 font-display text-xl text-club-green">
             {resource.title}
           </h2>
           <p className="mt-2 max-w-2xl text-sm leading-relaxed text-club-muted">

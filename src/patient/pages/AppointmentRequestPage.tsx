@@ -6,6 +6,7 @@ import {
   CalendarCheck,
   Copy,
   MessageCircle,
+  SearchX,
   ShieldCheck,
 } from "lucide-react";
 import { fetchPatientAppointmentById } from "../../appointments/patient";
@@ -22,6 +23,7 @@ import { useSessionStore } from "../../store/sessionStore";
 import { getErrorMessage } from "../../utils/errors";
 import { EmotionalGlass } from "../components/EmotionalGlass";
 import { PatientFlowSteps } from "../components/PatientFlowSteps";
+import { EmptyState } from "../../components/ui/EmptyState";
 import {
   formatSessionDate,
   formatSessionRange,
@@ -159,9 +161,12 @@ export function PatientAppointmentRequestPage() {
       {loading ? (
         <div className="h-96 animate-pulse rounded-3xl bg-club-green/5" />
       ) : !appointment ? (
-        <EmotionalGlass className="p-8">
-          <p className="text-sm text-club-muted">No encontramos esta cita.</p>
-        </EmotionalGlass>
+        <EmptyState
+          icon={SearchX}
+          title="No encontramos esta cita"
+          description="Puede que el enlace esté vencido o la solicitud haya cambiado."
+          action={{ label: "Ver mis sesiones", to: "/patient/sessions" }}
+        />
       ) : (
         <motion.div
           initial={{ opacity: 0, y: 10 }}
@@ -184,7 +189,7 @@ export function PatientAppointmentRequestPage() {
               directamente con el/ella según sus métodos disponibles.
             </p>
 
-            <div className="mt-6 grid gap-4 rounded-3xl border border-club-green/10 bg-white/45 p-5 md:grid-cols-2">
+            <div className="mt-6 grid gap-4 rounded-3xl border border-club-green/10 bg-white/50 p-5 md:grid-cols-2">
               <div>
                 <p className="text-xs text-club-muted">Especialista</p>
                 <p className="font-display text-2xl text-club-green">

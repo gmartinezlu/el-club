@@ -4,7 +4,7 @@ const STEPS = ["Bienvenida", "Especialista", "Agenda", "Solicitud", "sesión"];
 
 export function PatientFlowSteps({ current }: { current: number }) {
   return (
-    <div className="rounded-3xl border border-club-green/10 bg-white/40 p-3 shadow-soft backdrop-blur">
+    <div className="rounded-3xl border border-club-green/10 bg-white/50 p-3 shadow-soft backdrop-blur">
       <ol className="grid gap-2 sm:grid-cols-5">
         {STEPS.map((step, index) => {
           const active = index === current;
