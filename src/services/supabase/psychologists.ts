@@ -15,6 +15,9 @@ type PsychologistRow = {
   cancellation_policy?: string | null;
   payment_confirmation_hours?: number | null;
   allow_whatsapp_after_request?: boolean | null;
+  nequi_number?: string | null;
+  session_price_cents?: number | null;
+  nequi_qr_url?: string | null;
   profile?: {
     full_name: string | null;
     avatar_url: string | null;
@@ -34,6 +37,9 @@ type UpdatePsychologistProfileInput = {
   cancellationPolicy?: string | null;
   paymentConfirmationHours?: number | null;
   allowWhatsappAfterRequest?: boolean;
+  nequiNumber?: string | null;
+  sessionPriceCents?: number | null;
+  nequiQrUrl?: string | null;
 };
 
 const PROFILE_RELATION_SELECT = `
@@ -66,6 +72,9 @@ const PAYMENT_SELECT = `
   cancellation_policy,
   payment_confirmation_hours,
   allow_whatsapp_after_request,
+  nequi_number,
+  session_price_cents,
+  nequi_qr_url,
   ${PROFILE_RELATION_SELECT}
 `;
 
@@ -79,7 +88,10 @@ function isMissingColumnError(error: PostgrestError | null) {
     text.includes("payment_instructions") ||
     text.includes("cancellation_policy") ||
     text.includes("payment_confirmation_hours") ||
-    text.includes("allow_whatsapp_after_request")
+    text.includes("allow_whatsapp_after_request") ||
+    text.includes("nequi_number") ||
+    text.includes("session_price_cents") ||
+    text.includes("nequi_qr_url")
   );
 }
 
@@ -113,6 +125,9 @@ function mapRow(row: PsychologistRow, defaults = false): PsychologistProfile {
     cancellationPolicy: row.cancellation_policy ?? null,
     paymentConfirmationHours: row.payment_confirmation_hours ?? 24,
     allowWhatsappAfterRequest: row.allow_whatsapp_after_request ?? true,
+    nequiNumber: row.nequi_number ?? null,
+    sessionPriceCents: row.session_price_cents ?? null,
+    nequiQrUrl: row.nequi_qr_url ?? null,
   };
 }
 
@@ -188,6 +203,9 @@ export async function updatePsychologistProfile({
   cancellationPolicy,
   paymentConfirmationHours,
   allowWhatsappAfterRequest,
+  nequiNumber,
+  sessionPriceCents,
+  nequiQrUrl,
 }: UpdatePsychologistProfileInput): Promise<void> {
   const supabase = getSupabaseClient();
 
@@ -213,6 +231,9 @@ export async function updatePsychologistProfile({
       cancellation_policy: cancellationPolicy,
       payment_confirmation_hours: paymentConfirmationHours,
       allow_whatsapp_after_request: allowWhatsappAfterRequest,
+      nequi_number: nequiNumber,
+      session_price_cents: sessionPriceCents,
+      nequi_qr_url: nequiQrUrl,
     })
     .eq("user_id", userId);
 
