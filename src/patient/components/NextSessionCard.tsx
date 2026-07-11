@@ -72,7 +72,7 @@ export function NextSessionCard({
       </p>
 
       <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
-        {["requested", "pending_payment", "paid"].includes(appointment.status) ? (
+        {["requested", "pending_payment"].includes(appointment.status) ? (
           <Link
             to={`/patient/requests/${appointment.id}`}
             className="inline-flex items-center justify-center gap-2 rounded-2xl bg-club-green px-6 py-3.5 text-base text-club-paper shadow-soft transition hover:translate-y-[-1px] hover:opacity-95"

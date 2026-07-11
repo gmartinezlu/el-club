@@ -1,8 +1,19 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowLeft, CalendarCheck, MessageCircle, ShieldCheck } from "lucide-react";
+import {
+  ArrowLeft,
+  CalendarCheck,
+  Copy,
+  MessageCircle,
+  ShieldCheck,
+} from "lucide-react";
 import { fetchPatientAppointmentById } from "../../appointments/patient";
+import {
+  markPatientPaid,
+  releaseUnpaidAppointment,
+  uploadPaymentProof,
+} from "../../appointments/payments";
 import type { PatientAppointmentView } from "../../appointments/types";
 import { STATUS_LABELS } from "../../appointments/utils";
 import { fetchPsychologistProfile } from "../../services/supabase/psychologists";
@@ -15,6 +26,21 @@ import {
   formatSessionDate,
   formatSessionRange,
 } from "../utils/formatDate";
+
+function formatCop(cents: number): string {
+  return new Intl.NumberFormat("es-CO", {
+    style: "currency",
+    currency: "COP",
+    maximumFractionDigits: 0,
+  }).format(cents / 100);
+}
+
+function formatDeadline(deadline: string): string {
+  return new Date(deadline).toLocaleString("es-CO", {
+    dateStyle: "medium",
+    timeStyle: "short",
+  });
+}
 
 function createWhatsappUrl(value: string, psychologistName: string) {
   const digits = value.replace(/\D/g, "");
@@ -35,6 +61,9 @@ export function PatientAppointmentRequestPage() {
   );
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [proofFile, setProofFile] = useState<File | null>(null);
+  const [markingPaid, setMarkingPaid] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   const loadRequest = useCallback(async () => {
     if (!patientId || !appointmentId) {
@@ -45,7 +74,15 @@ export function PatientAppointmentRequestPage() {
     setLoading(true);
     setError(null);
     try {
-      const data = await fetchPatientAppointmentById(patientId, appointmentId);
+      let data = await fetchPatientAppointmentById(patientId, appointmentId);
+      if (
+        data?.status === "pending_payment" &&
+        data.paymentDeadline &&
+        new Date(data.paymentDeadline) < new Date()
+      ) {
+        await releaseUnpaidAppointment(appointmentId).catch(() => {});
+        data = await fetchPatientAppointmentById(patientId, appointmentId);
+      }
       setAppointment(data);
       if (data?.psychologistId) {
         const profile = await fetchPsychologistProfile(data.psychologistId);
@@ -63,6 +100,35 @@ export function PatientAppointmentRequestPage() {
       void loadRequest();
     });
   }, [loadRequest]);
+
+  async function submitPaid() {
+    if (!patientId || !appointmentId) return;
+    setMarkingPaid(true);
+    setError(null);
+    try {
+      let proofPath: string | null = null;
+      if (proofFile) {
+        proofPath = await uploadPaymentProof({
+          patientId,
+          appointmentId,
+          file: proofFile,
+        });
+      }
+      await markPatientPaid({ appointmentId, patientId, proofPath });
+      await loadRequest();
+    } catch (e) {
+      setError(getErrorMessage(e, "No se pudo registrar tu pago"));
+    } finally {
+      setMarkingPaid(false);
+    }
+  }
+
+  function copyNequiNumber() {
+    if (!psychologist?.nequiNumber) return;
+    void navigator.clipboard.writeText(psychologist.nequiNumber);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  }
 
   const canContactWhatsapp = useMemo(() => {
     if (!appointment || !psychologist?.professionalWhatsapp) return false;
@@ -150,37 +216,112 @@ export function PatientAppointmentRequestPage() {
               </div>
             </div>
 
-            <div className="mt-5 rounded-3xl border border-club-green/10 bg-club-green/5 p-5">
-              <p className="font-display text-2xl text-club-green">
-                Coordina el pago directamente con tu especialista
-              </p>
-              <p className="mt-2 text-sm leading-relaxed text-club-muted">
-                EL CLUB no solicita pagos por WhatsApp ni procesa dinero de
-                sesiones dentro de la plataforma.
-              </p>
-              {psychologist?.paymentMethods?.length ? (
-                <div className="mt-3 flex flex-wrap gap-2">
-                  {psychologist.paymentMethods.map((method) => (
-                    <span
-                      key={method}
-                      className="rounded-full bg-white/70 px-3 py-1 text-xs text-club-green"
-                    >
-                      {method}
-                    </span>
-                  ))}
+            {appointment.status === "pending_payment" && psychologist?.nequiNumber ? (
+              <div className="mt-5 rounded-3xl border border-club-green/10 bg-club-green/5 p-5">
+                <p className="font-display text-2xl text-club-green">
+                  Paga por Nequi
+                </p>
+                {appointment.paymentDeadline ? (
+                  <p className="mt-1 text-xs text-club-muted">
+                    Confirma antes del {formatDeadline(appointment.paymentDeadline)}
+                  </p>
+                ) : null}
+
+                <div className="mt-4 flex flex-wrap items-center gap-3">
+                  <div className="rounded-2xl border border-club-green/10 bg-white/70 px-4 py-3">
+                    <p className="text-xs text-club-muted">Número Nequi</p>
+                    <p className="font-display text-xl text-club-green">
+                      {psychologist.nequiNumber}
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={copyNequiNumber}
+                    className="inline-flex items-center gap-2 rounded-2xl border border-club-green/15 bg-white/55 px-4 py-2 text-sm text-club-green transition hover:bg-white/80"
+                  >
+                    <Copy className="h-4 w-4" strokeWidth={1.5} />
+                    {copied ? "Copiado" : "Copiar"}
+                  </button>
+                  {psychologist.sessionPriceCents ? (
+                    <div className="rounded-2xl border border-club-green/10 bg-white/70 px-4 py-3">
+                      <p className="text-xs text-club-muted">Valor sesión</p>
+                      <p className="font-display text-xl text-club-green">
+                        {formatCop(psychologist.sessionPriceCents)}
+                      </p>
+                    </div>
+                  ) : null}
                 </div>
-              ) : null}
-              {psychologist?.paymentInstructions ? (
-                <p className="mt-3 text-sm leading-relaxed text-club-muted">
-                  {psychologist.paymentInstructions}
+
+                {psychologist.nequiQrUrl ? (
+                  <img
+                    src={psychologist.nequiQrUrl}
+                    alt="QR de Nequi"
+                    className="mt-4 h-40 w-40 rounded-2xl border border-club-green/10 object-cover"
+                  />
+                ) : null}
+
+                {appointment.paymentMarkedPaidAt ? (
+                  <p className="mt-4 text-sm text-club-green">
+                    Marcaste tu pago como realizado. La especialista lo confirmará
+                    pronto.
+                  </p>
+                ) : (
+                  <div className="mt-4 space-y-3">
+                    <label className="block space-y-2">
+                      <span className="text-sm text-club-muted">
+                        Comprobante de pago (opcional)
+                      </span>
+                      <input
+                        type="file"
+                        accept="image/png,image/jpeg,image/webp,application/pdf"
+                        onChange={(e) => setProofFile(e.target.files?.[0] ?? null)}
+                        className="block w-full text-sm text-club-ink"
+                      />
+                    </label>
+                    <button
+                      type="button"
+                      disabled={markingPaid}
+                      onClick={() => void submitPaid()}
+                      className="inline-flex items-center gap-2 rounded-2xl bg-club-green px-5 py-3 text-sm text-club-paper shadow-soft transition hover:opacity-95 disabled:opacity-60"
+                    >
+                      {markingPaid ? "Enviando..." : "Ya pagué"}
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div className="mt-5 rounded-3xl border border-club-green/10 bg-club-green/5 p-5">
+                <p className="font-display text-2xl text-club-green">
+                  Coordina el pago directamente con tu especialista
                 </p>
-              ) : null}
-              {psychologist?.cancellationPolicy ? (
-                <p className="mt-3 text-xs leading-relaxed text-club-muted">
-                  Política de cancelación: {psychologist.cancellationPolicy}
+                <p className="mt-2 text-sm leading-relaxed text-club-muted">
+                  EL CLUB no solicita pagos por WhatsApp ni procesa dinero de
+                  sesiones dentro de la plataforma.
                 </p>
-              ) : null}
-            </div>
+                {psychologist?.paymentMethods?.length ? (
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {psychologist.paymentMethods.map((method) => (
+                      <span
+                        key={method}
+                        className="rounded-full bg-white/70 px-3 py-1 text-xs text-club-green"
+                      >
+                        {method}
+                      </span>
+                    ))}
+                  </div>
+                ) : null}
+                {psychologist?.paymentInstructions ? (
+                  <p className="mt-3 text-sm leading-relaxed text-club-muted">
+                    {psychologist.paymentInstructions}
+                  </p>
+                ) : null}
+                {psychologist?.cancellationPolicy ? (
+                  <p className="mt-3 text-xs leading-relaxed text-club-muted">
+                    Política de cancelación: {psychologist.cancellationPolicy}
+                  </p>
+                ) : null}
+              </div>
+            )}
           </EmotionalGlass>
 
           <EmotionalGlass className="p-5">

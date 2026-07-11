@@ -17,6 +17,7 @@ import {
   createSignedDocumentUrl,
   uploadPsychologistDocument,
 } from "../documents";
+import { uploadNequiQr } from "../nequiQr";
 
 function splitList(value: string): string[] {
   return value
@@ -48,6 +49,10 @@ export function PsychologistSettingsPage() {
   const [paymentConfirmationHours, setPaymentConfirmationHours] = useState(24);
   const [allowWhatsappAfterRequest, setAllowWhatsappAfterRequest] =
     useState(true);
+  const [nequiNumber, setNequiNumber] = useState("");
+  const [sessionPrice, setSessionPrice] = useState("");
+  const [nequiQrUrl, setNequiQrUrl] = useState<string | null>(null);
+  const [uploadingQr, setUploadingQr] = useState(false);
   const [documentPath, setDocumentPath] = useState<string | null>(null);
   const [applicationStatus, setApplicationStatus] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -90,6 +95,13 @@ export function PsychologistSettingsPage() {
       setCancellationPolicy(profile?.cancellationPolicy ?? "");
       setPaymentConfirmationHours(profile?.paymentConfirmationHours ?? 24);
       setAllowWhatsappAfterRequest(profile?.allowWhatsappAfterRequest ?? true);
+      setNequiNumber(profile?.nequiNumber ?? "");
+      setSessionPrice(
+        profile?.sessionPriceCents != null
+          ? String(Math.round(profile.sessionPriceCents / 100))
+          : "",
+      );
+      setNequiQrUrl(profile?.nequiQrUrl ?? null);
       setDocumentPath(profile?.documentUrl ?? null);
       setApplicationStatus(profile?.applicationStatus ?? null);
     } catch (e) {
@@ -180,6 +192,12 @@ export function PsychologistSettingsPage() {
         cancellationPolicy: cancellationPolicy.trim() || null,
         paymentConfirmationHours,
         allowWhatsappAfterRequest,
+        nequiNumber: nequiNumber.trim() || null,
+        sessionPriceCents:
+          sessionPrice.trim() && !Number.isNaN(Number(sessionPrice))
+            ? Math.round(Number(sessionPrice) * 100)
+            : null,
+        nequiQrUrl,
       });
       await refreshRole();
       setSaved(true);
@@ -187,6 +205,21 @@ export function PsychologistSettingsPage() {
       setError(getErrorMessage(e, "No se pudo guardar tu perfil"));
     } finally {
       setSaving(false);
+    }
+  }
+
+  async function uploadQr(file: File | null) {
+    if (!userId || !file) return;
+    setUploadingQr(true);
+    setSaved(false);
+    setError(null);
+    try {
+      const url = await uploadNequiQr({ userId, file });
+      setNequiQrUrl(url);
+    } catch (e) {
+      setError(getErrorMessage(e, "No se pudo subir el código QR"));
+    } finally {
+      setUploadingQr(false);
     }
   }
 
@@ -360,6 +393,64 @@ export function PsychologistSettingsPage() {
                     Separados por coma.
                   </span>
                 </label>
+              </div>
+
+              <div className="mt-5 grid gap-5 md:grid-cols-2">
+                <label className="space-y-2">
+                  <span className="text-sm text-club-muted">
+                    Número Nequi
+                  </span>
+                  <input
+                    value={nequiNumber}
+                    onChange={(e) => setNequiNumber(e.target.value)}
+                    placeholder="300 000 0000"
+                    className="w-full rounded-2xl border border-club-green/10 bg-white/60 px-4 py-3 text-sm text-club-ink outline-none ring-club-green/10 focus:ring-2"
+                  />
+                  <span className="block text-xs text-club-muted">
+                    Se muestra a la persona cuando su cita queda pendiente de
+                    pago.
+                  </span>
+                </label>
+
+                <label className="space-y-2">
+                  <span className="text-sm text-club-muted">
+                    Precio de la sesión (COP)
+                  </span>
+                  <input
+                    type="number"
+                    min={0}
+                    step={1000}
+                    value={sessionPrice}
+                    onChange={(e) => setSessionPrice(e.target.value)}
+                    placeholder="120000"
+                    className="w-full rounded-2xl border border-club-green/10 bg-white/60 px-4 py-3 text-sm text-club-ink outline-none ring-club-green/10 focus:ring-2"
+                  />
+                </label>
+              </div>
+
+              <div className="mt-5 space-y-2">
+                <span className="text-sm text-club-muted">Código QR de Nequi</span>
+                <div className="flex flex-wrap items-center gap-3">
+                  {nequiQrUrl ? (
+                    <img
+                      src={nequiQrUrl}
+                      alt="QR de Nequi"
+                      className="h-20 w-20 rounded-2xl border border-club-green/10 object-cover"
+                    />
+                  ) : null}
+                  <label className="inline-flex cursor-pointer rounded-2xl border border-club-green/15 bg-white/55 px-4 py-2 text-sm text-club-green transition hover:bg-white/80">
+                    {uploadingQr ? "Subiendo..." : "Subir QR"}
+                    <input
+                      type="file"
+                      accept="image/png,image/jpeg,image/webp"
+                      className="sr-only"
+                      disabled={uploadingQr}
+                      onChange={(event) =>
+                        void uploadQr(event.target.files?.[0] ?? null)
+                      }
+                    />
+                  </label>
+                </div>
               </div>
 
               <div className="mt-5 grid gap-5 md:grid-cols-2">
