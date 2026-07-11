@@ -1,4 +1,4 @@
-import {
+﻿import {
   BookOpen,
   CalendarHeart,
   Coffee,
@@ -28,8 +28,8 @@ export const clubImages = {
 
 export const ecosystemItems = [
   {
-    title: "Terapia y acompañamiento profesional",
-    text: "Especialistas verificados cuando necesitas sostén claro y humano.",
+    title: "Terapia y acompaÃ±amiento profesional",
+    text: "Especialistas verificados cuando necesitas sostÃ©n claro y humano.",
     icon: HeartHandshake,
   },
   {
@@ -49,12 +49,12 @@ export const ecosystemItems = [
   },
   {
     title: "Retos de bienestar",
-    text: "Pequeñas prácticas para construir hábitos sin presión.",
+    text: "PequeÃ±as prÃ¡cticas para construir hÃ¡bitos sin presiÃ³n.",
     icon: Sparkles,
   },
   {
     title: "Contenido y recursos",
-    text: "Lecturas, journals y meditaciones para acompañarte entre experiencias.",
+    text: "Lecturas, journals y meditaciones para acompaÃ±arte entre experiencias.",
     icon: BookOpen,
   },
 ];
@@ -63,7 +63,7 @@ export const experiences = [
   {
     title: "Caminata consciente",
     tag: "Presencial",
-    date: "Próximamente",
+    date: "PrÃ³ximamente",
     category: "Movimiento",
     image:
       "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80",
@@ -79,7 +79,7 @@ export const experiences = [
   {
     title: "Yoga & journaling",
     tag: "Presencial",
-    date: "Sábado AM",
+    date: "SÃ¡bado AM",
     category: "Movimiento",
     image:
       "https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=900&q=80",
@@ -101,17 +101,17 @@ export const experiences = [
       "https://images.unsplash.com/photo-1526676037777-05a232554f77?auto=format&fit=crop&w=900&q=80",
   },
   {
-    title: "Café y conversación",
+    title: "CafÃ© y conversaciÃ³n",
     tag: "Miembros",
-    date: "Próximamente",
+    date: "PrÃ³ximamente",
     category: "Comunidad",
     image:
       "https://images.unsplash.com/photo-1521017432531-fbd92d768814?auto=format&fit=crop&w=900&q=80",
   },
   {
-    title: "Meditación guiada",
+    title: "MeditaciÃ³n guiada",
     tag: "Online",
-    date: "Miércoles",
+    date: "MiÃ©rcoles",
     category: "Bienestar",
     image:
       "https://images.unsplash.com/photo-1508672019048-805c876b67e2?auto=format&fit=crop&w=900&q=80",
@@ -126,71 +126,30 @@ export const experiences = [
   },
 ];
 
-export const membershipPlans = [
-  {
-    name: "Comunidad",
-    description: "Para sentirte parte y recibir guía constante.",
-    price: "Desde la comunidad",
-    features: [
-      "Acceso a comunidad WhatsApp",
-      "Invitaciones a eventos",
-      "Contenido exclusivo",
-      "Retos mensuales",
-    ],
-    cta: "Unirme a la comunidad",
-  },
-  {
-    name: "Club",
-    description: "Para vivir experiencias y crear hábitos con compañía.",
-    price: "Membresía Club",
-    featured: true,
-    features: [
-      "Todo lo anterior",
-      "Acceso prioritario a experiencias",
-      "Talleres mensuales",
-      "Descuentos en terapia",
-      "Recursos premium",
-    ],
-    cta: "Quiero ser miembro",
-  },
-  {
-    name: "Acompañamiento",
-    description: "Para combinar comunidad, terapia y seguimiento emocional.",
-    price: "Programa guiado",
-    features: [
-      "Todo lo anterior",
-      "Sesiones con profesionales",
-      "Seguimiento emocional",
-      "Programas personalizados",
-    ],
-    cta: "Explorar acompañamiento",
-  },
-];
-
 export const contentArticles = [
   {
-    title: "Cómo bajar el ritmo sin desconectarte de tu vida",
-    category: "Estrés",
+    title: "CÃ³mo bajar el ritmo sin desconectarte de tu vida",
+    category: "EstrÃ©s",
     readTime: "5 min",
     image:
       "https://images.unsplash.com/photo-1499209974431-9dddcece7f88?auto=format&fit=crop&w=900&q=80",
   },
   {
-    title: "Preguntas de journal para días emocionalmente intensos",
-    category: "Hábitos",
+    title: "Preguntas de journal para dÃ­as emocionalmente intensos",
+    category: "HÃ¡bitos",
     readTime: "4 min",
     image:
       "https://images.unsplash.com/photo-1517842645767-c639042777db?auto=format&fit=crop&w=900&q=80",
   },
   {
-    title: "Relaciones que se sienten seguras: señales suaves",
+    title: "Relaciones que se sienten seguras: seÃ±ales suaves",
     category: "Relaciones",
     readTime: "6 min",
     image:
       "https://images.unsplash.com/photo-1491438590914-bc09fcaaf77a?auto=format&fit=crop&w=900&q=80",
   },
   {
-    title: "Autoestima cotidiana: menos exigencia, más presencia",
+    title: "Autoestima cotidiana: menos exigencia, mÃ¡s presencia",
     category: "Autoestima",
     readTime: "5 min",
     image:
@@ -203,26 +162,26 @@ export const communityPrinciples = [
   { label: "Grupos por ciudad", icon: Users },
   { label: "Retos temporales", icon: CalendarHeart },
   { label: "Actividades para miembros", icon: Coffee },
-  { label: "Moderación y reglas claras", icon: ShieldCheck },
+  { label: "ModeraciÃ³n y reglas claras", icon: ShieldCheck },
   { label: "Cuidado sin foros abiertos", icon: Moon },
 ];
 
 export const specialists = [
   {
     name: "Dra. Camila R.",
-    focus: "Ansiedad y regulación emocional",
+    focus: "Ansiedad y regulaciÃ³n emocional",
     image:
       "https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=700&q=80",
   },
   {
     name: "Psic. Valeria S.",
-    focus: "Vínculos, duelo y autoestima",
+    focus: "VÃ­nculos, duelo y autoestima",
     image:
       "https://images.unsplash.com/photo-1551836022-8b2858c9c69b?auto=format&fit=crop&w=700&q=80",
   },
   {
     name: "Dra. Paula M.",
-    focus: "Estrés, burnout y hábitos",
+    focus: "EstrÃ©s, burnout y hÃ¡bitos",
     image:
       "https://images.unsplash.com/photo-1587614382346-4ec70e388b28?auto=format&fit=crop&w=700&q=80",
   },
@@ -231,15 +190,15 @@ export const specialists = [
 export const blogCategories = [
   "Ansiedad",
   "Relaciones",
-  "Hábitos",
-  "Estrés",
+  "HÃ¡bitos",
+  "EstrÃ©s",
   "Autoestima",
   "Bienestar laboral",
 ];
 
 export const therapyNeeds = [
   "Ansiedad",
-  "Estrés",
+  "EstrÃ©s",
   "Relaciones",
   "Duelo",
   "Autoestima",
@@ -249,8 +208,8 @@ export const therapyNeeds = [
 export const professionalBenefits = [
   "Perfil profesional dentro de una marca premium",
   "Agenda, notas y disponibilidad organizada",
-  "Metodos de pago configurados por cada profesional",
-  "Comunidad de bienestar con límites claros",
-  "Aprobación y revisión profesional por admin",
-  "Experiencia cálida para personas, no clínica fría",
+  "métodos de pago configurados por cada profesional",
+  "Comunidad de bienestar con lÃ­mites claros",
+  "AprobaciÃ³n y revisiÃ³n profesional por admin",
+  "Experiencia cÃ¡lida para personas, no clÃ­nica frÃ­a",
 ];

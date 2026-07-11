@@ -1,4 +1,4 @@
--- El Club · Private psychologist notes
+-- El Club Â· Private psychologist notes
 -- Keep patient-visible appointment rows separate from psychologist-only notes.
 
 create table if not exists public.psychologist_session_notes (

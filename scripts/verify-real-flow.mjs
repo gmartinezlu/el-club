@@ -1,4 +1,4 @@
-import { readFile } from "node:fs/promises";
+﻿import { readFile } from "node:fs/promises";
 import { createClient } from "@supabase/supabase-js";
 
 const envText = await readFile(new URL("../.env.local", import.meta.url), "utf8");

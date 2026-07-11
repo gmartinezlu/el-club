@@ -1,4 +1,4 @@
-import { getSupabaseClient } from "../../services/supabase/client";
+﻿import { getSupabaseClient } from "../../services/supabase/client";
 import type { PatientEmotionalOnboarding } from "./types";
 
 type PatientOnboardingRow = {

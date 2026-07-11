@@ -1,4 +1,4 @@
-import { getSupabaseClient } from "../services/supabase/client";
+﻿import { getSupabaseClient } from "../services/supabase/client";
 import type { EmotionalResource, ResourceType } from "./types";
 
 type ResourceRow = {

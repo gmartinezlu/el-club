@@ -1,4 +1,4 @@
-import { lazy, Suspense } from "react";
+﻿import { lazy, Suspense } from "react";
 import type { ComponentType } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { AuthLayout } from "../layouts/auth/AuthLayout";
@@ -25,10 +25,6 @@ const LandingPage = lazyPage(
 const ExperiencesPage = lazyPage(
   () => import("../pages/ExperiencesPage"),
   "ExperiencesPage",
-);
-const MembershipPage = lazyPage(
-  () => import("../pages/MembershipPage"),
-  "MembershipPage",
 );
 const CommunityPage = lazyPage(
   () => import("../pages/CommunityPage"),
@@ -113,14 +109,6 @@ const PatientOnboardingPage = lazyPage(
   () => import("../patient/pages/OnboardingPage"),
   "PatientOnboardingPage",
 );
-const PatientMembershipCheckoutPage = lazyPage(
-  () => import("../patient/pages/MembershipCheckoutPage"),
-  "PatientMembershipCheckoutPage",
-);
-const PatientMembershipReturnPage = lazyPage(
-  () => import("../patient/pages/MembershipReturnPage"),
-  "PatientMembershipReturnPage",
-);
 
 const PsychologistDashboardPage = lazyPage(
   () => import("../psychologist/pages/Dashboard"),
@@ -155,10 +143,6 @@ const AdminPsychologistsPage = lazyPage(
   () => import("../admin/pages/PsychologistsPage"),
   "AdminPsychologistsPage",
 );
-const AdminMembershipsPage = lazyPage(
-  () => import("../admin/pages/MembershipsPage"),
-  "AdminMembershipsPage",
-);
 const AdminActivityPage = lazyPage(
   () => import("../admin/pages/ActivityPage"),
   "AdminActivityPage",
@@ -186,7 +170,6 @@ export default function App() {
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/experiencias" element={<ExperiencesPage />} />
-        <Route path="/membresia" element={<MembershipPage />} />
         <Route path="/comunidad" element={<CommunityPage />} />
         <Route path="/blog" element={<BlogPage />} />
         <Route path="/terapia" element={<TherapyPage />} />
@@ -255,14 +238,6 @@ export default function App() {
             <Route path="meditations" element={<PatientMeditationsPage />} />
             <Route path="sessions" element={<PatientSessionsPage />} />
             <Route
-              path="membership/checkout/:planCode"
-              element={<PatientMembershipCheckoutPage />}
-            />
-            <Route
-              path="membership/return"
-              element={<PatientMembershipReturnPage />}
-            />
-            <Route
               path="crisis-chat"
               element={<CrisisChatPage mode="patient" />}
             />
@@ -305,7 +280,6 @@ export default function App() {
           >
             <Route index element={<AdminOverviewPage />} />
             <Route path="psychologists" element={<AdminPsychologistsPage />} />
-            <Route path="memberships" element={<AdminMembershipsPage />} />
             <Route path="activity" element={<AdminActivityPage />} />
             <Route path="support" element={<AdminSupportPage />} />
             <Route path="content" element={<AdminContentPage />} />

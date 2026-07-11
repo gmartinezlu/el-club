@@ -115,6 +115,11 @@ export function PatientJournalsPage() {
 
   async function removeEntry(entry: JournalEntry) {
     if (!patientId) return;
+    const confirmed = window.confirm(
+      "¿Estás seguro de que deseas eliminar esta entrada? Esta acción no se puede deshacer.",
+    );
+    if (!confirmed) return;
+
     setSaving(true);
     setError(null);
     try {

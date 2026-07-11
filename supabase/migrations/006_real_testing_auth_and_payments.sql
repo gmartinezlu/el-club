@@ -1,4 +1,4 @@
--- El Club · Real testing helpers
+-- El Club Â· Real testing helpers
 -- Auth profile bootstrap + demo payment RPC for a real Supabase project.
 
 create or replace function public.handle_new_auth_user()
@@ -70,7 +70,7 @@ begin
   end if;
 
   if appointment_row.status <> 'pending_payment'::public.appointment_status then
-    raise exception 'Esta cita no está pendiente de pago';
+    raise exception 'Esta cita no estÃ¡ pendiente de pago';
   end if;
 
   insert into public.payments (

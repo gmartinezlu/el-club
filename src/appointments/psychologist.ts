@@ -1,4 +1,4 @@
-import { getSupabaseClient } from "../services/supabase/client";
+﻿import { getSupabaseClient } from "../services/supabase/client";
 import { fetchAppointmentsBase } from "./fetchWithProfiles";
 import { APPOINTMENT_SELECT } from "./queries";
 import {
@@ -78,6 +78,28 @@ export async function fetchPsychologistAppointments(
   }
 
   return attachPsychologistNotes(psychologistId, appointments);
+}
+
+export async function fetchBusyStartTimes(
+  psychologistId: string,
+  fromIso: string,
+  toIso: string,
+): Promise<Set<number>> {
+  const supabase = getSupabaseClient();
+  const { data, error } = await supabase
+    .from("appointments")
+    .select("starts_at")
+    .eq("psychologist_id", psychologistId)
+    .gte("starts_at", fromIso)
+    .lt("starts_at", toIso)
+    .not("status", "in", "(cancelled,rejected)");
+
+  if (error) throw error;
+  return new Set(
+    ((data ?? []) as { starts_at: string }[]).map((row) =>
+      new Date(row.starts_at).getTime(),
+    ),
+  );
 }
 
 export function buildPatientSummaries(

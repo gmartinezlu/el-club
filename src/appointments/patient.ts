@@ -1,3 +1,4 @@
+﻿import type { PostgrestError } from "@supabase/supabase-js";
 import { getSupabaseClient } from "../services/supabase/client";
 import { fetchAppointmentsBase } from "./fetchWithProfiles";
 import { APPOINTMENT_SELECT } from "./queries";
@@ -8,12 +9,21 @@ import {
 } from "./mappers";
 import type { PatientAppointmentView } from "./types";
 
-export type CreatePatientAppointmentInput = {
-  patientId: string;
-  psychologistId: string;
-  startsAt: string;
-  endsAt: string;
-};
+// Postgres: 42703 = undefined_column, 42P01 = undefined_table/relation.
+// PostgREST: PGRST205 = table not found in schema cache.
+const SAFE_SCHEMA_ERROR_CODES = new Set(["42703", "42P01", "PGRST205"]);
+
+/**
+ * Check if error is a "safe" schema-related error (missing column/relation)
+ * that can be safely ignored with a fallback. Relies on the structured
+ * Postgres/PostgREST error code, not a text match on the message, so
+ * network or permission errors are never misclassified as safe.
+ */
+function isSafeSchemaError(error: unknown): boolean {
+  if (!error) return false;
+  const code = (error as Partial<PostgrestError>)?.code;
+  return typeof code === "string" && SAFE_SCHEMA_ERROR_CODES.has(code);
+}
 
 async function fetchPatientAppointmentsJoined(
   patientId: string,
@@ -38,7 +48,12 @@ export async function fetchPatientAppointments(
 ): Promise<PatientAppointmentView[]> {
   try {
     return await fetchPatientAppointmentsJoined(patientId);
-  } catch {
+  } catch (error) {
+    // Only fallback for safe schema errors (missing columns/relations)
+    if (!isSafeSchemaError(error)) {
+      throw error; // Re-throw network or permission errors
+    }
+    // Safe to ignore: try fallback query
     const base = await fetchAppointmentsBase({
       column: "patient_id",
       value: patientId,
@@ -66,46 +81,58 @@ export async function fetchPatientAppointmentById(
     return toPatientView(
       mapAppointmentRow(data as unknown as AppointmentRowRaw),
     );
-  } catch {
+  } catch (error) {
+    // Only fallback for safe schema errors (missing columns/relations)
+    if (!isSafeSchemaError(error)) {
+      throw error; // Re-throw network or permission errors
+    }
+    // Safe to ignore: try fallback query
     const all = await fetchPatientAppointments(patientId);
     return all.find((a) => a.id === appointmentId) ?? null;
   }
 }
 
-export async function createPatientAppointment(
-  input: CreatePatientAppointmentInput,
-): Promise<string> {
+/**
+ * Book appointment atomically using Supabase RPC.
+ * Prevents double-booking by verifying slot availability, creating appointment,
+ * and removing slot in a single transaction.
+ */
+export async function bookAppointmentAtomically({
+  patientId,
+  psychologistId,
+  slotId,
+}: {
+  patientId: string;
+  psychologistId: string;
+  slotId: string;
+}): Promise<string> {
   const supabase = getSupabaseClient();
 
-  let { data, error } = await supabase
-    .from("appointments")
-    .insert({
-      patient_id: input.patientId,
-      psychologist_id: input.psychologistId,
-      starts_at: input.startsAt,
-      ends_at: input.endsAt,
-      status: "requested",
-    })
-    .select("id")
-    .single<{ id: string }>();
-
-  if (error && /requested|appointment_status/i.test(error.message)) {
-    const fallback = await supabase
-      .from("appointments")
-      .insert({
-        patient_id: input.patientId,
-        psychologist_id: input.psychologistId,
-        starts_at: input.startsAt,
-        ends_at: input.endsAt,
-        status: "pending_payment",
-      })
-      .select("id")
-      .single<{ id: string }>();
-    data = fallback.data;
-    error = fallback.error;
-  }
+  const { data, error } = await supabase.rpc("book_appointment", {
+    p_patient_id: patientId,
+    p_psychologist_id: psychologistId,
+    p_slot_id: slotId,
+  });
 
   if (error) throw error;
-  if (!data) throw new Error("No se pudo crear la cita");
-  return data.id;
+  if (!data || !Array.isArray(data) || data.length === 0)
+    throw new Error("Invalid RPC response");
+
+  const result = data[0] as {
+    success: boolean;
+    appointment_id: string | null;
+    error_message: string | null;
+  };
+
+  if (!result.success) {
+    throw new Error(
+      result.error_message || "No se pudo reservar el horario disponible",
+    );
+  }
+
+  if (!result.appointment_id) {
+    throw new Error("No se recibió ID de cita del servidor");
+  }
+
+  return result.appointment_id;
 }

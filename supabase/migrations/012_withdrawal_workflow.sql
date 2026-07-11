@@ -49,7 +49,7 @@ begin
     where u.id = auth.uid()
       and u.role = 'psychologist'::public.app_role
   ) then
-    raise exception 'Solo las psicologas pueden solicitar retiros';
+    raise exception 'Solo las psicólogas pueden solicitar retiros';
   end if;
 
   amount_cents := p_amount_cop * 100;

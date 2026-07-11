@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+﻿import { useCallback, useEffect, useMemo, useState } from "react";
 import { CheckCircle2, MessageCircle, Search, Send } from "lucide-react";
 import {
   fetchAdminSupportTickets,
@@ -85,7 +85,7 @@ export function AdminSupportPage() {
         <p className="text-sm font-medium text-club-green">Cuidado operativo</p>
         <h1 className="font-display text-4xl text-club-green">Soporte</h1>
         <p className="max-w-2xl text-sm leading-relaxed text-club-muted">
-          Responde tickets y envia una notificacion directa al usuario.
+          Responde tickets y envía una notificación directa al usuario.
         </p>
       </header>
 

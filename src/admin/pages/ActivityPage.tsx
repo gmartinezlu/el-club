@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { Activity, Video } from "lucide-react";
 import { STATUS_LABELS } from "../../appointments/utils";
 import { formatSessionDate, formatSessionRange } from "../../patient/utils/formatDate";
@@ -41,10 +41,10 @@ export function AdminActivityPage() {
   return (
     <div className="space-y-8">
       <header className="space-y-2">
-        <p className="text-sm font-medium text-club-green">Auditoria</p>
+        <p className="text-sm font-medium text-club-green">Auditoría</p>
         <h1 className="font-display text-4xl text-club-green">Actividad</h1>
         <p className="max-w-2xl text-sm leading-relaxed text-club-muted">
-          Ultimos movimientos de citas y preparacion de sesiones.
+          Últimos movimientos de citas y preparación de sesiones.
         </p>
       </header>
 
@@ -54,7 +54,7 @@ export function AdminActivityPage() {
         <div className="h-52 animate-pulse rounded-3xl bg-club-green/5" />
       ) : activity.length === 0 ? (
         <div className="rounded-3xl border border-club-green/10 bg-white/35 p-6">
-          <p className="text-sm text-club-muted">Aun no hay actividad.</p>
+          <p className="text-sm text-club-muted">Aún no hay actividad.</p>
         </div>
       ) : (
         <div className="space-y-3">

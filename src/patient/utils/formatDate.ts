@@ -1,4 +1,4 @@
-export function formatSessionDate(iso: string): string {
+﻿export function formatSessionDate(iso: string): string {
   const date = new Date(iso);
   return date.toLocaleDateString("es-CO", {
     weekday: "long",
@@ -16,7 +16,7 @@ export function formatSessionTime(iso: string): string {
 }
 
 export function formatSessionRange(startsAt: string, endsAt: string): string {
-  return `${formatSessionTime(startsAt)} – ${formatSessionTime(endsAt)}`;
+  return `${formatSessionTime(startsAt)} â€“ ${formatSessionTime(endsAt)}`;
 }
 
 export function isSessionSoon(startsAt: string, withinMinutes = 30): boolean {

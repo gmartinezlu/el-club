@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+﻿import { motion } from "framer-motion";
 
 export function QuoteCard({
   quote,
@@ -20,10 +20,10 @@ export function QuoteCard({
       viewport={{ once: true, amount: 0.2 }}
       transition={{ duration: 0.45, ease: "easeOut" }}
       className={
-        "rounded-3xl border p-6 shadow-soft backdrop-blur " +
+        "rounded-3xl border p-6 transition-all duration-300 hover:-translate-y-1 " +
         (isDark
-          ? "border-club-cream/15 bg-club-paper/10"
-          : "border-club-green/10 bg-white/35")
+          ? "border-club-cream/15 bg-club-paper/10 hover:border-club-cream/25"
+          : "border-club-green/10 bg-white/60 hover:border-club-green/20 hover:shadow-soft")
       }
     >
       <p className="font-display text-2xl leading-none text-club-brass">

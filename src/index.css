@@ -10,6 +10,7 @@
   font-display: swap;
 }
 
+
 :root {
   --club-cream: #eadac8;
   --club-green: #084739;
@@ -44,12 +45,7 @@ body {
   margin: 0;
   font-family: var(--font-text);
   color: var(--club-ink);
-  background: radial-gradient(
-      1200px 600px at 10% 0%,
-      rgba(234, 218, 200, 0.65),
-      rgba(234, 218, 200, 0) 60%
-    ),
-    linear-gradient(180deg, var(--club-paper), var(--club-sand));
+  background: var(--club-paper);
 }
 
 ::selection {

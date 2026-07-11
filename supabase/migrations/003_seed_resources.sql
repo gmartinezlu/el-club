@@ -1,5 +1,5 @@
 -- Recursos emocionales iniciales (meditaciones + contenido)
--- Ejecutar después de 001 y 002
+-- Ejecutar despuÃ©s de 001 y 002
 
 insert into public.resources (
   title,
@@ -14,9 +14,9 @@ insert into public.resources (
 values
   (
     'Centro',
-    'Respiración consciente para volver al cuerpo.',
+    'RespiraciÃ³n consciente para volver al cuerpo.',
     'meditation',
-    'Cierra los ojos. Inhala en 4, sostén en 4, exhala en 6.',
+    'Cierra los ojos. Inhala en 4, sostÃ©n en 4, exhala en 6.',
     null,
     8,
     true,
@@ -24,9 +24,9 @@ values
   ),
   (
     'Soltar',
-    'Libera tensión acumulada con suavidad.',
+    'Libera tensiÃ³n acumulada con suavidad.',
     'meditation',
-    'Recorre hombros, mandíbula y manos sin juzgar.',
+    'Recorre hombros, mandÃ­bula y manos sin juzgar.',
     null,
     6,
     true,
@@ -34,9 +34,9 @@ values
   ),
   (
     'Gratitud suave',
-    'Cierra el día con calma.',
+    'Cierra el dÃ­a con calma.',
     'meditation',
-    'Nombra tres cosas pequeñas que te sostuvieron hoy.',
+    'Nombra tres cosas pequeÃ±as que te sostuvieron hoy.',
     null,
     5,
     true,
@@ -46,14 +46,14 @@ values
     'Cuando la ansiedad sube',
     'Lectura breve y aplicable para hoy.',
     'article',
-    'La ansiedad es una señal, no un fallo. Puedes nombrarla y acompañarla.',
+    'La ansiedad es una seÃ±al, no un fallo. Puedes nombrarla y acompaÃ±arla.',
     null,
     5,
     true,
     40
   ),
   (
-    'Respiración 4-4-6',
+    'RespiraciÃ³n 4-4-6',
     'Ejercicio guiado para regular el sistema nervioso.',
     'exercise',
     'Repite 4 ciclos. Si te mareas, vuelve a tu ritmo natural.',

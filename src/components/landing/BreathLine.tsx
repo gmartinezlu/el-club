@@ -1,4 +1,4 @@
-export function BreathLine({ className = "" }: { className?: string }) {
+﻿export function BreathLine({ className = "" }: { className?: string }) {
   return (
     <svg
       viewBox="0 0 600 64"

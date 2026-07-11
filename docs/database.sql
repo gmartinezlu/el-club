@@ -1,11 +1,11 @@
--- El Club · Esquema base (referencia)
+﻿-- El Club Â· Esquema base (referencia)
 -- Fuente de verdad para migraciones: supabase/migrations/
 -- Ver docs/supabase-setup.md para instrucciones de despliegue.
 
 -- Extensiones recomendadas
 create extension if not exists "uuid-ossp";
 
--- Roles de aplicación (no confundir con roles de Postgres)
+-- Roles de aplicaciÃ³n (no confundir con roles de Postgres)
 do $$
 begin
   if not exists (select 1 from pg_type where typname = 'app_role') then
@@ -64,7 +64,7 @@ create table if not exists public.availability (
   created_at timestamptz not null default now()
 );
 
--- APPOINTMENTS
+-- APPOINTMENTS (therapy sessions with direct Nequi payments)
 create table if not exists public.appointments (
   id uuid primary key default uuid_generate_v4(),
   patient_id uuid not null references public.patients(user_id),
@@ -77,17 +77,16 @@ create table if not exists public.appointments (
   updated_at timestamptz not null default now()
 );
 
--- PAYMENTS (marketplace)
+-- PAYMENTS (direct Nequi payments to psychologist for each session)
+-- Payments system is managed externally; this table records Nequi webhook events
 create table if not exists public.payments (
   id uuid primary key default uuid_generate_v4(),
   appointment_id uuid not null references public.appointments(id) on delete restrict,
-  provider text not null, -- wompi | epayco
+  provider text not null default 'nequi', -- always 'nequi' now
   provider_payment_id text,
   amount_cents integer not null,
   currency text not null default 'COP',
-  platform_fee_cents integer not null default 0,
-  psychologist_fee_cents integer not null default 0,
-  status text not null, -- created | paid | failed | refunded ...
+  status text not null, -- created | paid | failed | refunded
   created_at timestamptz not null default now()
 );
 

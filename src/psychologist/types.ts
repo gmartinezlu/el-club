@@ -1,4 +1,4 @@
-export type PsychologistProfile = {
+﻿export type PsychologistProfile = {
   userId: string;
   fullName: string;
   avatarUrl: string | null;

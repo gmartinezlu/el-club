@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+﻿import { useCallback, useEffect, useState } from "react";
 import { Save, Sparkles } from "lucide-react";
 import {
   fetchPatientOnboarding,
@@ -156,7 +156,7 @@ export function PatientSettingsPage() {
                 <input
                   value={mainConcern}
                   onChange={(e) => setMainConcern(e.target.value)}
-                  placeholder="Ansiedad, duelo, estrés..."
+                  placeholder="Ansiedad, duelo, estrÃ©s..."
                   className="w-full rounded-2xl border border-club-green/10 bg-white/60 px-4 py-3 text-sm text-club-ink outline-none ring-club-green/10 focus:ring-2"
                 />
               </label>
@@ -184,7 +184,7 @@ export function PatientSettingsPage() {
               <input
                 value={emotionalGoals}
                 onChange={(e) => setEmotionalGoals(e.target.value)}
-                placeholder="Regular ansiedad, poner límites, dormir mejor"
+                placeholder="Regular ansiedad, poner lÃ­mites, dormir mejor"
                 className="w-full rounded-2xl border border-club-green/10 bg-white/60 px-4 py-3 text-sm text-club-ink outline-none ring-club-green/10 focus:ring-2"
               />
               <span className="block text-xs text-club-muted">
@@ -194,12 +194,12 @@ export function PatientSettingsPage() {
 
             <label className="space-y-2">
               <span className="text-sm text-club-muted">
-                Preferencias de acompañamiento
+                Preferencias de acompaÃ±amiento
               </span>
               <input
                 value={therapyPreferences}
                 onChange={(e) => setTherapyPreferences(e.target.value)}
-                placeholder="Cálida, con ejercicios, ritmo suave"
+                placeholder="CÃ¡lida, con ejercicios, ritmo suave"
                 className="w-full rounded-2xl border border-club-green/10 bg-white/60 px-4 py-3 text-sm text-club-ink outline-none ring-club-green/10 focus:ring-2"
               />
               <span className="block text-xs text-club-muted">
@@ -222,7 +222,7 @@ export function PatientSettingsPage() {
                 <input
                   value={supportStyle}
                   onChange={(e) => setSupportStyle(e.target.value)}
-                  placeholder="Escucha y contención"
+                  placeholder="Escucha y contenciÃ³n"
                   className="w-full rounded-2xl border border-club-green/10 bg-white/60 px-4 py-3 text-sm text-club-ink outline-none ring-club-green/10 focus:ring-2"
                 />
               </label>
@@ -253,7 +253,7 @@ export function PatientSettingsPage() {
                 onClick={() => void signOut()}
                 className="rounded-2xl border border-club-green/15 bg-white/50 px-5 py-3 text-sm text-club-green transition hover:bg-white/70"
               >
-                Cerrar sesión
+                Cerrar sesiÃ³n
               </button>
             </div>
           </EmotionalGlass>

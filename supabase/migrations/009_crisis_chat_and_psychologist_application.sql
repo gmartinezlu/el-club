@@ -1,4 +1,4 @@
--- El Club · Crisis chat + psychologist professional application
+-- El Club Â· Crisis chat + psychologist professional application
 
 alter table public.psychologists
   add column if not exists professional_title text,

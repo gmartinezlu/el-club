@@ -1,4 +1,4 @@
-export type JournalEntry = {
+﻿export type JournalEntry = {
   id: string;
   patientId: string;
   title: string | null;

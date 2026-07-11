@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+﻿import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   CheckCircle2,
   Clock3,
@@ -67,7 +67,7 @@ export function AdminPsychologistsPage() {
     try {
       setPsychologists(await fetchAdminPsychologists());
     } catch (e) {
-      setError(getErrorMessage(e, "No se pudieron cargar las psicologas"));
+      setError(getErrorMessage(e, "No se pudieron cargar las psicólogas"));
     } finally {
       setLoading(false);
     }
@@ -121,7 +121,7 @@ export function AdminPsychologistsPage() {
       await loadPsychologists();
       closeReview();
     } catch (e) {
-      setError(getErrorMessage(e, "No se pudo actualizar la revision"));
+      setError(getErrorMessage(e, "No se pudo actualizar la revisión"));
     } finally {
       setSavingId(null);
     }
@@ -143,13 +143,13 @@ export function AdminPsychologistsPage() {
   return (
     <div className="space-y-8">
       <header className="space-y-2">
-        <p className="text-sm font-medium text-club-green">Equipo clinico</p>
+        <p className="text-sm font-medium text-club-green">Equipo clínico</p>
         <h1 className="font-display text-4xl text-club-green">
-          Aprobacion de psicologas
+          Aprobación de psicólogas
         </h1>
         <p className="max-w-2xl text-sm leading-relaxed text-club-muted">
           Revisa credenciales, soportes profesionales y el estado de cada
-          postulacion antes de abrir el perfil a personas.
+          postulación antes de abrir el perfil a personas.
         </p>
       </header>
 
@@ -306,17 +306,17 @@ function PsychologistReviewCard({
               Registro: {formatDate(psychologist.createdAt)}
             </p>
             <p className="mt-3 max-w-2xl text-sm leading-relaxed text-club-muted">
-              {psychologist.bio || "Sin bio registrada todavia."}
+              {psychologist.bio || "Sin bio registrada todavía."}
             </p>
             <div className="mt-4 grid gap-3 text-sm md:grid-cols-2">
-              <ReviewFact label="Titulo" value={psychologist.professionalTitle} />
+              <ReviewFact label="Título" value={psychologist.professionalTitle} />
               <ReviewFact label="Licencia" value={psychologist.licenseNumber} />
               <ReviewFact label="Universidad" value={psychologist.university} />
               <ReviewFact
                 label="Experiencia"
                 value={
                   psychologist.experienceYears !== null
-                    ? `${psychologist.experienceYears} anos`
+                    ? `${psychologist.experienceYears} años`
                     : null
                 }
               />
@@ -411,7 +411,7 @@ function PsychologistReviewCard({
             {item}
           </span>
         ))}
-        {(psychologist.languages.length ? psychologist.languages : ["Espanol"]).map(
+        {(psychologist.languages.length ? psychologist.languages : ["Español"]).map(
           (item) => (
             <span
               key={item}
@@ -444,7 +444,7 @@ function ReviewDecisionModal({
   onConfirm: () => void;
 }) {
   const title =
-    action === "rejected" ? "Rechazar postulacion" : "Pausar perfil";
+    action === "rejected" ? "Rechazar postulación" : "Pausar perfil";
   const disabled = saving || notes.trim().length === 0;
 
   return (
@@ -457,14 +457,14 @@ function ReviewDecisionModal({
           <div>
             <p className="font-display text-2xl text-club-green">{title}</p>
             <p className="mt-1 text-sm leading-relaxed text-club-muted">
-              Esta decision se guardara en el historial y se enviara como aviso
+              Esta decisión se guardará en el historial y se enviará como aviso
               a {psychologist.fullName}.
             </p>
           </div>
         </div>
 
         <label className="mt-6 block">
-          <span className="text-sm text-club-green">Motivo para la psicologa</span>
+          <span className="text-sm text-club-green">Motivo para la psicóloga</span>
           <textarea
             value={notes}
             onChange={(event) => onNotesChange(event.target.value)}

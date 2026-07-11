@@ -1,4 +1,4 @@
-/** Fragmentos PostgREST para joins consistentes */
+﻿/** Fragmentos PostgREST para joins consistentes */
 
 export const APPOINTMENT_SELECT = `
   id,

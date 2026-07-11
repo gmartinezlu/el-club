@@ -93,8 +93,8 @@ export function SessionRoomPage() {
           Tu espacio seguro
         </h1>
         <p className="mt-3 text-sm leading-relaxed text-club-muted">
-          Aqui queda preparada tu sesion: fecha, estado y acceso a Google Meet
-          cuando el enlace este habilitado.
+          Aquí queda preparada tu sesión: fecha, estado y acceso a Google Meet
+          cuando el enlace esté habilitado.
         </p>
       </motion.div>
 

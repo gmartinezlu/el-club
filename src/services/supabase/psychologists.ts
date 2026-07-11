@@ -1,4 +1,4 @@
-import type { PostgrestError } from "@supabase/supabase-js";
+﻿import type { PostgrestError } from "@supabase/supabase-js";
 import type { PsychologistProfile } from "../../psychologist/types";
 import { getSupabaseClient } from "./client";
 
@@ -93,7 +93,7 @@ function mapRow(row: PsychologistRow, defaults = false): PsychologistProfile {
     bio:
       row.bio ??
       (defaults
-        ? "Acompanamiento profesional con una mirada humana, calida y segura."
+        ? "acompañamiento profesional con una mirada humana, calida y segura."
         : ""),
     specialties: row.specialties?.length
       ? row.specialties
@@ -218,7 +218,7 @@ export async function updatePsychologistProfile({
 
   if (isMissingColumnError(psychErr)) {
     throw new Error(
-      "Falta aplicar la migracion de pagos externos en Supabase antes de guardar WhatsApp, metodos e instrucciones de pago.",
+      "Falta aplicar la migracion de pagos externos en Supabase antes de guardar WhatsApp, métodos e instrucciones de pago.",
     );
   }
 

@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export type FAQItem = { question: string; answer: string };
@@ -13,15 +13,24 @@ export function FAQAccordion({ items }: { items: FAQItem[] }) {
         return (
           <div
             key={item.question}
-            className="overflow-hidden rounded-3xl border border-club-green/10 bg-white/35 backdrop-blur"
+            className={
+              "overflow-hidden rounded-3xl border bg-white/60 transition-colors " +
+              (isOpen ? "border-club-green/20" : "border-club-green/10")
+            }
           >
             <button
               type="button"
               onClick={() => setOpenIndex(isOpen ? null : idx)}
-              className="flex w-full items-center justify-between gap-4 px-6 py-4 text-left"
+              className="flex w-full items-center justify-between gap-4 px-6 py-4 text-left transition-colors hover:bg-club-green/[0.03]"
             >
               <span className="font-medium text-club-ink">{item.question}</span>
-              <span className="text-club-green/80">{isOpen ? "−" : "+"}</span>
+              <motion.span
+                animate={{ rotate: isOpen ? 45 : 0 }}
+                transition={{ duration: 0.2 }}
+                className="text-lg text-club-green/80"
+              >
+                +
+              </motion.span>
             </button>
 
             <AnimatePresence initial={false}>

@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import { MarketingLayout } from "../layouts/MarketingLayout";
 import { SectionHeader } from "../components/club/SectionHeader";
 import { WhatsAppCommunityBlock } from "../components/club/WhatsAppCommunityBlock";

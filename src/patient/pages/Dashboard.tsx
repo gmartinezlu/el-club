@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+﻿import { motion } from "framer-motion";
 import { useSessionStore } from "../../store/sessionStore";
 import { usePatientAppointments } from "../hooks/usePatientAppointments";
 import { WelcomeGreeting } from "../components/WelcomeGreeting";
@@ -7,7 +7,6 @@ import { QuickPathGrid } from "../components/QuickPathGrid";
 import { MoodCheckIn } from "../components/MoodCheckIn";
 import { ResourcePreview } from "../components/ResourcePreview";
 import { SessionHistoryPreview } from "../components/SessionHistoryPreview";
-import { MembershipStatusCard } from "../components/MembershipStatusCard";
 
 export function PatientDashboardPage() {
   const fullName = useSessionStore((s) => s.fullName);
@@ -38,14 +37,13 @@ export function PatientDashboardPage() {
 
       <section className="space-y-4">
         <p className="text-sm font-medium text-club-muted">
-          Caminos suaves para acompañarte
+          Caminos suaves para acompaÃ±arte
         </p>
         <QuickPathGrid />
       </section>
 
-      <div className="grid gap-8 lg:grid-cols-3">
+      <div className="grid gap-8 lg:grid-cols-2">
         <MoodCheckIn />
-        <MembershipStatusCard />
         <ResourcePreview />
       </div>
 

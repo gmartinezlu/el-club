@@ -1,4 +1,4 @@
-export type ResourceType =
+﻿export type ResourceType =
   | "article"
   | "meditation"
   | "audio"

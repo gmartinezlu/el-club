@@ -1,11 +1,11 @@
-import { motion } from "framer-motion";
+﻿import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { usePatientResources } from "../hooks/usePatientResources";
 import { EmotionalGlass } from "../components/EmotionalGlass";
 
 const TYPE_LABEL: Record<string, string> = {
-  meditation: "Meditación",
-  article: "Artículo",
+  meditation: "MeditaciÃ³n",
+  article: "ArtÃ­culo",
   audio: "Audio",
   exercise: "Ejercicio",
   pdf: "PDF",
@@ -17,12 +17,12 @@ export function PatientResourcesPage() {
   return (
     <div className="space-y-10">
       <header className="space-y-2">
-        <p className="text-sm font-medium text-club-green">Acompañamiento</p>
+        <p className="text-sm font-medium text-club-green">AcompaÃ±amiento</p>
         <h1 className="font-display text-4xl text-club-green">
           Recursos emocionales
         </h1>
         <p className="max-w-lg text-sm leading-relaxed text-club-muted">
-          Lecturas, ejercicios y audios curados para momentos difíciles y días
+          Lecturas, ejercicios y audios curados para momentos difÃ­ciles y dÃ­as
           tranquilos.
         </p>
       </header>
@@ -52,7 +52,7 @@ export function PatientResourcesPage() {
               <EmotionalGlass className="h-full p-6">
                 <span className="text-xs font-medium uppercase tracking-wider text-club-green">
                   {TYPE_LABEL[r.type]}
-                  {r.durationMinutes ? ` · ${r.durationMinutes} min` : ""}
+                  {r.durationMinutes ? ` Â· ${r.durationMinutes} min` : ""}
                 </span>
                 <h2 className="mt-3 font-display text-2xl text-club-green">
                   {r.title}

@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+﻿import { motion } from "framer-motion";
 import { useMoodCheckIn } from "../hooks/useMoodCheckIn";
 import { EmotionalGlass } from "./EmotionalGlass";
 
@@ -16,13 +16,13 @@ export function MoodCheckIn() {
   return (
     <EmotionalGlass className="p-6 md:p-8">
       <p className="text-xs font-medium uppercase tracking-wider text-club-muted">
-        Seguimiento emocional · opcional
+        Seguimiento emocional Â· opcional
       </p>
       <p className="mt-2 font-display text-2xl text-club-green">
-        ¿Cómo te sientes hoy?
+        Â¿CÃ³mo te sientes hoy?
       </p>
       <p className="mt-2 text-sm text-club-muted">
-        Sin presión. Solo para ti.
+        Sin presiÃ³n. Solo para ti.
       </p>
 
       <div className="mt-6 flex flex-wrap gap-2">

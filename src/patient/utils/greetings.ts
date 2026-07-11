@@ -1,6 +1,6 @@
-export function getTimeGreeting(): string {
+﻿export function getTimeGreeting(): string {
   const hour = new Date().getHours();
-  if (hour < 12) return "Buenos días";
+  if (hour < 12) return "Buenos dÃ­as";
   if (hour < 19) return "Buenas tardes";
   return "Buenas noches";
 }
@@ -12,10 +12,10 @@ export function getFirstName(fullName: string | null): string {
 
 const AFFIRMATIONS = [
   "No tienes que cargarlo todo sola.",
-  "Tu ritmo es válido. Hoy también cuenta.",
-  "Pedir ayuda es un acto de valentía.",
-  "Respira. Estás en un espacio seguro.",
-  "Pequeños pasos también son progreso.",
+  "Tu ritmo es vÃ¡lido. Hoy tambiÃ©n cuenta.",
+  "Pedir ayuda es un acto de valentÃ­a.",
+  "Respira. EstÃ¡s en un espacio seguro.",
+  "PequeÃ±os pasos tambiÃ©n son progreso.",
 ];
 
 export function getDailyAffirmation(): string {

@@ -1,6 +1,7 @@
-import { useMemo, useState } from "react";
+﻿import { useMemo, useState } from "react";
 import { Search, StickyNote } from "lucide-react";
 import { updateAppointmentPsychologistNotes } from "../../appointments/psychologist";
+import { useAutoSaveNotes } from "../hooks/useAutoSaveNotes";
 import type { PsychologistAppointmentView } from "../../appointments/types";
 import { STATUS_LABELS } from "../../appointments/utils";
 import {
@@ -58,7 +59,7 @@ export function PsychologistNotesPage() {
         <p className="text-sm font-medium text-club-green">Seguimiento</p>
         <h1 className="font-display text-4xl text-club-green">Notas</h1>
         <p className="max-w-2xl text-sm leading-relaxed text-club-muted">
-          Observaciones privadas por sesión, ordenadas para preparar el próximo encuentro.
+          Observaciones privadas por sesiÃ³n, ordenadas para preparar el prÃ³ximo encuentro.
         </p>
       </header>
 
@@ -83,7 +84,7 @@ export function PsychologistNotesPage() {
       ) : filtered.length === 0 ? (
         <div className="rounded-3xl border border-club-green/10 bg-white/35 p-6">
           <p className="text-sm text-club-muted">
-            No hay sesiones que coincidan con la búsqueda.
+            No hay sesiones que coincidan con la bÃºsqueda.
           </p>
         </div>
       ) : (
@@ -111,7 +112,11 @@ function NoteCard({
   saving: boolean;
   onSave: (appointmentId: string, notes: string) => Promise<void>;
 }) {
-  const [notes, setNotes] = useState(appointment.psychologistNotes ?? "");
+  const { notes, setNotes, saving: autoSaving, hasUnsavedChanges } = useAutoSaveNotes(
+    appointment.psychologistNotes ?? "",
+    (updatedNotes) => onSave(appointment.id, updatedNotes),
+    2000, // 2 second debounce
+  );
 
   return (
     <article className="rounded-3xl border border-club-green/10 bg-white/40 p-5 shadow-soft backdrop-blur">
@@ -121,7 +126,7 @@ function NoteCard({
             {appointment.patientName}
           </p>
           <p className="mt-1 capitalize text-sm text-club-muted">
-            {formatSessionDate(appointment.startsAt)} ·{" "}
+            {formatSessionDate(appointment.startsAt)} Â·{" "}
             {formatSessionRange(appointment.startsAt, appointment.endsAt)}
           </p>
         </div>
@@ -138,17 +143,22 @@ function NoteCard({
         value={notes}
         onChange={(e) => setNotes(e.target.value)}
         rows={5}
-        placeholder="Avances, hipótesis, tareas acordadas, próximos temas..."
+        placeholder="Avances, hipÃ³tesis, tareas acordadas, prÃ³ximos temas..."
         className="mt-2 w-full resize-none rounded-2xl border border-club-green/10 bg-white/60 px-4 py-3 text-sm leading-relaxed text-club-ink outline-none ring-club-green/10 focus:ring-2"
       />
-      <button
-        type="button"
-        disabled={saving}
-        onClick={() => void onSave(appointment.id, notes)}
-        className="mt-3 rounded-2xl bg-club-green px-4 py-2 text-sm text-club-paper transition hover:opacity-95 disabled:opacity-60"
-      >
-        {saving ? "Guardando..." : "Guardar nota"}
-      </button>
+      <div className="mt-3 flex items-center justify-between gap-2">
+        <button
+          type="button"
+          disabled={saving || autoSaving}
+          onClick={() => void onSave(appointment.id, notes)}
+          className="rounded-2xl bg-club-green px-4 py-2 text-sm text-club-paper transition hover:opacity-95 disabled:opacity-60"
+        >
+          {autoSaving ? "Guardando..." : "Guardar nota"}
+        </button>
+        {hasUnsavedChanges && !autoSaving ? (
+          <p className="text-xs text-amber-700">Guardando automÃ¡ticamente...</p>
+        ) : null}
+      </div>
     </article>
   );
 }

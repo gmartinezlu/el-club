@@ -1,11 +1,11 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { Link } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 
 const LINKS = [
   { href: "#beneficios", label: "Beneficios" },
   { href: "#como-funciona", label: "Como funciona" },
-  { href: "#psicologas", label: "Psicologas" },
+  { href: "#psicólogas", label: "psicólogas" },
   { href: "#recursos", label: "Recursos" },
 ];
 
@@ -41,7 +41,7 @@ export function NavBar() {
             to="/auth/patient/login"
             className="hidden rounded-2xl border border-club-green/15 bg-white/40 px-4 py-2 text-sm text-club-green shadow-soft backdrop-blur transition hover:translate-y-[-1px] sm:inline-flex"
           >
-            Iniciar sesion
+            Iniciar sesiÃ³n
           </Link>
           <Link
             to="/auth/patient/register"
@@ -110,7 +110,7 @@ export function NavBar() {
                   onClick={() => setOpen(false)}
                   className="rounded-2xl border border-club-green/15 bg-white/60 px-4 py-3 text-center text-sm text-club-green shadow-soft"
                 >
-                  Iniciar sesion
+                  Iniciar sesiÃ³n
                 </Link>
                 <Link
                   to="/auth/patient/register"

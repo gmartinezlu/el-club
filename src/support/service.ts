@@ -1,4 +1,4 @@
-import { getSupabaseClient } from "../services/supabase/client";
+﻿import { getSupabaseClient } from "../services/supabase/client";
 
 export async function createSupportTicket({
   userId,

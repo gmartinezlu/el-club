@@ -1,6 +1,6 @@
-import { Check } from "lucide-react";
+﻿import { Check } from "lucide-react";
 
-const STEPS = ["Bienvenida", "Especialista", "Agenda", "Solicitud", "Sesion"];
+const STEPS = ["Bienvenida", "Especialista", "Agenda", "Solicitud", "sesión"];
 
 export function PatientFlowSteps({ current }: { current: number }) {
   return (

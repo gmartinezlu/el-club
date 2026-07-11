@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { fetchMeditations } from "../../resources/service";
@@ -87,7 +87,7 @@ export function PatientMeditationsPage() {
                   </p>
                   <p className="mt-1 text-sm text-club-muted">
                     {m.description}
-                    {m.durationMinutes ? ` · ${m.durationMinutes} min` : ""}
+                    {m.durationMinutes ? ` Â· ${m.durationMinutes} min` : ""}
                   </p>
                 </EmotionalGlass>
               </button>

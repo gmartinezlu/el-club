@@ -1,7 +1,7 @@
-# El Club · Prueba real con Supabase
+﻿# El Club Â· Prueba real con Supabase
 
 Esta guia deja la plataforma lista para una prueba real con base de datos, Auth,
-roles, aprobacion de psicologas, agenda, checkout demo, Meet y admin.
+roles, aprobacion de psicólogas, agenda, checkout demo, Meet y admin.
 
 ## 1. Crear proyecto en Supabase
 
@@ -46,13 +46,13 @@ La migracion `008` mueve las notas privadas de psicologa a una tabla protegida
 por RLS para que pacientes no puedan leerlas por API.
 
 La migracion `009` agrega el chat de intervencion en crisis y campos de
-postulacion profesional para psicologas.
+postulacion profesional para psicólogas.
 
 La migracion `010` actualiza el checkout demo a la estructura definida para la
 prueba real: la paciente paga 110.000 COP, la psicologa recibe 90.000 COP y la
 plataforma conserva 20.000 COP.
 
-La migracion `011` agrega el flujo formal de revision de psicologas: aprobar,
+La migracion `011` agrega el flujo formal de revision de psicólogas: aprobar,
 rechazar o pausar con motivo, fecha de revision, admin responsable y
 notificacion automatica para la psicologa.
 
@@ -66,7 +66,7 @@ profesionales, agrega politicas de Storage y permite al admin responder tickets
 de soporte con notificacion automatica al usuario.
 
 La migracion `014` endurece seguridad: evita cambios de rol desde cuentas no
-admin, bloquea autoaprobacion de psicologas y obliga a solicitar retiros por la
+admin, bloquea autoaprobacion de psicólogas y obliga a solicitar retiros por la
 funcion backend validada, no por insercion directa.
 
 ## 3. Auth para pruebas
@@ -121,7 +121,7 @@ Luego entra desde:
 1. Entra a `/auth/patient`.
 2. Registra un paciente.
 3. Completa onboarding emocional.
-4. Ve a `Psicologas`.
+4. Ve a `psicólogas`.
 5. Abre el perfil de una psicologa aprobada.
 6. Elige un horario.
 7. Continua al checkout demo.
@@ -136,7 +136,7 @@ Luego entra desde:
 4. Pega un enlace real de Google Meet.
 5. Guarda y habilita Meet.
 6. Escribe notas privadas.
-7. Entra como paciente y revisa la sala de sesion.
+7. Entra como paciente y revisa la sala de sesión.
 
 ## 8. Probar admin operativo
 
@@ -152,14 +152,14 @@ Desde admin revisa:
 
 - Paciente puede registrarse.
 - Psicologa puede registrarse.
-- Admin puede iniciar sesion.
+- Admin puede iniciar sesión.
 - Admin puede aprobar psicologa.
 - Psicologa aprobada aparece para pacientes.
 - Psicologa puede crear disponibilidad.
 - Paciente puede reservar.
 - Checkout demo crea pago y confirma cita.
 - Psicologa puede guardar Meet.
-- Paciente puede abrir sala de sesion.
+- Paciente puede abrir sala de sesión.
 - Psicologa puede guardar notas.
 - Soporte crea tickets reales.
 - Admin ve pagos, soporte, actividad y contenido.

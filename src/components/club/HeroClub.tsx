@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowRight, CalendarHeart, Sparkles, Users } from "lucide-react";
 import { clubImages } from "./clubContent";
@@ -22,8 +22,8 @@ export function HeroClub() {
           </h1>
           <p className="max-w-xl text-base leading-relaxed text-club-muted sm:text-lg">
             EL CLUB combina bienestar emocional, experiencias guiadas,
-            comunidad y acompañamiento profesional para ayudarte a construir una
-            vida más tranquila, consciente y acompañada.
+            comunidad y acompaÃ±amiento profesional para ayudarte a construir una
+            vida mÃ¡s tranquila, consciente y acompaÃ±ada.
           </p>
         </div>
 
@@ -45,7 +45,7 @@ export function HeroClub() {
             to="/terapia"
             className="rounded-2xl border border-club-green/15 bg-white/35 px-6 py-3 text-center text-base text-club-green shadow-soft backdrop-blur transition hover:translate-y-[-1px]"
           >
-            Reservar una sesión
+            Reservar una sesiÃ³n
           </Link>
         </div>
       </motion.div>
@@ -70,7 +70,7 @@ export function HeroClub() {
         ) : (
           <img
             src={clubImages.hero}
-            alt="Personas jóvenes adultas compartiendo en un ambiente cálido"
+            alt="Personas jÃ³venes adultas compartiendo en un ambiente cÃ¡lido"
             className="absolute inset-0 h-full w-full object-cover"
           />
         )}
@@ -79,7 +79,7 @@ export function HeroClub() {
           <div className="grid gap-3 sm:grid-cols-3">
             <HeroMetric icon={Users} value="Comunidad" label="moderada" />
             <HeroMetric icon={CalendarHeart} value="Eventos" label="guiados" />
-            <HeroMetric icon={Sparkles} value="Hábitos" label="emocionales" />
+            <HeroMetric icon={Sparkles} value="HÃ¡bitos" label="emocionales" />
           </div>
         </div>
       </motion.div>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import type { AppRole } from "../../shared/auth/roles";
 import { getSupabaseClient } from "../../services/supabase/client";
@@ -139,21 +139,21 @@ export function RegisterPage({ role }: { role: RegisterRole }) {
           <div className="space-y-4 rounded-3xl border border-club-green/10 bg-white/35 p-4">
             <div>
               <h2 className="font-display text-2xl text-club-green">
-                Verificacion profesional
+                Verificación profesional
               </h2>
               <p className="mt-1 text-sm text-club-muted">
-                Esta informacion ayuda al equipo a revisar tu postulacion antes
+                Esta información ayuda al equipo a revisar tu postulación antes
                 de aprobar tu perfil.
               </p>
             </div>
 
             <label className="block space-y-2">
-              <span className="text-sm text-club-muted">Titulo profesional</span>
+              <span className="text-sm text-club-muted">Título profesional</span>
               <input
                 value={professionalTitle}
                 onChange={(e) => setProfessionalTitle(e.target.value)}
                 required
-                placeholder="Psicologa clinica"
+                placeholder="Psicóloga clínica"
                 className="w-full rounded-2xl border border-club-green/10 bg-white/60 px-4 py-3 outline-none ring-club-green/10 focus:ring-2"
               />
             </label>
@@ -197,7 +197,7 @@ export function RegisterPage({ role }: { role: RegisterRole }) {
 
             <label className="block space-y-2">
               <span className="text-sm text-club-muted">
-                Enfoque clinico
+                Enfoque clínico
               </span>
               <textarea
                 value={clinicalApproach}
@@ -222,7 +222,7 @@ export function RegisterPage({ role }: { role: RegisterRole }) {
 
             <label className="block space-y-2">
               <span className="text-sm text-club-muted">
-                Comentarios para revision
+                Comentarios para revisión
               </span>
               <textarea
                 value={applicationNotes}

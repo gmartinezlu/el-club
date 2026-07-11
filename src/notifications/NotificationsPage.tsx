@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+﻿import { useCallback, useEffect, useMemo, useState } from "react";
 import { Bell, CheckCheck } from "lucide-react";
 import {
   fetchUserNotifications,
@@ -61,7 +61,7 @@ export function NotificationsPage() {
       await markNotificationRead({ id, userId });
       await loadNotifications();
     } catch (e) {
-      setError(getErrorMessage(e, "No se pudo marcar como leída"));
+      setError(getErrorMessage(e, "No se pudo marcar como leÃ­da"));
     } finally {
       setSaving(false);
     }
@@ -75,7 +75,7 @@ export function NotificationsPage() {
       await markAllNotificationsRead(userId);
       await loadNotifications();
     } catch (e) {
-      setError(getErrorMessage(e, "No se pudieron marcar como leídas"));
+      setError(getErrorMessage(e, "No se pudieron marcar como leÃ­das"));
     } finally {
       setSaving(false);
     }
@@ -84,7 +84,7 @@ export function NotificationsPage() {
   return (
     <div className="space-y-8">
       <header className="space-y-2">
-        <p className="text-sm font-medium text-club-green">Acompañamiento</p>
+        <p className="text-sm font-medium text-club-green">AcompaÃ±amiento</p>
         <h1 className="font-display text-4xl text-club-green">
           Notificaciones
         </h1>
@@ -109,7 +109,7 @@ export function NotificationsPage() {
               {unreadCount} sin leer
             </p>
             <p className="text-sm text-club-muted">
-              Mantén tu espacio al día sin ruido.
+              MantÃ©n tu espacio al dÃ­a sin ruido.
             </p>
           </div>
         </div>
@@ -120,7 +120,7 @@ export function NotificationsPage() {
           className="inline-flex items-center gap-2 rounded-2xl border border-club-green/15 bg-white/55 px-4 py-2 text-sm text-club-green transition hover:bg-white/80 disabled:opacity-60"
         >
           <CheckCheck className="h-4 w-4" strokeWidth={1.5} />
-          Marcar todo leído
+          Marcar todo leÃ­do
         </button>
       </div>
 
@@ -129,7 +129,7 @@ export function NotificationsPage() {
       ) : notifications.length === 0 ? (
         <div className="rounded-3xl border border-club-green/10 bg-white/35 p-6">
           <p className="text-sm text-club-muted">
-            Aún no tienes notificaciones.
+            AÃºn no tienes notificaciones.
           </p>
         </div>
       ) : (
@@ -163,7 +163,7 @@ export function NotificationsPage() {
                     onClick={() => void markOne(notification.id)}
                     className="rounded-2xl bg-club-green px-4 py-2 text-sm text-club-paper transition hover:opacity-95 disabled:opacity-60"
                   >
-                    Leída
+                    LeÃ­da
                   </button>
                 ) : null}
               </div>

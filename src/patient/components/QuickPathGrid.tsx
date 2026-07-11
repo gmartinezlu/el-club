@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { BookOpen, Headphones, PenLine, UserRoundSearch } from "lucide-react";
 import { EmotionalGlass } from "./EmotionalGlass";
@@ -6,14 +6,14 @@ import { EmotionalGlass } from "./EmotionalGlass";
 const paths = [
   {
     to: "/patient/psychologists",
-    label: "Psicólogas",
-    description: "Encuentra y agenda sesión",
+    label: "PsicÃ³logas",
+    description: "Encuentra y agenda sesiÃ³n",
     icon: UserRoundSearch,
   },
   {
     to: "/patient/resources",
     label: "Recursos",
-    description: "Artículos y guías curadas",
+    description: "ArtÃ­culos y guÃ­as curadas",
     icon: BookOpen,
   },
   {

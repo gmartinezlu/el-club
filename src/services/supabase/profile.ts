@@ -1,4 +1,4 @@
-import type { AppRole } from "../../shared/auth/roles";
+﻿import type { AppRole } from "../../shared/auth/roles";
 import { getSupabaseClient } from "./client";
 
 type UserProfileRow = {

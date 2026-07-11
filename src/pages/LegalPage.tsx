@@ -1,45 +1,45 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import { ShieldCheck } from "lucide-react";
 import { MarketingLayout } from "../layouts/MarketingLayout";
 
 const CONTENT = {
   privacy: {
     eyebrow: "Privacidad",
-    title: "Cuidar tus datos tambien es cuidar tu proceso",
+    title: "Cuidar tus datos también es cuidar tu proceso",
     intro:
-      "El Club esta pensado para manejar informacion sensible con respeto, claridad y permisos por rol.",
+      "El Club está pensado para manejar información sensible con respeto, claridad y permisos por rol.",
     sections: [
       [
-        "Informacion que usamos",
+        "Información que usamos",
         "Datos de cuenta, perfil, citas, journals, preferencias emocionales y mensajes de soporte necesarios para operar la plataforma.",
       ],
       [
-        "Quien puede verla",
-        "Personas, especialistas y administracion tienen accesos separados. La informacion clinica y las notas privadas no se mezclan con espacios publicos.",
+        "Quién puede verla",
+        "Personas, especialistas y administración tienen accesos separados. La información clínica y las notas privadas no se mezclan con espacios públicos.",
       ],
       [
         "Seguridad",
-        "La autenticacion, las politicas de Supabase y los permisos por rol son la base tecnica para proteger el acceso.",
+        "La autenticación, las políticas de Supabase y los permisos por rol son la base técnica para proteger el acceso.",
       ],
     ],
   },
   terms: {
-    eyebrow: "Terminos",
+    eyebrow: "Términos",
     title: "Un acuerdo simple para usar El Club con confianza",
     intro:
-      "Estos terminos resumen la experiencia esperada mientras la plataforma avanza hacia su version productiva.",
+      "Estos términos resumen la experiencia esperada mientras la plataforma avanza hacia su versión productiva.",
     sections: [
       [
         "Servicio",
-        "El Club conecta personas con psicologas, recursos emocionales, journaling y sesiones por Google Meet.",
+        "El Club conecta personas con psicólogas, recursos emocionales, journaling y sesiones por Google Meet.",
       ],
       [
         "Pagos",
-        "EL CLUB facilita la conexion entre usuarios y profesionales. Los pagos por sesiones son gestionados directamente entre el usuario y el profesional. EL CLUB no actua como intermediario financiero ni procesa pagos de terapia.",
+        "EL CLUB facilita la conexión entre usuarios y profesionales. Los pagos por sesiones son gestionados directamente entre el usuario y el profesional. EL CLUB no actúa como intermediario financiero ni procesa pagos de terapia.",
       ],
       [
         "Uso responsable",
-        "La plataforma acompana procesos de bienestar emocional, pero no reemplaza servicios de emergencia.",
+        "La plataforma acompaña procesos de bienestar emocional, pero no reemplaza servicios de emergencia.",
       ],
     ],
   },

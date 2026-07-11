@@ -1,4 +1,4 @@
--- El Club · Harden public Auth bootstrap
+-- El Club Â· Harden public Auth bootstrap
 -- Public signup can only create patient or psychologist profiles.
 -- Admin users must be promoted manually by an existing admin/Supabase owner.
 

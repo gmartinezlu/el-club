@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+﻿import { useCallback, useState } from "react";
 import type { MoodEntry } from "../types";
 
 const STORAGE_KEY = "el-club-mood-entries";

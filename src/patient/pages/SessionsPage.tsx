@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { CalendarPlus, ClipboardCheck, Video } from "lucide-react";
 import { STATUS_LABELS } from "../../appointments/utils";
@@ -9,7 +9,14 @@ import { EmotionalGlass } from "../components/EmotionalGlass";
 
 export function PatientSessionsPage() {
   const { appointments, history, loading, error } = usePatientAppointments();
-  const [now] = useState(() => Date.now());
+  const [now, setNow] = useState(() => Date.now());
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setNow(Date.now());
+    }, 60000); // Refresh every minute
+    return () => clearInterval(timer);
+  }, []);
   const upcoming = appointments.filter(
     (a) =>
       new Date(a.startsAt).getTime() > now &&
@@ -43,14 +50,14 @@ export function PatientSessionsPage() {
             <section className="space-y-4">
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <h2 className="font-display text-xl text-club-green">
-                  Proximas
+                  Próximas
                 </h2>
                 <Link
                   to="/patient/psychologists"
                   className="inline-flex items-center gap-2 rounded-full bg-club-green px-4 py-2 text-xs text-club-paper transition hover:opacity-95"
                 >
                   <CalendarPlus className="h-3.5 w-3.5" strokeWidth={1.5} />
-                  Agendar otra sesion
+                  Agendar otra sesión
                 </Link>
               </div>
               <ul className="space-y-3">
@@ -66,7 +73,7 @@ export function PatientSessionsPage() {
             {history.length === 0 && upcoming.length === 0 ? (
               <EmotionalGlass className="p-6">
                 <p className="text-sm text-club-muted">
-                  Aun no hay sesiones en tu historial.
+                  Aún no hay sesiones en tu historial.
                 </p>
                 <Link
                   to="/patient/psychologists"
@@ -77,7 +84,7 @@ export function PatientSessionsPage() {
               </EmotionalGlass>
             ) : history.length === 0 ? (
               <p className="text-sm text-club-muted">
-                Tus sesiones completadas apareceran aqui.
+                Tus sesiones completadas aparecerán aquí.
               </p>
             ) : (
               <ul className="space-y-3">

@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom";
+﻿import { Outlet } from "react-router-dom";
 import { RoleShell } from "./RoleShell";
 import { Calendar, Clock, Users, FileText, MessageSquare, BarChart2, Bell, Settings } from "lucide-react";
 
@@ -14,10 +14,10 @@ export function PsychologistLayout() {
         { to: "/psychologist/notes", label: "Notas", group: "Consulta", icon: FileText },
         { to: "/psychologist/crisis-chat", label: "Chat crisis", group: "Consulta", icon: MessageSquare },
 
-        { to: "/psychologist/metrics", label: "Metricas", group: "Gestion", icon: BarChart2 },
+        { to: "/psychologist/metrics", label: "Métricas", group: "Gestión", icon: BarChart2 },
 
         { to: "/psychologist/notifications", label: "Avisos", group: "Cuenta", icon: Bell },
-        { to: "/psychologist/settings", label: "Configuracion", group: "Cuenta", icon: Settings },
+        { to: "/psychologist/settings", label: "Configuración", group: "Cuenta", icon: Settings },
       ]}
     >
       <Outlet />

@@ -1,4 +1,4 @@
-import { getSupabaseClient } from "../services/supabase/client";
+﻿import { getSupabaseClient } from "../services/supabase/client";
 import { APPOINTMENT_SELECT } from "./queries";
 import { mapAppointmentRow, type AppointmentRowRaw } from "./mappers";
 import type { Appointment } from "./types";

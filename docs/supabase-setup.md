@@ -1,4 +1,4 @@
-# El Club · Configuración Supabase
+﻿# El Club Â· ConfiguraciÃ³n Supabase
 
 ## 1. Variables de entorno
 
@@ -20,8 +20,8 @@ En el **SQL Editor** de Supabase, ejecuta en orden:
 
 ## 3. Crear usuarios de prueba
 
-1. Regístrate en la app como **paciente** y **psicóloga** (cuentas distintas).
-2. En Supabase → Table Editor → `psychologists`, marca `is_approved = true` para la psicóloga.
+1. RegÃ­strate en la app como **paciente** y **psicÃ³loga** (cuentas distintas).
+2. En Supabase â†’ Table Editor â†’ `psychologists`, marca `is_approved = true` para la psicÃ³loga.
 3. Inserta una cita de prueba (ajusta UUIDs):
 
 ```sql
@@ -45,16 +45,16 @@ values (
 
 ## 4. Reglas de acceso (resumen)
 
-| Rol | Citas | Pacientes | Psicólogas | Recursos |
+| Rol | Citas | Pacientes | PsicÃ³logas | Recursos |
 |-----|-------|-----------|------------|----------|
 | Paciente | Solo las suyas | Solo su perfil | Solo aprobadas | Publicados |
-| Psicóloga | Solo las suyas | Solo con cita previa | Su perfil | Publicados |
+| PsicÃ³loga | Solo las suyas | Solo con cita previa | Su perfil | Publicados |
 | Admin | Todo | Todo | Todo | Todo |
 
 ## 5. Estados de cita
 
-Flujo válido (validado en DB):
+Flujo vÃ¡lido (validado en DB):
 
-`pending_payment` → `paid` → `confirmed` → `meeting_enabled` → `completed`
+`pending_payment` â†’ `paid` â†’ `confirmed` â†’ `meeting_enabled` â†’ `completed`
 
-También: `cancelled`, `refund_pending` según reglas en `validate_appointment_status_transition`.
+TambiÃ©n: `cancelled`, `refund_pending` segÃºn reglas en `validate_appointment_status_transition`.

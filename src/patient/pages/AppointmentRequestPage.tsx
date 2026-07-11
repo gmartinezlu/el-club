@@ -19,7 +19,7 @@ import {
 function createWhatsappUrl(value: string, psychologistName: string) {
   const digits = value.replace(/\D/g, "");
   const message = encodeURIComponent(
-    `Hola ${psychologistName}, solicite una cita contigo en EL CLUB y quiero coordinar los detalles.`,
+    `Hola ${psychologistName}, solicité una cita contigo en EL CLUB y quiero coordinar los detalles.`,
   );
   return `https://wa.me/${digits}?text=${message}`;
 }
@@ -114,8 +114,8 @@ export function PatientAppointmentRequestPage() {
               Tu cita fue solicitada
             </h1>
             <p className="mt-3 max-w-2xl text-sm leading-relaxed text-club-muted">
-              EL profesional revisara tu solicitud. El pago se coordina
-              directamente con el/ella segun sus metodos disponibles.
+              EL profesional revisará tu solicitud. El pago se coordina
+              directamente con el/ella según sus métodos disponibles.
             </p>
 
             <div className="mt-6 grid gap-4 rounded-3xl border border-club-green/10 bg-white/45 p-5 md:grid-cols-2">
@@ -141,11 +141,11 @@ export function PatientAppointmentRequestPage() {
                 </p>
               </div>
               <div>
-                <p className="text-xs text-club-muted">Confirmacion</p>
+                <p className="text-xs text-club-muted">Confirmación</p>
                 <p className="text-sm text-club-ink">
                   {psychologist?.paymentConfirmationHours
-                    ? `${psychologist.paymentConfirmationHours} horas max.`
-                    : "La especialista te indicara el tiempo."}
+                    ? `${psychologist.paymentConfirmationHours} horas máx.`
+                    : "La especialista te indicará el tiempo."}
                 </p>
               </div>
             </div>
@@ -177,7 +177,7 @@ export function PatientAppointmentRequestPage() {
               ) : null}
               {psychologist?.cancellationPolicy ? (
                 <p className="mt-3 text-xs leading-relaxed text-club-muted">
-                  Politica de cancelacion: {psychologist.cancellationPolicy}
+                  Política de cancelación: {psychologist.cancellationPolicy}
                 </p>
               ) : null}
             </div>
@@ -191,7 +191,7 @@ export function PatientAppointmentRequestPage() {
               Flujo seguro
             </p>
             <p className="mt-2 text-sm leading-relaxed text-club-muted">
-              EL CLUB facilita la conexion y la agenda. Los acuerdos de pago
+              EL CLUB facilita la conexión y la agenda. Los acuerdos de pago
               ocurren directamente entre la persona y la profesional.
             </p>
 

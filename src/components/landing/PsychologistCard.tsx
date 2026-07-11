@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+﻿import { motion } from "framer-motion";
 import type { ReactNode } from "react";
 
 function initials(name: string) {
@@ -30,7 +30,7 @@ export function PsychologistCard({
       viewport={{ once: true, amount: 0.2 }}
       transition={{ duration: 0.45, ease: "easeOut" }}
     >
-      <div className="group rounded-3xl border border-club-green/10 bg-white/35 p-6 shadow-soft backdrop-blur transition hover:-translate-y-1 hover:bg-white/45">
+      <div className="group rounded-3xl border border-club-green/10 bg-white/60 p-6 transition-all duration-300 hover:-translate-y-1 hover:border-club-green/20 hover:shadow-soft">
         <div className="flex items-start gap-4">
           <div
             className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full text-lg text-club-paper shadow-soft"

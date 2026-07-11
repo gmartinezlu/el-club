@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import { ShieldCheck } from "lucide-react";
 import { clubImages, communityPrinciples } from "./clubContent";
 
@@ -23,7 +23,7 @@ export function WhatsAppCommunityBlock({ compact = false }: { compact?: boolean 
           <p className="mt-4 text-base leading-relaxed text-club-muted">
             Los miembros de EL CLUB acceden a canales y grupos de WhatsApp
             moderados, donde reciben contenido, invitaciones a eventos, retos y
-            acompañamiento guiado. Sin chats privados dentro de la plataforma,
+            acompaÃ±amiento guiado. Sin chats privados dentro de la plataforma,
             sin foros abiertos y con reglas claras de cuidado.
           </p>
 
@@ -44,8 +44,8 @@ export function WhatsAppCommunityBlock({ compact = false }: { compact?: boolean 
               <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-club-green" />
               <p className="text-sm leading-relaxed text-club-muted">
                 La comunidad no reemplaza la terapia ni promueve consejos entre
-                miembros como guía clínica. Es un espacio moderado de
-                pertenencia, hábitos y experiencias.
+                miembros como guÃ­a clÃ­nica. Es un espacio moderado de
+                pertenencia, hÃ¡bitos y experiencias.
               </p>
             </div>
           </div>

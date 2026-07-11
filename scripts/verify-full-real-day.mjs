@@ -1,4 +1,4 @@
-import { readFile } from "node:fs/promises";
+﻿import { readFile } from "node:fs/promises";
 import { createClient } from "@supabase/supabase-js";
 
 const envText = await readFile(new URL("../.env.local", import.meta.url), "utf8");
@@ -103,7 +103,7 @@ try {
       license_number: `TP-${stamp}`,
       university: "Universidad de prueba",
       experience_years: "7",
-      clinical_approach: "Acompanamiento integrativo con enfoque humano.",
+      clinical_approach: "acompañamiento integrativo con enfoque humano.",
       application_notes: "Postulacion creada para prueba real completa.",
     },
   );

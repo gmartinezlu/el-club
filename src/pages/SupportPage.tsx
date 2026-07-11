@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from "react";
+﻿import { useState, type FormEvent } from "react";
 import { Link } from "react-router-dom";
 import { HeartHandshake, MessageCircle, Send } from "lucide-react";
 import { MarketingLayout } from "../layouts/MarketingLayout";
@@ -47,7 +47,7 @@ export function SupportPage() {
           </h1>
           <p className="mt-4 text-sm leading-relaxed text-club-paper/80">
             Si algo no funciona, si necesitas ayuda con una cita o si quieres
-            reportar una situacion, puedes dejar un ticket para el equipo.
+            reportar una situación, puedes dejar un ticket para el equipo.
           </p>
         </section>
 
@@ -60,7 +60,7 @@ export function SupportPage() {
           {status !== "authenticated" ? (
             <div className="mt-6 rounded-3xl border border-club-green/10 bg-white/50 p-5">
               <p className="text-sm leading-relaxed text-club-muted">
-                Para crear un ticket necesitamos que inicies sesion. Asi el
+                Para crear un ticket necesitamos que inicies sesión. Así el
                 equipo puede responderte dentro de tu cuenta.
               </p>
               <div className="mt-5 flex flex-wrap gap-3">
@@ -68,7 +68,7 @@ export function SupportPage() {
                   to="/auth/patient/login"
                   className="rounded-2xl bg-club-green px-5 py-3 text-sm text-club-paper transition hover:opacity-95"
                 >
-                  Iniciar sesion
+                  Iniciar sesión
                 </Link>
                 <Link
                   to="/auth/patient/register"
@@ -88,7 +88,7 @@ export function SupportPage() {
 
               {saved ? (
                 <p className="rounded-2xl border border-club-green/10 bg-club-green/10 px-4 py-3 text-sm text-club-green">
-                  Ticket creado. El equipo podra revisarlo desde admin.
+                  Ticket creado. El equipo podrá revisarlo desde admin.
                 </p>
               ) : null}
 

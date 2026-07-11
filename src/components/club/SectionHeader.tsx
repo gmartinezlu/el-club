@@ -1,4 +1,4 @@
-export function SectionHeader({
+﻿export function SectionHeader({
   eyebrow,
   title,
   subtitle,

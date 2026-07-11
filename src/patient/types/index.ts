@@ -1,4 +1,4 @@
-export type {
+﻿export type {
   AppointmentStatus,
   PatientAppointmentView as PatientAppointment,
 } from "../../appointments/types";

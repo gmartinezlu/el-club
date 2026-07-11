@@ -1,4 +1,4 @@
-import { create } from "zustand";
+﻿import { create } from "zustand";
 import type { Session, User } from "@supabase/supabase-js";
 import type { AppRole } from "../shared/auth/roles";
 import { fetchAppRoleByUserId } from "../services/supabase/profile";

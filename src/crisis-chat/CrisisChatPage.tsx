@@ -1,4 +1,4 @@
-import {
+﻿import {
   useCallback,
   useEffect,
   useMemo,
@@ -108,7 +108,7 @@ export function CrisisChatPage({ mode }: { mode: "patient" | "psychologist" }) {
           Chat de apoyo
         </h1>
         <p className="max-w-2xl text-sm leading-relaxed text-club-muted">
-          Un canal breve para acompanamiento entre sesiones. No reemplaza
+          Un canal breve para acompañamiento entre sesiones. No reemplaza
           servicios de emergencia.
         </p>
       </header>

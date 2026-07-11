@@ -1,4 +1,4 @@
-export type AppointmentStatus =
+﻿export type AppointmentStatus =
   | "requested"
   | "pending_payment"
   | "paid"
@@ -27,7 +27,7 @@ export type Appointment = {
   patient: UserProfileSnippet;
 };
 
-/** Vista paciente: datos de la psicóloga */
+/** Vista paciente: datos de la psicÃ³loga */
 export type PatientAppointmentView = {
   id: string;
   startsAt: string;
@@ -39,7 +39,7 @@ export type PatientAppointmentView = {
   psychologistAvatarUrl: string | null;
 };
 
-/** Vista psicóloga: datos del paciente */
+/** Vista psicÃ³loga: datos del paciente */
 export type PsychologistAppointmentView = {
   id: string;
   patientId: string;

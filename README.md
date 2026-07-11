@@ -1,4 +1,4 @@
-# El Club
+﻿# El Club
 
 Plataforma web premium de salud mental con React, Vite, TailwindCSS y Supabase.
 
@@ -18,7 +18,7 @@ VITE_SUPABASE_ANON_KEY=
 
 ## Supabase real
 
-Para conectar base de datos real, roles, admin, aprobacion de psicologas,
+Para conectar base de datos real, roles, admin, aprobacion de psicólogas,
 checkout demo y prueba completa, sigue:
 
 [docs/supabase-real-test.md](docs/supabase-real-test.md)

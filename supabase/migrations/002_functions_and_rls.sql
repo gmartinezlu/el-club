@@ -1,4 +1,4 @@
--- El Club · Funciones de autorización + RLS
+-- El Club Â· Funciones de autorizaciÃ³n + RLS
 
 -- Rol del usuario autenticado
 create or replace function public.current_app_role()
@@ -44,7 +44,7 @@ as $$
   select public.current_app_role() = 'psychologist'::public.app_role;
 $$;
 
--- Psicóloga tiene relación con paciente vía cita
+-- PsicÃ³loga tiene relaciÃ³n con paciente vÃ­a cita
 create or replace function public.psychologist_has_patient(p_patient_id uuid)
 returns boolean
 language sql
@@ -60,7 +60,7 @@ as $$
   );
 $$;
 
--- Transiciones válidas de estado de cita
+-- Transiciones vÃ¡lidas de estado de cita
 create or replace function public.validate_appointment_status_transition(
   old_status public.appointment_status,
   new_status public.appointment_status
@@ -94,7 +94,7 @@ as $$
 begin
   if tg_op = 'UPDATE' and old.status is distinct from new.status then
     if not public.validate_appointment_status_transition(old.status, new.status) then
-      raise exception 'Transición de estado inválida: % → %', old.status, new.status;
+      raise exception 'TransiciÃ³n de estado invÃ¡lida: % â†’ %', old.status, new.status;
     end if;
   end if;
   return new;
@@ -106,7 +106,7 @@ create trigger trg_appointments_status_transition
 before update on public.appointments
 for each row execute function public.enforce_appointment_status_transition();
 
--- Si hay URL de Meet y la cita está confirmada → meeting_enabled
+-- Si hay URL de Meet y la cita estÃ¡ confirmada â†’ meeting_enabled
 create or replace function public.appointments_status_side_effects()
 returns trigger
 language plpgsql
@@ -126,7 +126,7 @@ create trigger trg_appointments_status_side_effects
 before insert or update on public.appointments
 for each row execute function public.appointments_status_side_effects();
 
--- ─── RLS ─────────────────────────────────────────────────────────────
+-- â”€â”€â”€ RLS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 alter table public.users enable row level security;
 alter table public.patients enable row level security;
@@ -315,7 +315,7 @@ for update to authenticated
 using (public.is_admin())
 with check (public.is_admin());
 
--- RESOURCES (lectura para autenticados; gestión admin)
+-- RESOURCES (lectura para autenticados; gestiÃ³n admin)
 drop policy if exists resources_select_published on public.resources;
 create policy resources_select_published on public.resources
 for select to authenticated

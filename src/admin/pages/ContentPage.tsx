@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+﻿import { useCallback, useEffect, useMemo, useState } from "react";
 import { Edit3, Plus, Save, Trash2 } from "lucide-react";
 import {
   deleteResourceAdmin,
@@ -124,6 +124,11 @@ export function AdminContentPage() {
   }
 
   async function removeResource(id: string) {
+    const confirmed = window.confirm(
+      "¿Estás seguro de que deseas eliminar este recurso? Esta acción no se puede deshacer.",
+    );
+    if (!confirmed) return;
+
     setSaving(true);
     setError(null);
     try {

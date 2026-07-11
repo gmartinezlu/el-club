@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 
 const PORTALS = [
   {
@@ -29,7 +29,7 @@ const PORTAL_COPY = {
   },
   patient: {
     title: "Tu espacio en El Club",
-    description: "Inicia sesión o crea tu cuenta para empezar con calma.",
+    description: "Inicia sesiÃ³n o crea tu cuenta para empezar con calma.",
     portals: [PORTALS[0]],
   },
   psychologist: {
@@ -72,7 +72,7 @@ export function AuthEntryPage({
                 to={portalItem.loginTo}
                 className="rounded-2xl border border-club-green/15 bg-white/60 px-4 py-2 text-sm text-club-green transition hover:bg-white/80"
               >
-                Iniciar sesión
+                Iniciar sesiÃ³n
               </Link>
               {portalItem.registerTo ? (
                 <Link

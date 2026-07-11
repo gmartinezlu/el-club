@@ -1,4 +1,4 @@
-import type {
+﻿import type {
   Appointment,
   AppointmentStatus,
   PatientAppointmentView,
@@ -62,7 +62,7 @@ export function toPatientView(appointment: Appointment): PatientAppointmentView 
     googleMeetUrl: appointment.googleMeetUrl,
     psychologistId: appointment.psychologistId,
     psychologistName:
-      appointment.psychologist.fullName?.trim() || "Tu psicóloga",
+      appointment.psychologist.fullName?.trim() || "Tu psicÃ³loga",
     psychologistAvatarUrl: appointment.psychologist.avatarUrl,
   };
 }

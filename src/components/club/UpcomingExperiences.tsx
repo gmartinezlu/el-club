@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import { experiences } from "./clubContent";
 import { ExperienceCard } from "./ExperienceCard";
 import { SectionHeader } from "./SectionHeader";
@@ -10,7 +10,7 @@ export function UpcomingExperiences({ limit = 4 }: { limit?: number }) {
         <SectionHeader
           eyebrow="Experiencias EL CLUB"
           title="Espacios para moverte, aprender y conectar."
-          subtitle="Talleres, caminatas, círculos y prácticas guiadas para que el bienestar salga de la pantalla."
+          subtitle="Talleres, caminatas, cÃ­rculos y prÃ¡cticas guiadas para que el bienestar salga de la pantalla."
         />
         <Link
           to="/experiencias"

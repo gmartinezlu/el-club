@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+﻿import { useRef, useState } from "react";
 import { Pause, Play } from "lucide-react";
 import type { EmotionalResource } from "../../resources/types";
 import { EmotionalGlass } from "./EmotionalGlass";
@@ -55,11 +55,11 @@ export function MeditationPlayer({ resource }: { resource: EmotionalResource }) 
         <div className="mt-6 rounded-2xl border border-club-green/10 bg-white/40 p-4">
           <p className="text-sm text-club-muted">
             {resource.content ??
-              "Próximamente: audio guiado. Mientras tanto, puedes leer la guía con calma."}
+              "PrÃ³ximamente: audio guiado. Mientras tanto, puedes leer la guÃ­a con calma."}
           </p>
           {resource.durationMinutes ? (
             <p className="mt-2 text-xs text-club-green">
-              Duración sugerida: {resource.durationMinutes} min
+              DuraciÃ³n sugerida: {resource.durationMinutes} min
             </p>
           ) : null}
         </div>

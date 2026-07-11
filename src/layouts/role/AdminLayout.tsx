@@ -1,6 +1,6 @@
-import { Outlet } from "react-router-dom";
+﻿import { Outlet } from "react-router-dom";
 import { RoleShell } from "./RoleShell";
-import { BarChart2, Users, CreditCard, Activity, LifeBuoy, FileText, Bell, Settings } from "lucide-react";
+import { BarChart2, Users, Activity, LifeBuoy, FileText, Bell, Settings } from "lucide-react";
 
 export function AdminLayout() {
   return (
@@ -9,15 +9,14 @@ export function AdminLayout() {
       nav={[
         // Consolidated: Control / Operacion / Cuenta
         { to: "/admin", label: "Resumen", end: true, group: "Control", icon: BarChart2 },
-        { to: "/admin/psychologists", label: "Psicologas", group: "Control", icon: Users },
-        { to: "/admin/memberships", label: "Membresias", group: "Control", icon: CreditCard },
+        { to: "/admin/psychologists", label: "Psicólogas", group: "Control", icon: Users },
 
-        { to: "/admin/activity", label: "Actividad", group: "Operacion", icon: Activity },
-        { to: "/admin/support", label: "Soporte", group: "Operacion", icon: LifeBuoy },
-        { to: "/admin/content", label: "Contenido", group: "Operacion", icon: FileText },
+        { to: "/admin/activity", label: "Actividad", group: "Operación", icon: Activity },
+        { to: "/admin/support", label: "Soporte", group: "Operación", icon: LifeBuoy },
+        { to: "/admin/content", label: "Contenido", group: "Operación", icon: FileText },
 
         { to: "/admin/notifications", label: "Avisos", group: "Cuenta", icon: Bell },
-        { to: "/admin/settings", label: "Configuracion", group: "Cuenta", icon: Settings },
+        { to: "/admin/settings", label: "Configuración", group: "Cuenta", icon: Settings },
       ]}
     >
       <Outlet />

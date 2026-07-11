@@ -12,11 +12,10 @@ import {
   WalletCards,
 } from "lucide-react";
 import {
-  deleteAvailabilitySlotByTime,
   fetchBookableAvailability,
   type AvailabilitySlot,
 } from "../../appointments/availability";
-import { createPatientAppointment } from "../../appointments/patient";
+import { bookAppointmentAtomically } from "../../appointments/patient";
 import { createNotification } from "../../notifications/service";
 import { fetchApprovedPsychologists } from "../../services/supabase/psychologists";
 import { useSessionStore } from "../../store/sessionStore";
@@ -62,7 +61,7 @@ export function PatientPsychologistsPage() {
       setPsychologists(data);
       setSelectedPsychologistId((current) => current ?? data[0]?.userId ?? null);
     } catch (e) {
-      setError(getErrorMessage(e, "No pudimos cargar las psicologas"));
+      setError(getErrorMessage(e, "No pudimos cargar las psicólogas"));
     } finally {
       setLoading(false);
     }
@@ -116,31 +115,26 @@ export function PatientPsychologistsPage() {
     setSaving(true);
     setError(null);
     try {
-      const appointmentId = await createPatientAppointment({
+      const appointmentId = await bookAppointmentAtomically({
         patientId,
         psychologistId: selectedPsychologist.userId,
-        startsAt: selectedSlot.startsAt,
-        endsAt: selectedSlot.endsAt,
-      });
-      await deleteAvailabilitySlotByTime({
-        psychologistId: selectedPsychologist.userId,
-        startsAt: selectedSlot.startsAt,
+        slotId: selectedSlot.id,
       });
       await Promise.all([
         createNotification({
           userId: patientId,
           title: "Cita solicitada",
-          body: "Tu solicitud fue enviada. El pago se coordina directamente con la especialista segun sus metodos disponibles.",
+          body: "Tu solicitud fue enviada. El pago se coordina directamente con la especialista según sus métodos disponibles.",
         }),
         createNotification({
           userId: selectedPsychologist.userId,
           title: "Nueva solicitud de cita",
-          body: "Una persona solicito un horario. Revisa la solicitud y coordina el pago directamente.",
+          body: "Una persona solicitó un horario. Revisa la solicitud y coordina el pago directamente.",
         }),
       ]);
       navigate(`/patient/requests/${appointmentId}`);
     } catch (e) {
-      setError(getErrorMessage(e, "No se pudo agendar la sesion"));
+      setError(getErrorMessage(e, "No se pudo agendar la sesión"));
     } finally {
       setSaving(false);
     }
@@ -163,12 +157,12 @@ export function PatientPsychologistsPage() {
           <p className="text-sm font-medium text-club-green">Terapia</p>
         )}
         <h1 className="font-display text-4xl text-club-green">
-          {isDetailView ? "Perfil de especialista" : "Encuentra tu psicologa"}
+          {isDetailView ? "Perfil de especialista" : "Encuentra tu psicóloga"}
         </h1>
         <p className="max-w-2xl text-sm leading-relaxed text-club-muted">
           {isDetailView
             ? "Conoce su enfoque, revisa horarios disponibles y reserva tu primer espacio con calma."
-            : "Explora perfiles aprobados por El Club y elige la profesional que se sienta mas cercana para ti."}
+            : "Explora perfiles aprobados por El Club y elige la profesional que se sienta más cercana para ti."}
         </p>
       </header>
 
@@ -183,10 +177,10 @@ export function PatientPsychologistsPage() {
       ) : psychologists.length === 0 ? (
         <EmotionalGlass className="p-8">
           <p className="font-display text-2xl text-club-green">
-            Aun no hay psicologas aprobadas
+            Aún no hay psicólogas aprobadas
           </p>
           <p className="mt-2 text-sm text-club-muted">
-            Cuando el equipo apruebe perfiles, apareceran aqui para agendar.
+            Cuando el equipo apruebe perfiles, aparecerán aquí para agendar.
           </p>
         </EmotionalGlass>
       ) : isDetailView && !selectedPsychologist ? (
@@ -195,7 +189,7 @@ export function PatientPsychologistsPage() {
             No encontramos este perfil
           </p>
           <p className="mt-2 text-sm text-club-muted">
-            Puede que aun no este aprobado o que haya sido pausado.
+            Puede que aún no esté aprobado o que haya sido pausado.
           </p>
         </EmotionalGlass>
       ) : (
@@ -351,7 +345,7 @@ function PsychologistFullProfile({
           />
           <MiniFact
             icon={<Clock className="h-4 w-4" strokeWidth={1.5} />}
-            label="Duracion"
+            label="Duración"
             value="50 minutos"
           />
           <MiniFact
@@ -367,7 +361,7 @@ function PsychologistFullProfile({
           </h3>
           <p className="mt-2 text-sm leading-relaxed text-club-muted">
             EL CLUB no procesa pagos de sesiones. Una vez solicites tu cita, el
-            profesional te compartira sus metodos de pago y confirmara contigo
+            profesional te compartirá sus métodos de pago y confirmará contigo
             los detalles.
           </p>
           {psychologist.paymentMethods?.length ? (
@@ -386,7 +380,7 @@ function PsychologistFullProfile({
 
         <section>
           <h3 className="font-display text-2xl text-club-green">
-            Areas de acompanamiento
+            Áreas de acompañamiento
           </h3>
           <div className="mt-3 flex flex-wrap gap-2">
             {psychologist.specialties.map((item) => (
@@ -409,11 +403,11 @@ function PsychologistFullProfile({
 
         <section className="rounded-3xl border border-club-green/10 bg-white/45 p-5">
           <h3 className="font-display text-2xl text-club-green">
-            Como se siente este espacio
+            Cómo se siente este espacio
           </h3>
           <p className="mt-2 text-sm leading-relaxed text-club-muted">
-            Una primera sesion para ordenar lo que estas viviendo, hacer
-            preguntas con tranquilidad y decidir el ritmo de acompanamiento que
+            Una primera sesión para ordenar lo que estás viviendo, hacer
+            preguntas con tranquilidad y decidir el ritmo de acompañamiento que
             mejor se acomode a ti.
           </p>
         </section>
@@ -443,11 +437,11 @@ function BookingPanel({
     <EmotionalGlass className="p-5">
       <div className="flex items-center gap-2 text-club-green">
         <CalendarPlus className="h-5 w-5" strokeWidth={1.5} />
-        <p className="font-display text-2xl">Reservar sesion</p>
+        <p className="font-display text-2xl">Reservar sesión</p>
       </div>
       <p className="mt-2 text-sm text-club-muted">
-        Elige un horario disponible. La especialista revisara tu solicitud y el
-        pago se acordara directamente con ella.
+        Elige un horario disponible. La especialista revisará tu solicitud y el
+        pago se acordará directamente con ella.
       </p>
 
       {selectedPsychologist ? (
@@ -467,7 +461,7 @@ function BookingPanel({
       ) : slots.length === 0 ? (
         <div className="mt-5 rounded-2xl border border-club-green/10 bg-white/50 p-4">
           <p className="text-sm text-club-muted">
-            Esta psicologa aun no tiene horarios publicados.
+            Esta psicóloga aún no tiene horarios publicados.
           </p>
         </div>
       ) : (

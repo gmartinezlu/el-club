@@ -3,7 +3,7 @@
 
 create table if not exists public.patient_memberships (
   patient_id uuid primary key references public.patients (user_id) on delete cascade,
-  plan_code text not null check (plan_code in ('comunidad', 'club', 'acompanamiento')),
+  plan_code text not null check (plan_code in ('comunidad', 'club', 'acompañamiento')),
   status text not null default 'active' check (status in ('active', 'paused', 'cancelled', 'expired')),
   started_at timestamptz not null default now(),
   ends_at timestamptz,
@@ -13,7 +13,7 @@ create table if not exists public.patient_memberships (
 create table if not exists public.membership_orders (
   id uuid primary key default gen_random_uuid(),
   patient_id uuid not null references public.patients (user_id) on delete cascade,
-  plan_code text not null check (plan_code in ('comunidad', 'club', 'acompanamiento')),
+  plan_code text not null check (plan_code in ('comunidad', 'club', 'acompañamiento')),
   amount_cents integer not null check (amount_cents > 0),
   currency text not null default 'COP',
   provider text not null default 'wompi',

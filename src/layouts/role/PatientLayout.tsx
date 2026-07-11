@@ -1,4 +1,4 @@
-import { Outlet } from "react-router-dom";
+﻿import { Outlet } from "react-router-dom";
 import { RoleShell } from "./RoleShell";
 import {
   Home,
@@ -8,7 +8,6 @@ import {
   BookOpen,
   FileText,
   Sparkles,
-  CreditCard,
   Bell,
   Settings,
 } from "lucide-react";
@@ -20,7 +19,6 @@ export function PatientLayout() {
       nav={[
         // Consolidated groups: Principal / Terapia / Cuenta
         { to: "/patient", label: "Inicio", end: true, group: "Principal", icon: Home },
-        { to: "/membresia", label: "Membresia", group: "Principal", icon: CreditCard },
 
         { to: "/patient/psychologists", label: "Especialistas", group: "Terapia", icon: Users },
         { to: "/patient/sessions", label: "Sesiones", group: "Terapia", icon: Calendar },

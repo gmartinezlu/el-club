@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { AppRole } from "../../shared/auth/roles";
 import { ROLE_LABELS } from "../../shared/auth/roles";
@@ -19,7 +19,7 @@ export function OnboardingRolePage() {
 
   useEffect(() => {
     if (!user) return;
-    // Si ya hay nombre poblado, podríamos inicializarlo en otro momento.
+    // Si ya hay nombre poblado, podrÃ­amos inicializarlo en otro momento.
   }, [user]);
 
   async function onSubmit(e: React.FormEvent) {
@@ -76,7 +76,7 @@ export function OnboardingRolePage() {
                 <p className="text-sm font-medium">{ROLE_LABELS[r]}</p>
                 <p className="mt-1 text-xs text-club-muted">
                   {r === "patient"
-                    ? "Terapia y acompañamiento"
+                    ? "Terapia y acompaÃ±amiento"
                     : "Agenda y personas"}
                 </p>
               </button>
@@ -93,7 +93,7 @@ export function OnboardingRolePage() {
             className="w-full rounded-2xl border border-club-green/10 bg-white/60 px-4 py-3 outline-none ring-club-green/10 focus:ring-2"
             value={fullName}
             onChange={(e) => setFullName(e.target.value)}
-            placeholder="Cómo te gusta que te llamen"
+            placeholder="CÃ³mo te gusta que te llamen"
             autoComplete="name"
           />
         </div>

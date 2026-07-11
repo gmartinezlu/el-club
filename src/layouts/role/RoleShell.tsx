@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+﻿import type { ReactNode } from "react";
 import { NavLink } from "react-router-dom";
 import type { AppRole } from "../../shared/auth/roles";
 import { ROLE_LABELS } from "../../shared/auth/roles";

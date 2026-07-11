@@ -1,4 +1,4 @@
--- Permite leer perfiles relacionados (paciente↔psicóloga) y psicólogas aprobadas
+-- Permite leer perfiles relacionados (pacienteâ†”psicÃ³loga) y psicÃ³logas aprobadas
 
 drop policy if exists users_select on public.users;
 

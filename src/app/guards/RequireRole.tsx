@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+﻿import type { ReactNode } from "react";
 import { Navigate } from "react-router-dom";
 import { useSessionStore } from "../../store/sessionStore";
 import type { AppRole } from "../../shared/auth/roles";
@@ -32,7 +32,7 @@ export function RequireRole({
     return <Navigate to={loginPathForRole(role)} replace />;
   }
 
-  // Si el usuario está autenticado pero aún no eligió rol/onboarding.
+  // Si el usuario estÃ¡ autenticado pero aÃºn no eligiÃ³ rol/onboarding.
   if (!userRole) {
     return <Navigate to="/auth/onboarding" replace />;
   }

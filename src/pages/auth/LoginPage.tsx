@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import type { AppRole } from "../../shared/auth/roles";
 import { getSupabaseClient } from "../../services/supabase/client";
@@ -73,7 +73,7 @@ export function LoginPage({ role }: { role: AppRole }) {
 
       navigate(dashboardForRole(nextRole), { replace: true });
     } catch (e2: unknown) {
-      setError(getErrorMessage(e2, "No se pudo iniciar sesión"));
+      setError(getErrorMessage(e2, "No se pudo iniciar sesiÃ³n"));
     } finally {
       setLoading(false);
     }
@@ -106,7 +106,7 @@ export function LoginPage({ role }: { role: AppRole }) {
 
         <div className="space-y-2">
           <label className="text-sm text-club-muted" htmlFor="password">
-            Contraseña
+            ContraseÃ±a
           </label>
           <input
             id="password"
@@ -137,7 +137,7 @@ export function LoginPage({ role }: { role: AppRole }) {
       <div className="text-center text-sm text-club-muted">
         {copy.registerTo ? (
           <>
-            ¿No tienes cuenta?{" "}
+            Â¿No tienes cuenta?{" "}
             <Link
               className="text-club-green hover:underline"
               to={copy.registerTo}

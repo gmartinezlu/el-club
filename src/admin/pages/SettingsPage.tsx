@@ -1,4 +1,4 @@
-export function AdminSettingsPage() {
+﻿export function AdminSettingsPage() {
   return (
     <div className="space-y-6">
       <h2 className="font-display text-3xl text-club-green">

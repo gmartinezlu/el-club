@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 
 export type ExperienceCardData = {
@@ -39,7 +39,7 @@ export function ExperienceCard({
       <div className="space-y-4 p-5">
         <div>
           <p className="text-xs uppercase tracking-[0.18em] text-club-muted">
-            {experience.category} · {experience.date}
+            {experience.category} Â· {experience.date}
           </p>
           <h3 className="mt-2 font-display text-2xl text-club-green">
             {experience.title}

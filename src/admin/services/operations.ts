@@ -1,4 +1,4 @@
-import { fetchAllAppointmentsAdmin } from "../../appointments/admin";
+﻿import { fetchAllAppointmentsAdmin } from "../../appointments/admin";
 import type { AppointmentStatus } from "../../appointments/types";
 import { getSupabaseClient } from "../../services/supabase/client";
 
@@ -114,8 +114,8 @@ export async function fetchAdminActivity(): Promise<AdminActivityRow[]> {
       appointment.psychologist,
     )}`,
     description: appointment.googleMeetUrl
-      ? "Sesion con enlace Meet asociado"
-      : "Sesion sin enlace Meet",
+      ? "sesión con enlace Meet asociado"
+      : "sesión sin enlace Meet",
     status: appointment.status,
     createdAt: appointment.startsAt,
   }));

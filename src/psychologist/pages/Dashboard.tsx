@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+﻿import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import {
   Calendar,
@@ -16,7 +16,12 @@ import {
   updateAppointmentPsychologistNotes,
   updateAppointmentStatus,
 } from "../../appointments/psychologist";
+import {
+  cancelGoogleCalendarEvent,
+  syncGoogleCalendarEvent,
+} from "../../services/supabase/googleCalendar";
 import { createNotification } from "../../notifications/service";
+import { useAutoSaveNotes } from "../hooks/useAutoSaveNotes";
 import type {
   AppointmentStatus,
   PsychologistAppointmentView,
@@ -34,7 +39,7 @@ type AgendaFilter = "today" | "upcoming" | "history" | "all";
 
 const FILTERS: { value: AgendaFilter; label: string }[] = [
   { value: "today", label: "Hoy" },
-  { value: "upcoming", label: "Próximas" },
+  { value: "upcoming", label: "PrÃ³ximas" },
   { value: "history", label: "Historial" },
   { value: "all", label: "Todas" },
 ];
@@ -63,7 +68,14 @@ export function PsychologistDashboardPage() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [savingId, setSavingId] = useState<string | null>(null);
   const [actionError, setActionError] = useState<string | null>(null);
-  const [now] = useState(() => new Date());
+  const [now, setNow] = useState(() => new Date());
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setNow(new Date());
+    }, 60000); // Refresh every minute
+    return () => clearInterval(timer);
+  }, []);
 
   const todayCount = useMemo(
     () =>
@@ -121,7 +133,7 @@ export function PsychologistDashboardPage() {
           await createNotification({
             userId: appointment.patientId,
             title: "Meet habilitado",
-            body: "Tu enlace de videollamada ya está preparado dentro de El Club.",
+            body: "Tu enlace de videollamada ya estÃ¡ preparado dentro de El Club.",
           });
         }
       } else {
@@ -149,6 +161,23 @@ export function PsychologistDashboardPage() {
           body: `Tu cita ahora esta ${STATUS_LABELS[status].toLowerCase()}.`,
         });
       }
+
+      // Best-effort: la cita ya cambió de estado en la base, así que un
+      // fallo en Google no debe impedir que la psicóloga vea el cambio
+      // reflejado (queda el respaldo manual de pegar el link de Meet).
+      if (status === "confirmed") {
+        await syncGoogleCalendarEvent(appointmentId).catch((e) => {
+          setActionError(
+            getErrorMessage(e, "No se pudo crear el evento en Google Calendar"),
+          );
+        });
+      } else if (status === "cancelled" || status === "rejected") {
+        await cancelGoogleCalendarEvent(appointmentId).catch(() => {
+          // Silencioso: cancelar/rechazar ya tuvo éxito en EL CLUB, y el
+          // evento de Google (si existe) puede limpiarse manualmente.
+        });
+      }
+
       await reload();
     } catch (e) {
       setActionError(getErrorMessage(e, "No se pudo actualizar la cita"));
@@ -194,7 +223,7 @@ export function PsychologistDashboardPage() {
       <header className="space-y-2">
         <p className="text-sm font-medium text-club-green">Agenda</p>
         <h1 className="font-display text-4xl text-club-green">
-          Tu día, con claridad
+          Tu dÃ­a, con claridad
         </h1>
         <p className="max-w-2xl text-sm leading-relaxed text-club-muted">
           Citas, notas privadas y acceso a Meet en una sola vista de trabajo.
@@ -270,7 +299,7 @@ export function PsychologistDashboardPage() {
           ) : (
             <div className="rounded-3xl border border-club-green/10 bg-white/35 p-6 shadow-soft backdrop-blur">
               <p className="text-sm text-club-muted">
-                Selecciona una cita para preparar la sesión.
+                Selecciona una cita para preparar la sesiÃ³n.
               </p>
             </div>
           )}
@@ -376,7 +405,11 @@ function AppointmentWorkspace({
   onMarkCompleted: (appointmentId: string) => Promise<void>;
 }) {
   const [meetUrl, setMeetUrl] = useState(appointment.googleMeetUrl ?? "");
-  const [notes, setNotes] = useState(appointment.psychologistNotes ?? "");
+  const { notes, setNotes, saving: autoSaving, hasUnsavedChanges } = useAutoSaveNotes(
+    appointment.psychologistNotes ?? "",
+    (updatedNotes) => onSaveNotes(appointment.id, updatedNotes),
+    2000, // 2 second debounce
+  );
 
   const canComplete = isActionable(appointment.status);
   const canSetPendingPayment = appointment.status === "requested";
@@ -389,13 +422,13 @@ function AppointmentWorkspace({
   return (
     <div className="rounded-3xl border border-club-green/10 bg-white/40 p-5 shadow-soft backdrop-blur">
       <p className="text-xs font-medium uppercase tracking-wider text-club-muted">
-        Preparación de sesión
+        PreparaciÃ³n de sesiÃ³n
       </p>
       <h2 className="mt-2 font-display text-3xl text-club-green">
         {appointment.patientName}
       </h2>
       <p className="mt-1 capitalize text-sm text-club-muted">
-        {formatSessionDate(appointment.startsAt)} ·{" "}
+        {formatSessionDate(appointment.startsAt)} Â·{" "}
         {formatSessionRange(appointment.startsAt, appointment.endsAt)}
       </p>
 
@@ -513,18 +546,21 @@ function AppointmentWorkspace({
             id="sessionNotes"
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
-            rows={7}
-            placeholder="Observaciones, avances, próximos temas..."
-            className="w-full resize-none rounded-2xl border border-club-green/10 bg-white/60 px-4 py-3 text-sm leading-relaxed text-club-ink outline-none ring-club-green/10 focus:ring-2"
+            className="min-h-24 w-full rounded-2xl border border-club-green/10 bg-white/60 px-4 py-3 text-sm text-club-ink outline-none ring-club-green/10 focus:ring-2"
           />
-          <button
-            type="button"
-            disabled={saving}
-            onClick={() => void onSaveNotes(appointment.id, notes)}
-            className="rounded-2xl bg-club-green px-4 py-2 text-sm text-club-paper transition hover:opacity-95 disabled:opacity-60"
-          >
-            {saving ? "Guardando..." : "Guardar notas"}
-          </button>
+          <div className="flex items-center justify-between">
+            <button
+              type="button"
+              disabled={saving || autoSaving}
+              onClick={() => void onSaveNotes(appointment.id, notes)}
+              className="rounded-2xl bg-club-green px-4 py-2 text-sm text-club-paper transition hover:opacity-95 disabled:opacity-60"
+            >
+              {autoSaving ? "Guardando..." : "Guardar notas"}
+            </button>
+            {hasUnsavedChanges && !autoSaving ? (
+              <p className="text-xs text-amber-700">Guardando automÃ¡ticamente...</p>
+            ) : null}
+          </div>
         </div>
 
         {canComplete ? (

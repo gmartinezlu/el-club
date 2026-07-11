@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+﻿import type { ReactNode } from "react";
 import { GlassCard } from "./GlassCard";
 
 export function FeatureCard({
@@ -12,14 +12,16 @@ export function FeatureCard({
 }) {
   return (
     <GlassCard className="group">
-      <div className="flex items-start justify-between gap-4">
-        <div className="space-y-2">
-          <h3 className="font-display text-xl text-club-green">{title}</h3>
-          <p className="text-sm leading-relaxed text-club-muted">
-            {description}
-          </p>
-        </div>
-        {icon ? <div className="shrink-0 text-club-green/80">{icon}</div> : null}
+      <div className="space-y-3">
+        {icon ? (
+          <div className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-club-green/8 text-club-green transition-colors group-hover:bg-club-green/12">
+            {icon}
+          </div>
+        ) : null}
+        <h3 className="font-display text-xl text-club-green">{title}</h3>
+        <p className="text-sm leading-relaxed text-club-muted">
+          {description}
+        </p>
       </div>
     </GlassCard>
   );

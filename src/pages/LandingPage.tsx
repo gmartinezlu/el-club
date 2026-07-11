@@ -1,5 +1,15 @@
-import { motion } from "framer-motion";
+﻿import { useRef } from "react";
+import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { Link } from "react-router-dom";
+import {
+  BookOpen,
+  Feather,
+  HeartHandshake,
+  ShieldCheck,
+  Sparkles,
+  UserCheck,
+  Wind,
+} from "lucide-react";
 import { MarketingLayout } from "../layouts/MarketingLayout";
 import { FeatureCard } from "../components/landing/FeatureCard";
 import { Section } from "../components/landing/Section";
@@ -15,40 +25,46 @@ export function LandingPage() {
     {
       title: "Un espacio seguro",
       description:
-        "Un entorno disenado para sentirte acompanada, sin juicios, con calma real.",
+        "Un entorno diseñado para sentirte acompañada, sin juicios, con calma real.",
+      icon: <ShieldCheck className="h-5 w-5" />,
     },
     {
-      title: "Cercania emocional",
+      title: "Cercanía emocional",
       description:
         "Microrecordatorios, recursos y un ritmo que respeta tu proceso.",
+      icon: <HeartHandshake className="h-5 w-5" />,
     },
     {
       title: "Terapia con enfoque humano",
       description:
-        "Menos friccion. Mas claridad. Historial y seguimiento con intencion.",
+        "Menos fricción. Más claridad. Historial y seguimiento con intención.",
+      icon: <Sparkles className="h-5 w-5" />,
     },
     {
       title: "Recursos que te sostienen",
       description:
-        "Meditacion, journaling y articulos curados para momentos dificiles.",
+        "Meditación, journaling y artículos curados para momentos difíciles.",
+      icon: <Wind className="h-5 w-5" />,
     },
     {
-      title: "Organizacion elegante",
+      title: "Organización elegante",
       description:
         "Tu agenda y tus notas, listas y respirables, nunca un panel pesado.",
+      icon: <BookOpen className="h-5 w-5" />,
     },
     {
       title: "Profesionales validados",
       description:
-        "Psicologas con perfil completo y aprobacion del equipo de El Club.",
+        "Psicólogas con perfil completo y aprobación del equipo de El Club.",
+      icon: <UserCheck className="h-5 w-5" />,
     },
   ];
 
   const steps = [
     {
-      title: "Registrate",
+      title: "Regístrate",
       description:
-        "Crea tu cuenta y empieza con una bienvenida calida, sin burocracia.",
+        "Crea tu cuenta y empieza con una bienvenida cálida, sin burocracia.",
     },
     {
       title: "Onboarding emocional",
@@ -56,174 +72,116 @@ export function LandingPage() {
         "Define tu rol y tus prioridades para personalizar la experiencia.",
     },
     {
-      title: "Encuentra tu psicologa",
+      title: "Encuentra tu psicóloga",
       description: "Explora perfiles y agenda un espacio con tranquilidad.",
     },
     {
-      title: "Solicitud y coordinacion",
+      title: "Solicitud y coordinación",
       description:
         "Tu cita se solicita en El Club. El pago de terapia se coordina directamente con la profesional.",
     },
     {
-      title: "Sesion y seguimiento",
+      title: "Sesión y seguimiento",
       description:
-        "La sesion se registra y tu historial queda guardado con intencion.",
+        "La sesión se registra y tu historial queda guardado con intención.",
     },
   ];
 
   const psychologists = [
     {
       name: "Dra. Camila R.",
-      tagline: "Ansiedad y regulacion emocional",
-      specialties: ["Ansiedad", "Respiracion", "Autoestima"],
+      tagline: "Ansiedad y regulación emocional",
+      specialties: ["Ansiedad", "Respiración", "Autoestima"],
     },
     {
       name: "Psic. Valeria S.",
-      tagline: "Procesos de vinculo y acompanamiento",
-      specialties: ["Vinculos", "Duelo", "Limites"],
+      tagline: "Procesos de vínculo y acompañamiento",
+      specialties: ["Vínculos", "Duelo", "Límites"],
     },
     {
       name: "Dra. Paula M.",
-      tagline: "Estres, burnout y bienestar",
-      specialties: ["Estres", "Burnout", "Rutinas"],
+      tagline: "Estrés, burnout y bienestar",
+      specialties: ["Estrés", "Burnout", "Rutinas"],
     },
   ];
 
   const resources = [
     {
-      title: "Meditacion guiada",
+      title: "Meditación guiada",
       description: "8 minutos para volver a tu centro.",
+      icon: <Wind className="h-5 w-5" />,
     },
     {
-      title: "Journal con intencion",
-      description: "Prompts suaves para sentirte acompanada.",
+      title: "Journal con intención",
+      description: "Prompts suaves para sentirte acompañada.",
+      icon: <Feather className="h-5 w-5" />,
     },
     {
-      title: "Articulos claros",
+      title: "Artículos claros",
       description: "Lecturas breves, humanas y aplicables.",
+      icon: <BookOpen className="h-5 w-5" />,
     },
     {
       title: "Mini ejercicios",
       description: "Respira, nombra y suelta, sin exigencia.",
+      icon: <Sparkles className="h-5 w-5" />,
     },
   ];
 
   const testimonials = [
     {
       quote:
-        "Por primera vez senti que la plataforma me entendia. Es calida y tranquila.",
-      name: "Sofia",
+        "Por primera vez sentí que la plataforma me entendía. Es cálida y tranquila.",
+      name: "Sofía",
       context: "Miembro",
     },
     {
       quote:
-        "Todo esta claro, pero sin sentirse medico. La experiencia es premium y humana.",
-      name: "Maria Fernanda",
+        "Todo está claro, pero sin sentirse médico. La experiencia es premium y humana.",
+      name: "María Fernanda",
       context: "Miembro",
     },
     {
       quote:
-        "Mis sesiones y mis notas se ven ordenadas, pero no frias. Se siente profesional.",
+        "Mis sesiones y mis notas se ven ordenadas, pero no frías. Se siente profesional.",
       name: "Laura",
-      context: "Psicologa",
+      context: "Psicóloga",
     },
   ];
 
   const faqs = [
     {
-      question: "El Club es solo para pedir citas?",
+      question: "¿El Club es solo para pedir citas?",
       answer:
-        "No. Es un ecosistema de bienestar: terapia, recursos emocionales, journaling, comunidad guiada y acompanamiento entre sesiones.",
+        "No. Es un ecosistema de bienestar: terapia, recursos emocionales, journaling, comunidad guiada y acompañamiento entre sesiones.",
     },
     {
-      question: "Como se integran las videollamadas?",
+      question: "¿Cómo se integran las videollamadas?",
       answer:
-        "La sesion se habilita desde El Club y el acceso se mantiene dentro de la experiencia con Google Meet.",
+        "La sesión se habilita desde El Club y el acceso se mantiene dentro de la experiencia con Google Meet.",
     },
     {
-      question: "La plataforma es segura y con permisos por rol?",
+      question: "¿La plataforma es segura y con permisos por rol?",
       answer:
-        "Si. La seguridad se maneja con Supabase Auth y reglas por rol para proteger rutas y datos sensibles.",
+        "Sí. La seguridad se maneja con Supabase Auth y reglas por rol para proteger rutas y datos sensibles.",
     },
     {
-      question: "El Club procesa pagos de terapia?",
+      question: "¿El Club procesa pagos de terapia?",
       answer:
-        "No. Las sesiones se solicitan en El Club, pero el pago se coordina directamente con cada profesional. La membresia si se paga por pasarela.",
+        "No. Las sesiones se solicitan en El Club, pero el pago se coordina directamente con cada profesional, por lo general vía Nequi.",
     },
   ];
 
   return (
     <MarketingLayout>
       <main>
-        <section className="relative mx-auto w-full max-w-6xl overflow-hidden px-5 pb-14 pt-10 md:px-8 md:pt-16">
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute -left-24 -top-24 h-72 w-72 rounded-full bg-club-brass/10 blur-3xl"
-          />
-          <motion.div
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.55, ease: "easeOut" }}
-            className="relative grid items-center gap-10 md:grid-cols-2 md:gap-12"
-          >
-            <div className="space-y-5">
-              <p className="inline-flex rounded-full border border-club-brass/25 bg-club-brass/10 px-3 py-1 text-sm text-club-brass">
-                Un refugio emocional digital
-              </p>
-              <h1 className="font-display text-6xl leading-[0.95] tracking-tight text-club-green md:text-7xl">
-                El Club
-              </h1>
-              <BreathLine className="h-5 w-32 text-club-brass" />
-              <p className="max-w-prose text-lg leading-relaxed text-club-muted">
-                Terapia, recursos y acompanamiento emocional con una
-                experiencia calida, premium y humana.
-              </p>
-              <div className="flex flex-col gap-3 sm:flex-row">
-                <Link
-                  to="/auth/patient/register"
-                  className="rounded-2xl bg-club-green px-5 py-3 text-base text-club-paper shadow-soft transition hover:translate-y-[-1px] hover:opacity-95"
-                >
-                  Empezar
-                </Link>
-                <a
-                  href="#psicologas"
-                  className="rounded-2xl border border-club-green/15 bg-white/50 px-5 py-3 text-base text-club-green shadow-soft backdrop-blur transition hover:translate-y-[-1px]"
-                >
-                  Ver psicologas
-                </a>
-              </div>
-            </div>
-
-            <div className="relative">
-              <div
-                aria-hidden="true"
-                className="absolute -right-6 -top-6 h-full w-full rounded-[2rem] bg-club-cream"
-              />
-              <div className="relative overflow-hidden rounded-[2rem] border border-club-green/10 bg-white/60 p-6 shadow-soft backdrop-blur">
-                <img
-                  src={heroImage}
-                  alt="Ilustracion de una persona en un momento de calma, rodeada de elementos suaves de bienestar"
-                  className="mx-auto w-full max-w-[280px]"
-                />
-                <p className="mt-2 text-center font-display text-2xl leading-tight text-club-green">
-                  No tienes que cargarlo todo sola.
-                </p>
-                <div className="mt-5 grid grid-cols-2 gap-3">
-                  <Mini value="8 min" label="Meditacion" />
-                  <Mini value="2 prompts" label="Journal" />
-                  <Mini value="Curados" label="Recursos" />
-                  <Mini value="Agenda" label="Sesion" />
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        </section>
+        <HeroSection heroImage={heroImage} />
 
         <Section
           id="beneficios"
           eyebrow="Experiencia"
           title="Premium, respirable y humana"
-          subtitle="Disenada para que te sientas segura y para que tu psicologa tambien tenga un espacio organizado, elegante y funcional."
+          subtitle="Diseñada para que te sientas segura y para que tu psicóloga también tenga un espacio organizado, elegante y funcional."
         >
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {benefits.map((b) => (
@@ -231,6 +189,7 @@ export function LandingPage() {
                 key={b.title}
                 title={b.title}
                 description={b.description}
+                icon={b.icon}
               />
             ))}
           </div>
@@ -240,7 +199,7 @@ export function LandingPage() {
           id="como-funciona"
           eyebrow="Proceso"
           title="Un flujo claro, sin peso"
-          subtitle="Tu camino hacia el acompanamiento emocional se siente integrado en El Club."
+          subtitle="Tu camino hacia el acompañamiento emocional se siente integrado en El Club."
         >
           <div className="grid gap-4 md:grid-cols-5">
             {steps.map((s, idx) => (
@@ -272,10 +231,10 @@ export function LandingPage() {
         </Section>
 
         <Section
-          id="psicologas"
+          id="psicólogas"
           eyebrow="Profesionales"
-          title="Psicologas que se sienten cercanas"
-          subtitle="Perfiles pensados para crear confianza: enfoque, experiencia y un estilo de acompanamiento humano."
+          title="psicólogas que se sienten cercanas"
+          subtitle="Perfiles pensados para crear confianza: enfoque, experiencia y un estilo de acompañamiento humano."
         >
           <div className="grid gap-4 md:grid-cols-3">
             {psychologists.map((p) => (
@@ -302,23 +261,24 @@ export function LandingPage() {
                   key={r.title}
                   title={r.title}
                   description={r.description}
+                  icon={r.icon}
                 />
               ))}
             </div>
 
-            <div className="rounded-3xl border border-club-green/10 bg-white/35 p-6 shadow-soft backdrop-blur">
+            <div className="rounded-3xl border border-club-green/10 bg-white/60 p-6">
               <p className="font-display text-2xl text-club-green">
                 Ritmo suave, resultados reales
               </p>
               <p className="mt-3 text-sm leading-relaxed text-club-muted">
-                Un diseno editorial minimalista con animaciones sutiles para
+                Un diseño editorial minimalista con animaciones sutiles para
                 que tu mente descanse mientras exploras.
               </p>
 
               <div className="mt-6 grid gap-3 sm:grid-cols-2">
-                <Mini label="Meditacion" value="8 min" />
+                <Mini label="Meditación" value="8 min" />
                 <Mini label="Journal" value="2 prompts" />
-                <Mini label="Guias" value="Curadas" />
+                <Mini label="Guías" value="Curadas" />
                 <Mini label="Sesiones" value="Agenda" />
               </div>
             </div>
@@ -328,29 +288,29 @@ export function LandingPage() {
         <Section
           id="journaling"
           eyebrow="Practicas"
-          title="Journaling y meditacion, con intencion"
-          subtitle="Ejercicios simples que no se sienten tecnicos. Solo calma y claridad."
+          title="Journaling y meditación, con intención"
+          subtitle="Ejercicios simples que no se sienten técnicos. Solo calma y claridad."
         >
           <div className="grid gap-4 lg:grid-cols-2">
             <GlassCard>
               <p className="font-display text-3xl text-club-green">Journal</p>
               <p className="mt-3 text-sm text-club-muted">
-                Prompts que acompanan sin presionar. Escribir para soltar,
+                Prompts que acompañan sin presionar. Escribir para soltar,
                 nombrar y volver.
               </p>
               <ul className="mt-5 space-y-3 text-sm text-club-muted">
-                <li>Que necesitabas hoy y no pediste?</li>
-                <li>Que parte de ti merece cuidado ahora?</li>
-                <li>Una cosa pequena que puedes hacer por ti.</li>
+                <li>¿Qué necesitabas hoy y no pediste?</li>
+                <li>¿Qué parte de ti merece cuidado ahora?</li>
+                <li>Una cosa pequeña que puedes hacer por ti.</li>
               </ul>
             </GlassCard>
 
             <GlassCard>
               <p className="font-display text-3xl text-club-green">
-                Meditacion
+                Meditación
               </p>
               <p className="mt-3 text-sm text-club-muted">
-                Una guia breve para regular el cuerpo y calmar la mente.
+                Una guía breve para regular el cuerpo y calmar la mente.
               </p>
               <div className="mt-5 grid gap-3 sm:grid-cols-2">
                 <Mini label="Respira" value="4 ciclos" />
@@ -366,7 +326,7 @@ export function LandingPage() {
           id="testimonios"
           eyebrow="Voces"
           title="Historias reales de calma"
-          subtitle="Lo que se siente cuando el acompanamiento es premium y humano."
+          subtitle="Lo que se siente cuando el acompañamiento es premium y humano."
           tone="dark"
         >
           <div className="grid gap-4 md:grid-cols-3">
@@ -386,7 +346,7 @@ export function LandingPage() {
           id="faq"
           eyebrow="Preguntas"
           title="Respuestas claras"
-          subtitle="Sin letras pequenas. Sin confusion."
+          subtitle="Sin letras pequeñas. Sin confusión."
         >
           <FAQAccordion items={faqs} />
         </Section>
@@ -412,7 +372,7 @@ export function LandingPage() {
                   Entra a El Club y comienza a respirar.
                 </h3>
                 <p className="text-sm leading-relaxed text-club-cream/75">
-                  Terapia, recursos y acompanamiento emocional en un espacio
+                  Terapia, recursos y acompañamiento emocional en un espacio
                   seguro y premium.
                 </p>
               </div>
@@ -428,7 +388,7 @@ export function LandingPage() {
                   href="#beneficios"
                   className="rounded-2xl border border-club-cream/30 px-6 py-3 text-center text-base text-club-paper transition hover:bg-white/10"
                 >
-                  Ver como funciona
+                  Ver cómo funciona
                 </a>
               </div>
             </div>
@@ -441,9 +401,104 @@ export function LandingPage() {
 
 function Mini({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-2xl border border-club-green/10 bg-white/45 p-3 shadow-soft backdrop-blur">
+    <div className="rounded-2xl border border-club-green/10 bg-white/60 p-3">
       <p className="text-xs text-club-muted">{label}</p>
       <p className="mt-1 text-sm font-semibold text-club-ink">{value}</p>
     </div>
+  );
+}
+
+function HeroSection({ heroImage }: { heroImage: string }) {
+  const ref = useRef<HTMLElement>(null);
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  const springX = useSpring(mouseX, { stiffness: 120, damping: 20 });
+  const springY = useSpring(mouseY, { stiffness: 120, damping: 20 });
+
+  const rotateX = useTransform(springY, [-0.5, 0.5], [6, -6]);
+  const rotateY = useTransform(springX, [-0.5, 0.5], [-6, 6]);
+  const translateX = useTransform(springX, [-0.5, 0.5], [-8, 8]);
+  const translateY = useTransform(springY, [-0.5, 0.5], [-8, 8]);
+
+  function handleMouseMove(event: React.MouseEvent<HTMLElement>) {
+    const bounds = ref.current?.getBoundingClientRect();
+    if (!bounds) return;
+    mouseX.set((event.clientX - bounds.left) / bounds.width - 0.5);
+    mouseY.set((event.clientY - bounds.top) / bounds.height - 0.5);
+  }
+
+  function handleMouseLeave() {
+    mouseX.set(0);
+    mouseY.set(0);
+  }
+
+  return (
+    <section
+      ref={ref}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      className="relative mx-auto w-full max-w-6xl overflow-hidden px-5 pb-14 pt-10 md:px-8 md:pt-16"
+    >
+      <motion.div
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.55, ease: "easeOut" }}
+        className="relative grid items-center gap-10 md:grid-cols-2 md:gap-12"
+      >
+        <div className="space-y-5">
+          <p className="inline-flex rounded-full border border-club-brass/25 bg-club-brass/10 px-3 py-1 text-sm text-club-brass">
+            Un refugio emocional digital
+          </p>
+          <h1 className="font-display text-6xl leading-[0.95] tracking-tight text-club-green md:text-7xl">
+            El Club
+          </h1>
+          <BreathLine className="h-5 w-32 text-club-brass" />
+          <p className="max-w-prose text-lg leading-relaxed text-club-muted">
+            Terapia, recursos y acompañamiento emocional con una experiencia
+            cálida, premium y humana.
+          </p>
+          <div className="flex flex-col gap-3 sm:flex-row">
+            <Link
+              to="/auth/patient/register"
+              className="rounded-2xl bg-club-green px-5 py-3 text-base text-club-paper shadow-soft transition hover:translate-y-[-1px] hover:opacity-95"
+            >
+              Empezar
+            </Link>
+            <a
+              href="#psicólogas"
+              className="rounded-2xl border border-club-green/15 bg-white/60 px-5 py-3 text-base text-club-green transition hover:translate-y-[-1px] hover:border-club-green/25"
+            >
+              Ver psicólogas
+            </a>
+          </div>
+        </div>
+
+        <motion.div
+          style={{ perspective: 1200 }}
+          className="relative"
+        >
+          <motion.div
+            style={{ rotateX, rotateY, x: translateX, y: translateY }}
+            className="relative overflow-hidden rounded-[2rem] border border-club-green/10 bg-white/70 p-6 shadow-soft"
+          >
+            <img
+              src={heroImage}
+              alt="Ilustración de una persona en un momento de calma, rodeada de elementos suaves de bienestar"
+              className="mx-auto w-full max-w-[280px]"
+            />
+            <p className="mt-2 text-center font-display text-2xl leading-tight text-club-green">
+              No tienes que cargarlo todo sola.
+            </p>
+            <div className="mt-5 grid grid-cols-2 gap-3">
+              <Mini value="8 min" label="Meditación" />
+              <Mini value="2 prompts" label="Journal" />
+              <Mini value="Curados" label="Recursos" />
+              <Mini value="Agenda" label="Sesión" />
+            </div>
+          </motion.div>
+        </motion.div>
+      </motion.div>
+    </section>
   );
 }

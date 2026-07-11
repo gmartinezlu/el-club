@@ -1,5 +1,4 @@
-import { Link } from "react-router-dom";
-import { ecosystemItems } from "./clubContent";
+﻿import { ecosystemItems } from "./clubContent";
 import { SectionHeader } from "./SectionHeader";
 
 export function CommunitySection() {
@@ -7,8 +6,8 @@ export function CommunitySection() {
     <section className="mx-auto w-full max-w-6xl px-5 py-16 md:px-8">
       <SectionHeader
         eyebrow="Esto no es solo terapia"
-        title="Más que terapia. Un club para cuidar tu vida emocional."
-        subtitle="En EL CLUB puedes encontrar profesionales, participar en experiencias, acceder a contenido de bienestar y formar parte de una comunidad guiada que te acompaña dentro y fuera de lo digital."
+        title="MÃ¡s que terapia. Un club para cuidar tu vida emocional."
+        subtitle="En EL CLUB puedes encontrar profesionales, participar en experiencias, acceder a contenido de bienestar y formar parte de una comunidad guiada que te acompaÃ±a dentro y fuera de lo digital."
       />
 
       <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -27,13 +26,6 @@ export function CommunitySection() {
           </article>
         ))}
       </div>
-
-      <Link
-        to="/membresia"
-        className="mt-8 inline-flex rounded-2xl bg-club-green px-5 py-3 text-sm text-club-paper shadow-soft transition hover:translate-y-[-1px]"
-      >
-        Explorar membresía
-      </Link>
     </section>
   );
 }

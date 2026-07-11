@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { fetchAllAppointmentsAdmin } from "../../appointments/admin";
 import { getSupabaseClient } from "../../services/supabase/client";
 
@@ -30,7 +30,7 @@ export function useAdminStats() {
       } catch (e) {
         if (!cancelled) {
           setError(
-            e instanceof Error ? e.message : "No se pudieron cargar métricas",
+            e instanceof Error ? e.message : "No se pudieron cargar mÃ©tricas",
           );
         }
       } finally {

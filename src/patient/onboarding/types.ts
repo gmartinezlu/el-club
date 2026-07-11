@@ -1,4 +1,4 @@
-export type PatientEmotionalOnboarding = {
+﻿export type PatientEmotionalOnboarding = {
   mainConcern: string | null;
   emotionalGoals: string[];
   therapyPreferences: string[];

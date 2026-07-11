@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+﻿import { useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
@@ -65,7 +65,7 @@ export function PsychologistPatientsPage() {
       ) : patients.length === 0 ? (
         <div className="rounded-3xl border border-club-green/10 bg-white/35 p-6">
           <p className="text-sm text-club-muted">
-            Cuando tengas citas, las personas apareceran aqui.
+            Cuando tengas citas, las personas aparecerán aquí.
           </p>
         </div>
       ) : (
@@ -97,18 +97,18 @@ export function PsychologistPatientsPage() {
                     <div>
                       <p className="font-medium text-club-ink">{p.fullName}</p>
                       <p className="text-xs text-club-muted">
-                        {p.sessionsCount} sesion
+                        {p.sessionsCount} sesión
                         {p.sessionsCount !== 1 ? "es" : ""}
                       </p>
                     </div>
                   </div>
                   {p.nextSessionAt ? (
                     <p className="text-sm text-club-green">
-                      Proxima: {formatSessionDate(p.nextSessionAt)}
+                      Próxima: {formatSessionDate(p.nextSessionAt)}
                     </p>
                   ) : (
                     <p className="text-sm text-club-muted">
-                      Sin cita proxima
+                      Sin cita próxima
                     </p>
                   )}
                 </div>
@@ -165,7 +165,7 @@ function PatientDetail({
           {patientName}
         </h1>
         <p className="max-w-2xl text-sm leading-relaxed text-club-muted">
-          Historial de encuentros, notas privadas y preparación de proximas
+          Historial de encuentros, notas privadas y preparación de próximas
           sesiones.
         </p>
       </header>
@@ -185,11 +185,11 @@ function PatientDetail({
           <aside className="space-y-4 lg:sticky lg:top-24 lg:self-start">
             <SummaryCard
               icon={<CalendarClock className="h-5 w-5" strokeWidth={1.5} />}
-              label="Proxima sesion"
+              label="Próxima sesión"
               value={
                 nextAppointment
                   ? formatSessionDate(nextAppointment.startsAt)
-                  : "Sin cita proxima"
+                  : "Sin cita próxima"
               }
               detail={
                 nextAppointment
@@ -292,7 +292,7 @@ function SessionHistoryCard({
             </a>
           ) : (
             <p className="mt-2 text-sm text-club-muted">
-              Aun no hay enlace asociado.
+              Aún no hay enlace asociado.
             </p>
           )}
         </div>
@@ -304,7 +304,7 @@ function SessionHistoryCard({
           </div>
           <p className="mt-2 text-sm leading-relaxed text-club-muted">
             {appointment.psychologistNotes?.trim() ||
-              "Sin notas guardadas para esta sesion."}
+              "Sin notas guardadas para esta sesión."}
           </p>
         </div>
       </div>

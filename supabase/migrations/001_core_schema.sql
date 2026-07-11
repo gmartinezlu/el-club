@@ -1,5 +1,5 @@
--- El Club · Core schema (ejecutar en Supabase SQL Editor o via CLI)
--- Orden: 001 → 002 → 003
+-- El Club Â· Core schema (ejecutar en Supabase SQL Editor o via CLI)
+-- Orden: 001 â†’ 002 â†’ 003
 
 create extension if not exists "pgcrypto";
 

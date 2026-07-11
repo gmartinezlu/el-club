@@ -1,4 +1,4 @@
--- El Club · Session pricing update
+-- El Club Â· Session pricing update
 -- Public price: 110.000 COP
 -- Psychologist payout: 90.000 COP
 -- Platform fee: 20.000 COP
@@ -30,7 +30,7 @@ begin
   end if;
 
   if appointment_row.status <> 'pending_payment'::public.appointment_status then
-    raise exception 'Esta cita no está pendiente de pago';
+    raise exception 'Esta cita no estÃ¡ pendiente de pago';
   end if;
 
   insert into public.payments (

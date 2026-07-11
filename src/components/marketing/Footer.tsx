@@ -1,15 +1,14 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 
 const FOOTER_LINKS = [
   { label: "Experiencias", to: "/experiencias" },
   { label: "Terapia", to: "/terapia" },
-  { label: "Membresía", to: "/membresia" },
   { label: "Comunidad", to: "/comunidad" },
-  { label: "Para psicólogos", to: "/para-psicologos" },
+  { label: "Para psicÃ³logos", to: "/para-psicologos" },
   { label: "Blog", to: "/blog" },
   { label: "Contacto", to: "/soporte" },
   { label: "Privacidad", to: "/privacidad" },
-  { label: "Términos", to: "/terminos" },
+  { label: "TÃ©rminos", to: "/terminos" },
 ];
 
 export function Footer() {
@@ -20,7 +19,7 @@ export function Footer() {
           <p className="font-display text-4xl">EL CLUB</p>
           <p className="mt-3 max-w-sm text-sm leading-relaxed text-club-paper/70">
             Un club premium de bienestar emocional: terapia, experiencias,
-            comunidad guiada y contenido para sentirte acompañado.
+            comunidad guiada y contenido para sentirte acompaÃ±ado.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
             <a

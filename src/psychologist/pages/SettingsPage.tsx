@@ -1,9 +1,16 @@
-import { useCallback, useEffect, useState } from "react";
+﻿import { useCallback, useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { Save, Sparkles } from "lucide-react";
 import {
   fetchPsychologistProfile,
   updatePsychologistProfile,
 } from "../../services/supabase/psychologists";
+import {
+  disconnectGoogleCalendar,
+  fetchGoogleConnectionStatus,
+  startGoogleConnection,
+  type GoogleConnectionStatus,
+} from "../../services/supabase/googleCalendar";
 import { useSessionStore } from "../../store/sessionStore";
 import { getErrorMessage } from "../../utils/errors";
 import {
@@ -31,7 +38,7 @@ export function PsychologistSettingsPage() {
   const [avatarUrl, setAvatarUrl] = useState("");
   const [bio, setBio] = useState("");
   const [specialties, setSpecialties] = useState("");
-  const [languages, setLanguages] = useState("Espanol");
+  const [languages, setLanguages] = useState("Español");
   const [professionalWhatsapp, setProfessionalWhatsapp] = useState("");
   const [paymentMethods, setPaymentMethods] = useState(
     "Transferencia, Nequi, Daviplata",
@@ -49,6 +56,13 @@ export function PsychologistSettingsPage() {
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [googleStatus, setGoogleStatus] = useState<GoogleConnectionStatus | null>(null);
+  const [googleLoading, setGoogleLoading] = useState(true);
+  const [googleActionLoading, setGoogleActionLoading] = useState(false);
+  const [googleError, setGoogleError] = useState<string | null>(null);
+  const googleRedirectResult = searchParams.get("google");
+
   const loadProfile = useCallback(async () => {
     if (!userId) {
       setLoading(false);
@@ -63,7 +77,7 @@ export function PsychologistSettingsPage() {
       setAvatarUrl(profile?.avatarUrl ?? "");
       setBio(profile?.bio ?? "");
       setSpecialties(joinList(profile?.specialties ?? []));
-      setLanguages(joinList(profile?.languages?.length ? profile.languages : ["Espanol"]));
+      setLanguages(joinList(profile?.languages?.length ? profile.languages : ["Español"]));
       setProfessionalWhatsapp(profile?.professionalWhatsapp ?? "");
       setPaymentMethods(
         joinList(
@@ -90,6 +104,62 @@ export function PsychologistSettingsPage() {
       void loadProfile();
     });
   }, [loadProfile]);
+
+  const loadGoogleStatus = useCallback(async () => {
+    setGoogleLoading(true);
+    setGoogleError(null);
+    try {
+      setGoogleStatus(await fetchGoogleConnectionStatus());
+    } catch (e) {
+      setGoogleError(getErrorMessage(e, "No se pudo consultar la conexión con Google"));
+    } finally {
+      setGoogleLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    queueMicrotask(() => {
+      void loadGoogleStatus();
+    });
+  }, [loadGoogleStatus]);
+
+  // Limpia el parámetro ?google= de la URL tras leerlo, así un refresh
+  // de la página no vuelve a mostrar el mensaje de éxito/error.
+  useEffect(() => {
+    if (!googleRedirectResult) return;
+    setSearchParams(
+      (prev) => {
+        const next = new URLSearchParams(prev);
+        next.delete("google");
+        return next;
+      },
+      { replace: true },
+    );
+  }, [googleRedirectResult, setSearchParams]);
+
+  async function connectGoogle() {
+    setGoogleActionLoading(true);
+    setGoogleError(null);
+    try {
+      await startGoogleConnection();
+    } catch (e) {
+      setGoogleError(getErrorMessage(e, "No se pudo iniciar la conexión con Google"));
+      setGoogleActionLoading(false);
+    }
+  }
+
+  async function disconnectGoogle() {
+    setGoogleActionLoading(true);
+    setGoogleError(null);
+    try {
+      await disconnectGoogleCalendar();
+      await loadGoogleStatus();
+    } catch (e) {
+      setGoogleError(getErrorMessage(e, "No se pudo desconectar Google Calendar"));
+    } finally {
+      setGoogleActionLoading(false);
+    }
+  }
 
   async function saveProfile() {
     if (!userId) return;
@@ -156,10 +226,10 @@ export function PsychologistSettingsPage() {
     <div className="space-y-8">
       <header className="space-y-2">
         <p className="text-sm font-medium text-club-green">Perfil profesional</p>
-        <h1 className="font-display text-4xl text-club-green">Configuracion</h1>
+        <h1 className="font-display text-4xl text-club-green">Configuración</h1>
         <p className="max-w-2xl text-sm leading-relaxed text-club-muted">
-          Completa la informacion que revisa el equipo de El Club y que veran
-          las personas cuando tu perfil este aprobado.
+          Completa la información que revisa el equipo de El Club y que verán
+          las personas cuando tu perfil esté aprobado.
         </p>
       </header>
 
@@ -175,6 +245,17 @@ export function PsychologistSettingsPage() {
         </p>
       ) : null}
 
+      {googleRedirectResult === "connected" ? (
+        <p className="rounded-2xl border border-club-green/10 bg-club-green/10 px-4 py-3 text-sm text-club-green">
+          Conectaste tu Google Calendar correctamente.
+        </p>
+      ) : null}
+      {googleRedirectResult === "error" ? (
+        <p className="rounded-2xl border border-red-200/80 bg-red-50/40 px-4 py-3 text-sm text-red-800">
+          No se pudo completar la conexión con Google. Intenta de nuevo.
+        </p>
+      ) : null}
+
       {loading ? (
         <div className="h-96 animate-pulse rounded-3xl bg-club-green/5" />
       ) : (
@@ -185,7 +266,7 @@ export function PsychologistSettingsPage() {
               <input
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
-                placeholder="Dra. Camila Rodriguez"
+                placeholder="Dra. Camila Rodríguez"
                 className="w-full rounded-2xl border border-club-green/10 bg-white/60 px-4 py-3 text-sm text-club-ink outline-none ring-club-green/10 focus:ring-2"
               />
             </label>
@@ -206,7 +287,7 @@ export function PsychologistSettingsPage() {
                 value={bio}
                 onChange={(e) => setBio(e.target.value)}
                 rows={6}
-                placeholder="Cuentale a las personas como acompanas, tu enfoque y que pueden esperar de una sesion contigo."
+                placeholder="Cuéntale a las personas cómo acompañas, tu enfoque y qué pueden esperar de una sesión contigo."
                 className="w-full resize-none rounded-2xl border border-club-green/10 bg-white/60 px-4 py-3 text-sm leading-relaxed text-club-ink outline-none ring-club-green/10 focus:ring-2"
               />
             </label>
@@ -230,7 +311,7 @@ export function PsychologistSettingsPage() {
                 <input
                   value={languages}
                   onChange={(e) => setLanguages(e.target.value)}
-                  placeholder="Espanol, Ingles"
+                  placeholder="Español, Inglés"
                   className="w-full rounded-2xl border border-club-green/10 bg-white/60 px-4 py-3 text-sm text-club-ink outline-none ring-club-green/10 focus:ring-2"
                 />
                 <span className="block text-xs text-club-muted">
@@ -245,7 +326,7 @@ export function PsychologistSettingsPage() {
               </p>
               <p className="mt-1 text-sm leading-relaxed text-club-muted">
                 EL CLUB no procesa pagos de sesiones. Cuando una persona
-                solicite una cita, podras compartir tus metodos de pago y
+                solicite una cita, podrás compartir tus métodos de pago y
                 confirmar los detalles directamente con ella.
               </p>
 
@@ -261,13 +342,13 @@ export function PsychologistSettingsPage() {
                     className="w-full rounded-2xl border border-club-green/10 bg-white/60 px-4 py-3 text-sm text-club-ink outline-none ring-club-green/10 focus:ring-2"
                   />
                   <span className="block text-xs text-club-muted">
-                    No se muestra publicamente antes de solicitar una cita.
+                    No se muestra públicamente antes de solicitar una cita.
                   </span>
                 </label>
 
                 <label className="space-y-2">
                   <span className="text-sm text-club-muted">
-                    Metodos de pago aceptados
+                    métodos de pago aceptados
                   </span>
                   <input
                     value={paymentMethods}
@@ -290,20 +371,20 @@ export function PsychologistSettingsPage() {
                     value={paymentInstructions}
                     onChange={(e) => setPaymentInstructions(e.target.value)}
                     rows={5}
-                    placeholder="Comparte aqui tus condiciones, cuenta o pasos generales. Evita publicar datos sensibles si prefieres enviarlos por WhatsApp."
+                    placeholder="Comparte aquí tus condiciones, cuenta o pasos generales. Evita publicar datos sensibles si prefieres enviarlos por WhatsApp."
                     className="w-full resize-none rounded-2xl border border-club-green/10 bg-white/60 px-4 py-3 text-sm leading-relaxed text-club-ink outline-none ring-club-green/10 focus:ring-2"
                   />
                 </label>
 
                 <label className="space-y-2">
                   <span className="text-sm text-club-muted">
-                    Politica de cancelacion
+                    Política de cancelación
                   </span>
                   <textarea
                     value={cancellationPolicy}
                     onChange={(e) => setCancellationPolicy(e.target.value)}
                     rows={5}
-                    placeholder="Ejemplo: cancelar o reprogramar con minimo 12 horas de anticipacion."
+                    placeholder="Ejemplo: cancelar o reprogramar con mínimo 12 horas de anticipación."
                     className="w-full resize-none rounded-2xl border border-club-green/10 bg-white/60 px-4 py-3 text-sm leading-relaxed text-club-ink outline-none ring-club-green/10 focus:ring-2"
                   />
                 </label>
@@ -312,7 +393,7 @@ export function PsychologistSettingsPage() {
               <div className="mt-5 grid gap-5 md:grid-cols-2">
                 <label className="space-y-2">
                   <span className="text-sm text-club-muted">
-                    Horas maximas para confirmar pago
+                    Horas máximas para confirmar pago
                   </span>
                   <input
                     type="number"
@@ -337,10 +418,10 @@ export function PsychologistSettingsPage() {
                   />
                   <span>
                     <span className="block text-sm text-club-green">
-                      Permitir contacto por WhatsApp despues de solicitar cita
+                      Permitir contacto por WhatsApp después de solicitar cita
                     </span>
                     <span className="mt-1 block text-xs leading-relaxed text-club-muted">
-                      La persona solo vera el boton si inicio sesion y ya creo
+                      La persona solo verá el botón si inició sesión y ya creó
                       una solicitud contigo.
                     </span>
                   </span>
@@ -350,11 +431,65 @@ export function PsychologistSettingsPage() {
 
             <div className="rounded-3xl border border-club-green/10 bg-white/40 p-4">
               <p className="font-display text-2xl text-club-green">
+                Google Calendar
+              </p>
+              <p className="mt-1 text-sm leading-relaxed text-club-muted">
+                Conecta tu cuenta de Google para que, al confirmar una cita,
+                EL CLUB cree el evento con Meet en tu calendario y no
+                tengas que pegar el enlace a mano.
+              </p>
+
+              {googleError ? (
+                <p className="mt-3 rounded-2xl border border-red-200/80 bg-red-50/40 px-4 py-3 text-sm text-red-800">
+                  {googleError}
+                </p>
+              ) : null}
+
+              <div className="mt-4">
+                {googleLoading ? (
+                  <div className="h-12 w-full animate-pulse rounded-2xl bg-club-green/5" />
+                ) : googleStatus?.connected ? (
+                  <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-club-green/10 bg-white/55 px-4 py-3">
+                    <span className="text-sm text-club-green">
+                      Conectado como {googleStatus.googleEmail}
+                    </span>
+                    <button
+                      type="button"
+                      disabled={googleActionLoading}
+                      onClick={() => void disconnectGoogle()}
+                      className="rounded-2xl border border-club-green/15 bg-white/55 px-4 py-2 text-sm text-club-green transition hover:bg-white/80 disabled:opacity-60"
+                    >
+                      {googleActionLoading ? "Desconectando..." : "Desconectar"}
+                    </button>
+                  </div>
+                ) : (
+                  <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-club-green/10 bg-white/55 px-4 py-3">
+                    <span className="text-sm text-club-muted">No conectado</span>
+                    <button
+                      type="button"
+                      disabled={googleActionLoading}
+                      onClick={() => void connectGoogle()}
+                      className="rounded-2xl bg-club-green px-4 py-2 text-sm text-club-paper transition hover:opacity-95 disabled:opacity-60"
+                    >
+                      {googleActionLoading ? "Redirigiendo..." : "Conectar Google Calendar"}
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              <p className="mt-3 text-xs text-club-muted">
+                Si no conectas tu cuenta, puedes seguir pegando el enlace de
+                Meet manualmente en cada cita, como hoy.
+              </p>
+            </div>
+
+            <div className="rounded-3xl border border-club-green/10 bg-white/40 p-4">
+              <p className="font-display text-2xl text-club-green">
                 Soporte profesional
               </p>
               <p className="mt-1 text-sm leading-relaxed text-club-muted">
-                Sube diploma, tarjeta profesional o soporte de habilitacion.
-                Al actualizarlo, tu perfil vuelve a revision.
+                Sube diploma, tarjeta profesional o soporte de habilitación.
+                Al actualizarlo, tu perfil vuelve a revisión.
               </p>
               <div className="mt-4 flex flex-wrap items-center gap-3">
                 <label className="inline-flex cursor-pointer rounded-2xl border border-club-green/15 bg-white/55 px-4 py-2 text-sm text-club-green transition hover:bg-white/80">
@@ -380,7 +515,7 @@ export function PsychologistSettingsPage() {
                 ) : null}
               </div>
               <p className="mt-3 text-xs text-club-muted">
-                Estado de revision: {applicationStatus ?? "sin enviar"}
+                Estado de revisión: {applicationStatus ?? "sin enviar"}
               </p>
             </div>
 
@@ -399,7 +534,7 @@ export function PsychologistSettingsPage() {
                 onClick={() => void signOut()}
                 className="rounded-2xl border border-club-green/15 bg-white/55 px-5 py-3 text-sm text-club-green transition hover:bg-white/80"
               >
-                Cerrar sesion
+                Cerrar sesión
               </button>
             </div>
           </section>
@@ -425,13 +560,13 @@ export function PsychologistSettingsPage() {
                   {fullName || "Tu nombre"}
                 </p>
                 <p className="text-xs text-club-muted">
-                  {splitList(languages).join(", ") || "Espanol"}
+                  {splitList(languages).join(", ") || "Español"}
                 </p>
               </div>
             </div>
             <p className="mt-4 text-sm leading-relaxed text-club-muted">
               {bio ||
-                "Tu bio aparecera aqui para que las personas sientan confianza antes de agendar."}
+                "Tu bio aparecerá aquí para que las personas sientan confianza antes de agendar."}
             </p>
             <div className="mt-4 flex flex-wrap gap-2">
               {(splitList(specialties).length

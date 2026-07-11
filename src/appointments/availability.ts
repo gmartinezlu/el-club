@@ -1,4 +1,4 @@
-import { getSupabaseClient } from "../services/supabase/client";
+﻿import { getSupabaseClient } from "../services/supabase/client";
 
 export type AvailabilitySlot = {
   id: string;
@@ -87,6 +87,44 @@ export async function createAvailabilitySlot({
     starts_at: startsAt,
     ends_at: endsAt,
   });
+
+  if (error) throw error;
+}
+
+export async function createAvailabilitySlots({
+  psychologistId,
+  slots,
+}: {
+  psychologistId: string;
+  slots: Array<{ startsAt: string; endsAt: string }>;
+}): Promise<void> {
+  if (slots.length === 0) return;
+  const supabase = getSupabaseClient();
+  const { error } = await supabase.from("availability").insert(
+    slots.map((slot) => ({
+      psychologist_id: psychologistId,
+      starts_at: slot.startsAt,
+      ends_at: slot.endsAt,
+    })),
+  );
+
+  if (error) throw error;
+}
+
+export async function deleteAvailabilitySlots({
+  slotIds,
+  psychologistId,
+}: {
+  slotIds: string[];
+  psychologistId: string;
+}): Promise<void> {
+  if (slotIds.length === 0) return;
+  const supabase = getSupabaseClient();
+  const { error } = await supabase
+    .from("availability")
+    .delete()
+    .in("id", slotIds)
+    .eq("psychologist_id", psychologistId);
 
   if (error) throw error;
 }
