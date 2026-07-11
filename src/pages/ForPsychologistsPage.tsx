@@ -20,7 +20,7 @@ export function ForPsychologistsPage() {
                 to="/auth/psychologist/register"
                 className="rounded-2xl bg-club-green px-6 py-3 text-center text-sm text-club-paper shadow-soft"
               >
-                Registrarme como especialista
+                Registrarme como psicóloga
               </Link>
               <Link
                 to="/auth/psychologist/login"

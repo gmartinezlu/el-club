@@ -79,7 +79,7 @@ export function LandingPage() {
     {
       title: "Solicitud y coordinación",
       description:
-        "Tu cita se solicita en El Club. El pago de terapia se coordina directamente con la profesional.",
+        "Tu cita se solicita en El Club. El pago de terapia se coordina directamente con la psicóloga.",
     },
     {
       title: "Sesión y seguimiento",
@@ -169,7 +169,7 @@ export function LandingPage() {
     {
       question: "¿El Club procesa pagos de terapia?",
       answer:
-        "No. Las sesiones se solicitan en El Club, pero el pago se coordina directamente con cada profesional, por lo general vía Nequi.",
+        "No. Las sesiones se solicitan en El Club, pero el pago se coordina directamente con cada psicóloga, por lo general vía Nequi.",
     },
   ];
 

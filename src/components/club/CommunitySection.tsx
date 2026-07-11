@@ -8,7 +8,7 @@ export function CommunitySection() {
       <SectionHeader
         eyebrow="Esto no es solo terapia"
         title="Más que terapia. Un club para cuidar tu vida emocional."
-        subtitle="En EL CLUB puedes encontrar profesionales, participar en experiencias, acceder a contenido de bienestar y formar parte de una comunidad guiada que te acompaña dentro y fuera de lo digital."
+        subtitle="En EL CLUB puedes encontrar psicólogas, participar en experiencias, acceder a contenido de bienestar y formar parte de una comunidad guiada que te acompaña dentro y fuera de lo digital."
       />
 
       <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

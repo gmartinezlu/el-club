@@ -1,4 +1,4 @@
-﻿import { useCallback, useEffect, useMemo, useState } from "react";
+﻿import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   CheckCircle2,
   Clock3,
@@ -447,16 +447,39 @@ function ReviewDecisionModal({
   const title =
     action === "rejected" ? "Rechazar postulación" : "Pausar perfil";
   const disabled = saving || notes.trim().length === 0;
+  const titleId = "review-decision-title";
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    textareaRef.current?.focus();
+
+    function onKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") onClose();
+    }
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [onClose]);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-club-green/25 p-4 backdrop-blur-sm">
-      <section className="w-full max-w-lg rounded-3xl border border-club-green/10 bg-club-paper p-6 shadow-soft">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-club-green/25 p-4 backdrop-blur-sm"
+      onClick={(event) => {
+        if (event.target === event.currentTarget) onClose();
+      }}
+    >
+      <section
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={titleId}
+        onClick={(event) => event.stopPropagation()}
+        className="w-full max-w-lg rounded-3xl border border-club-green/10 bg-club-paper p-6 shadow-soft"
+      >
         <div className="flex items-start gap-3">
           <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-club-green/10 text-club-green">
             <FileText className="h-5 w-5" strokeWidth={1.5} />
           </div>
           <div>
-            <p className="font-display text-xl text-club-green">{title}</p>
+            <p id={titleId} className="font-display text-xl text-club-green">{title}</p>
             <p className="mt-1 text-sm leading-relaxed text-club-muted">
               Esta decisión se guardará en el historial y se enviará como aviso
               a {psychologist.fullName}.
@@ -467,6 +490,7 @@ function ReviewDecisionModal({
         <label className="mt-6 block">
           <span className="text-sm text-club-green">Motivo para la psicóloga</span>
           <textarea
+            ref={textareaRef}
             value={notes}
             onChange={(event) => onNotesChange(event.target.value)}
             rows={5}

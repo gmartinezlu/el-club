@@ -40,7 +40,7 @@ export function PatientShell() {
           </div>
           <div className="flex items-center gap-4">
             <p className="hidden text-sm text-club-muted sm:block">
-              {fullName ?? "Paciente"}
+              {fullName ?? "Persona"}
             </p>
             <button
               type="button"

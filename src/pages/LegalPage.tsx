@@ -15,7 +15,7 @@ const CONTENT = {
       ],
       [
         "Quién puede verla",
-        "Personas, especialistas y administración tienen accesos separados. La información clínica y las notas privadas no se mezclan con espacios públicos.",
+        "Personas, psicólogas y administración tienen accesos separados. La información clínica y las notas privadas no se mezclan con espacios públicos.",
       ],
       [
         "Seguridad",
@@ -35,7 +35,7 @@ const CONTENT = {
       ],
       [
         "Pagos",
-        "EL CLUB facilita la conexión entre usuarios y profesionales. Los pagos por sesiones son gestionados directamente entre el usuario y el profesional. EL CLUB no actúa como intermediario financiero ni procesa pagos de terapia.",
+        "EL CLUB facilita la conexión entre personas y psicólogas. Los pagos por sesiones son gestionados directamente entre la persona y la psicóloga. EL CLUB no actúa como intermediario financiero ni procesa pagos de terapia.",
       ],
       [
         "Uso responsable",

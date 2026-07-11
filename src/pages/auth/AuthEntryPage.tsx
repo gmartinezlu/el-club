@@ -8,14 +8,14 @@ const PORTALS = [
     registerTo: "/auth/patient/register",
   },
   {
-    title: "Especialistas",
+    title: "Psicólogas",
     description: "Agenda, personas activas, notas, disponibilidad e ingresos.",
     loginTo: "/auth/psychologist/login",
     registerTo: "/auth/psychologist/register",
   },
   {
     title: "Admin",
-    description: "Aprobaciones, contenido, soporte y operacion de El Club.",
+    description: "Aprobaciones, contenido, soporte y operación de El Club.",
     loginTo: "/auth/admin/login",
     registerTo: null,
   },
@@ -33,7 +33,7 @@ const PORTAL_COPY = {
     portals: [PORTALS[0]],
   },
   psychologist: {
-    title: "Espacio especialista",
+    title: "Espacio psicóloga",
     description: "Accede o registra tu perfil profesional en El Club.",
     portals: [PORTALS[1]],
   },

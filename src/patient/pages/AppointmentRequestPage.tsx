@@ -83,7 +83,9 @@ export function PatientAppointmentRequestPage() {
         data.paymentDeadline &&
         new Date(data.paymentDeadline) < new Date()
       ) {
-        await releaseUnpaidAppointment(appointmentId).catch(() => {});
+        await releaseUnpaidAppointment(appointmentId).catch((e) => {
+          console.error("Failed to release unpaid appointment", e);
+        });
         data = await fetchPatientAppointmentById(patientId, appointmentId);
       }
       setAppointment(data);
@@ -186,13 +188,13 @@ export function PatientAppointmentRequestPage() {
               Tu cita fue <Highlight>solicitada</Highlight>
             </PageTitle>
             <p className="mt-3 max-w-2xl text-sm leading-relaxed text-club-muted">
-              EL profesional revisará tu solicitud. El pago se coordina
-              directamente con el/ella según sus métodos disponibles.
+              Tu psicóloga revisará tu solicitud. El pago se coordina
+              directamente con ella según sus métodos disponibles.
             </p>
 
             <div className="mt-6 grid gap-4 rounded-3xl border border-club-green/10 bg-white/50 p-5 md:grid-cols-2">
               <div>
-                <p className="text-xs text-club-muted">Especialista</p>
+                <p className="text-xs text-club-muted">Psicóloga</p>
                 <p className="font-display text-2xl text-club-green">
                   {appointment.psychologistName}
                 </p>
@@ -217,7 +219,7 @@ export function PatientAppointmentRequestPage() {
                 <p className="text-sm text-club-ink">
                   {psychologist?.paymentConfirmationHours
                     ? `${psychologist.paymentConfirmationHours} horas máx.`
-                    : "La especialista te indicará el tiempo."}
+                    : "La psicóloga te indicará el tiempo."}
                 </p>
               </div>
             </div>
@@ -268,7 +270,7 @@ export function PatientAppointmentRequestPage() {
 
                 {appointment.paymentMarkedPaidAt ? (
                   <p className="mt-4 text-sm text-club-green">
-                    Marcaste tu pago como realizado. La especialista lo confirmará
+                    Marcaste tu pago como realizado. La psicóloga lo confirmará
                     pronto.
                   </p>
                 ) : (
@@ -298,7 +300,7 @@ export function PatientAppointmentRequestPage() {
             ) : (
               <div className="mt-5 rounded-3xl border border-club-green/10 bg-club-green/5 p-5">
                 <p className="font-display text-2xl text-club-green">
-                  Coordina el pago directamente con tu especialista
+                  Coordina el pago directamente con tu psicóloga
                 </p>
                 <p className="mt-2 text-sm leading-relaxed text-club-muted">
                   EL CLUB no solicita pagos por WhatsApp ni procesa dinero de
@@ -339,7 +341,7 @@ export function PatientAppointmentRequestPage() {
             </p>
             <p className="mt-2 text-sm leading-relaxed text-club-muted">
               EL CLUB facilita la conexión y la agenda. Los acuerdos de pago
-              ocurren directamente entre la persona y la profesional.
+              ocurren directamente entre la persona y la psicóloga.
             </p>
 
             <div className="mt-6 grid gap-3">

@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { CalendarPlus, ClipboardCheck, History, Video } from "lucide-react";
-import { STATUS_LABELS } from "../../appointments/utils";
+import { STATUS_HELP, STATUS_LABELS } from "../../appointments/utils";
 import { usePatientAppointments } from "../hooks/usePatientAppointments";
 import { formatSessionDate, formatSessionRange } from "../utils/formatDate";
 import { EmotionalGlass } from "../components/EmotionalGlass";
@@ -16,7 +16,7 @@ export function PatientSessionsPage() {
   useEffect(() => {
     const timer = setInterval(() => {
       setNow(Date.now());
-    }, 60000); // Refresh every minute
+    }, 15000); // Refresh every 15s to keep "próximas" al día
     return () => clearInterval(timer);
   }, []);
   const upcoming = appointments.filter(
@@ -37,7 +37,7 @@ export function PatientSessionsPage() {
       </header>
 
       <div className="rounded-3xl border border-club-green/10 bg-white/50 p-4 text-sm leading-relaxed text-club-muted shadow-soft backdrop-blur">
-        Coordina el pago directamente con tu especialista. EL CLUB no solicita
+        Coordina el pago directamente con tu psicóloga. EL CLUB no solicita
         pagos por WhatsApp ni procesa dinero de sesiones dentro de la
         plataforma.
       </div>
@@ -77,7 +77,7 @@ export function PatientSessionsPage() {
                 icon={History}
                 title="Aún no hay sesiones en tu historial"
                 description="Cuando agendes tu primera cita, aparecerá aquí."
-                action={{ label: "Encontrar especialista", to: "/patient/psychologists" }}
+                action={{ label: "Encontrar psicóloga", to: "/patient/psychologists" }}
               />
             ) : history.length === 0 ? (
               <p className="text-sm text-club-muted">
@@ -120,6 +120,8 @@ function SessionRow({
     session.status,
   );
 
+  const help = STATUS_HELP[session.status as keyof typeof STATUS_HELP];
+
   return (
     <EmotionalGlass className="flex flex-wrap items-center justify-between gap-4 p-5">
       <div>
@@ -130,6 +132,7 @@ function SessionRow({
         <p className="text-sm text-club-muted">
           {formatSessionRange(session.startsAt, session.endsAt)}
         </p>
+        {help ? <p className="mt-1 text-xs text-club-muted">{help}</p> : null}
       </div>
       <div className="flex flex-wrap items-center gap-2">
         <span className="rounded-full bg-club-green/10 px-3 py-1 text-xs text-club-green">

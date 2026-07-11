@@ -213,7 +213,7 @@ export function PatientOnboardingPage() {
           disabled={saving || !mainConcern || emotionalGoals.length === 0}
           className="w-full rounded-2xl bg-club-green px-5 py-3 text-sm text-club-paper shadow-soft transition hover:opacity-95 disabled:opacity-60"
         >
-          {saving ? "Guardando..." : "Continuar a especialistas"}
+          {saving ? "Guardando..." : "Continuar a psicólogas"}
         </button>
       </form>
     </div>

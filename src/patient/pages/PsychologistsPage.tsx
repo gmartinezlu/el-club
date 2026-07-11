@@ -128,7 +128,7 @@ export function PatientPsychologistsPage() {
         createNotification({
           userId: patientId,
           title: "Cita solicitada",
-          body: "Tu solicitud fue enviada. El pago se coordina directamente con la especialista según sus métodos disponibles.",
+          body: "Tu solicitud fue enviada. El pago se coordina directamente con la psicóloga según sus métodos disponibles.",
         }),
         createNotification({
           userId: selectedPsychologist.userId,
@@ -155,18 +155,18 @@ export function PatientPsychologistsPage() {
             className="inline-flex items-center gap-2 text-sm text-club-muted transition hover:text-club-green"
           >
             <ArrowLeft className="h-4 w-4" strokeWidth={1.5} />
-            Volver a especialistas
+            Volver a psicólogas
           </Link>
         ) : (
           <p className="text-sm font-medium text-club-green">Terapia</p>
         )}
         <PageTitle>
-          {isDetailView ? "Perfil de especialista" : "Encuentra tu psicóloga"}
+          {isDetailView ? "Perfil de psicóloga" : "Encuentra tu psicóloga"}
         </PageTitle>
         <p className="max-w-2xl text-sm leading-relaxed text-club-muted">
           {isDetailView
             ? "Conoce su enfoque, revisa horarios disponibles y reserva tu primer espacio con calma."
-            : "Explora perfiles aprobados por El Club y elige la profesional que se sienta más cercana para ti."}
+            : "Explora perfiles aprobados por El Club y elige la psicóloga que se sienta más cercana para ti."}
         </p>
       </header>
 
@@ -326,7 +326,7 @@ function PsychologistFullProfile({
         <div className="flex flex-wrap items-end gap-5">
           <ProfileAvatar profile={psychologist} size="lg" />
           <div>
-            <p className="text-sm text-club-paper/75">Especialista El Club</p>
+            <p className="text-sm text-club-paper/75">Psicóloga de El Club</p>
             <h2 className="font-display text-4xl">{psychologist.fullName}</h2>
             <p className="mt-2 max-w-2xl text-sm leading-relaxed text-club-paper/80">
               {psychologist.bio}
@@ -350,17 +350,17 @@ function PsychologistFullProfile({
           <MiniFact
             icon={<WalletCards className="h-4 w-4" strokeWidth={1.5} />}
             label="Pago"
-            value="Directo con la profesional"
+            value="Directo con la psicóloga"
           />
         </div>
 
         <section className="rounded-3xl border border-club-green/10 bg-white/50 p-5">
           <CardTitle className="text-2xl">
-            Pago gestionado por el profesional
+            Pago gestionado por la psicóloga
           </CardTitle>
           <p className="mt-2 text-sm leading-relaxed text-club-muted">
-            EL CLUB no procesa pagos de sesiones. Una vez solicites tu cita, el
-            profesional te compartirá sus métodos de pago y confirmará contigo
+            EL CLUB no procesa pagos de sesiones. Una vez solicites tu cita, la
+            psicóloga te compartirá sus métodos de pago y confirmará contigo
             los detalles.
           </p>
           {psychologist.paymentMethods?.length ? (
@@ -439,18 +439,18 @@ function BookingPanel({
         <p className="font-display text-2xl">Reservar sesión</p>
       </div>
       <p className="mt-2 text-sm text-club-muted">
-        Elige un horario disponible. La especialista revisará tu solicitud y el
+        Elige un horario disponible. La psicóloga revisará tu solicitud y el
         pago se acordará directamente con ella.
       </p>
 
       {selectedPsychologist ? (
         <div className="mt-5 rounded-2xl border border-club-green/10 bg-white/50 p-4">
-          <p className="text-xs text-club-muted">Especialista seleccionada</p>
+          <p className="text-xs text-club-muted">Psicóloga seleccionada</p>
           <p className="mt-1 font-display text-2xl text-club-green">
             {selectedPsychologist.fullName}
           </p>
           <p className="mt-1 text-xs text-club-muted">
-            Coordinar pago con el profesional
+            Coordinar pago con la psicóloga
           </p>
         </div>
       ) : null}
@@ -499,6 +499,11 @@ function BookingPanel({
       >
         {saving ? "Solicitando..." : "Solicitar cita"}
       </button>
+      {!selectedSlot && !saving ? (
+        <p className="mt-2 text-xs text-club-muted">
+          Selecciona un horario disponible para poder solicitar la cita.
+        </p>
+      ) : null}
     </EmotionalGlass>
   );
 }

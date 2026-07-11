@@ -20,7 +20,7 @@ export function PatientLayout() {
         // Consolidated groups: Principal / Terapia / Cuenta
         { to: "/patient", label: "Inicio", end: true, group: "Principal", icon: Home },
 
-        { to: "/patient/psychologists", label: "Especialistas", group: "Terapia", icon: Users },
+        { to: "/patient/psychologists", label: "Psicólogas", group: "Terapia", icon: Users },
         { to: "/patient/sessions", label: "Sesiones", group: "Terapia", icon: Calendar },
         { to: "/patient/crisis-chat", label: "Chat crisis", group: "Terapia", icon: MessageSquare },
         { to: "/patient/resources", label: "Recursos", group: "Terapia", icon: BookOpen },

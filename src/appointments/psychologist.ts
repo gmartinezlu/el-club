@@ -1,6 +1,7 @@
 ﻿import { getSupabaseClient } from "../services/supabase/client";
 import { fetchAppointmentsBase } from "./fetchWithProfiles";
 import { APPOINTMENT_SELECT } from "./queries";
+import { isSafeSchemaError } from "./schemaErrors";
 import {
   mapAppointmentRow,
   toPsychologistView,
@@ -69,7 +70,11 @@ export async function fetchPsychologistAppointments(
   let appointments: PsychologistAppointmentView[];
   try {
     appointments = await fetchPsychologistAppointmentsJoined(psychologistId);
-  } catch {
+  } catch (error) {
+    // Only fallback for safe schema errors (missing columns/relations)
+    if (!isSafeSchemaError(error)) {
+      throw error; // Re-throw network or permission errors
+    }
     const base = await fetchAppointmentsBase({
       column: "psychologist_id",
       value: psychologistId,
