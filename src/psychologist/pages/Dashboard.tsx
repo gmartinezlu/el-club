@@ -17,6 +17,11 @@ import {
   updateAppointmentStatus,
 } from "../../appointments/psychologist";
 import {
+  confirmPaymentReceived,
+  createSignedPaymentProofUrl,
+  markAppointmentPendingPayment,
+} from "../../appointments/payments";
+import {
   cancelGoogleCalendarEvent,
   syncGoogleCalendarEvent,
 } from "../../services/supabase/googleCalendar";
@@ -55,9 +60,7 @@ function isSameDay(a: Date, b: Date) {
 }
 
 function isActionable(status: AppointmentStatus) {
-  return !["cancelled", "completed", "rejected", "refund_pending"].includes(
-    status,
-  );
+  return !["cancelled", "completed", "rejected"].includes(status);
 }
 
 export function PsychologistDashboardPage() {
@@ -152,7 +155,19 @@ export function PsychologistDashboardPage() {
     setSavingId(appointmentId);
     setActionError(null);
     try {
-      await updateAppointmentStatus(appointmentId, psychologistId, status);
+      if (status === "pending_payment") {
+        await markAppointmentPendingPayment(appointmentId);
+      } else if (status === "confirmed") {
+        const appointment = appointments.find((item) => item.id === appointmentId);
+        if (appointment?.status === "pending_payment") {
+          await confirmPaymentReceived(appointmentId);
+        } else {
+          await updateAppointmentStatus(appointmentId, psychologistId, status);
+        }
+      } else {
+        await updateAppointmentStatus(appointmentId, psychologistId, status);
+      }
+
       const appointment = appointments.find((item) => item.id === appointmentId);
       if (appointment) {
         await createNotification({
@@ -411,11 +426,29 @@ function AppointmentWorkspace({
     2000, // 2 second debounce
   );
 
+  const [proofUrl, setProofUrl] = useState<string | null>(null);
+  const [proofError, setProofError] = useState<string | null>(null);
+
+  const paymentProofUrl = appointment.paymentProofUrl;
+
+  useEffect(() => {
+    if (!paymentProofUrl) return;
+    let active = true;
+    createSignedPaymentProofUrl(paymentProofUrl)
+      .then((url) => {
+        if (active) setProofUrl(url);
+      })
+      .catch((e) => {
+        if (active) setProofError(getErrorMessage(e, "No se pudo cargar el comprobante"));
+      });
+    return () => {
+      active = false;
+    };
+  }, [paymentProofUrl]);
+
   const canComplete = isActionable(appointment.status);
   const canSetPendingPayment = appointment.status === "requested";
-  const canConfirm = ["requested", "pending_payment", "paid"].includes(
-    appointment.status,
-  );
+  const canConfirm = appointment.status === "pending_payment";
   const canReject = appointment.status === "requested";
   const canCancel = isActionable(appointment.status);
 
@@ -444,6 +477,35 @@ function AppointmentWorkspace({
           </p>
         </div>
 
+        {appointment.status === "pending_payment" ? (
+          <div className="rounded-2xl border border-club-green/10 bg-white/45 p-4">
+            <p className="text-sm text-club-green">Comprobante de pago</p>
+            {proofError ? (
+              <p className="mt-2 text-xs text-red-800">{proofError}</p>
+            ) : appointment.paymentMarkedPaidAt ? (
+              proofUrl ? (
+                <a
+                  href={proofUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="mt-2 inline-flex items-center gap-2 text-sm text-club-green underline"
+                >
+                  Ver comprobante
+                  <ExternalLink className="h-3.5 w-3.5" strokeWidth={1.5} />
+                </a>
+              ) : (
+                <p className="mt-2 text-sm text-club-muted">
+                  La persona marcó que ya pagó, sin adjuntar comprobante.
+                </p>
+              )
+            ) : (
+              <p className="mt-2 text-sm text-club-muted">
+                Aún no ha marcado el pago como realizado.
+              </p>
+            )}
+          </div>
+        ) : null}
+
         <div className="space-y-3">
           <p className="text-sm text-club-green">Gestion de la cita</p>
           <div className="flex flex-wrap gap-2">
@@ -468,7 +530,7 @@ function AppointmentWorkspace({
                 className="inline-flex items-center gap-2 rounded-2xl bg-club-green px-4 py-2 text-sm text-club-paper transition hover:opacity-95 disabled:opacity-60"
               >
                 <CheckCircle2 className="h-4 w-4" strokeWidth={1.5} />
-                Marcar confirmada
+                Confirmar pago recibido
               </button>
             ) : null}
             {canReject ? (

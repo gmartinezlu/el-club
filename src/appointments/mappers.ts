@@ -26,6 +26,9 @@ export type AppointmentRowRaw = {
   status: AppointmentStatus;
   google_meet_url: string | null;
   notes_psychologist?: string | null;
+  payment_proof_url?: string | null;
+  payment_deadline?: string | null;
+  payment_marked_paid_at?: string | null;
   psychologist?: PartyRow;
   patient?: PartyRow;
 };
@@ -48,6 +51,9 @@ export function mapAppointmentRow(row: AppointmentRowRaw): Appointment {
     status: row.status,
     googleMeetUrl: row.google_meet_url,
     psychologistNotes: row.notes_psychologist ?? null,
+    paymentProofUrl: row.payment_proof_url ?? null,
+    paymentDeadline: row.payment_deadline ?? null,
+    paymentMarkedPaidAt: row.payment_marked_paid_at ?? null,
     psychologist: readProfile(row.psychologist ?? null),
     patient: readProfile(row.patient ?? null),
   };
@@ -60,6 +66,9 @@ export function toPatientView(appointment: Appointment): PatientAppointmentView 
     endsAt: appointment.endsAt,
     status: appointment.status,
     googleMeetUrl: appointment.googleMeetUrl,
+    paymentProofUrl: appointment.paymentProofUrl,
+    paymentDeadline: appointment.paymentDeadline,
+    paymentMarkedPaidAt: appointment.paymentMarkedPaidAt,
     psychologistId: appointment.psychologistId,
     psychologistName:
       appointment.psychologist.fullName?.trim() || "Tu psicÃ³loga",
@@ -78,6 +87,9 @@ export function toPsychologistView(
     status: appointment.status,
     googleMeetUrl: appointment.googleMeetUrl,
     psychologistNotes: appointment.psychologistNotes,
+    paymentProofUrl: appointment.paymentProofUrl,
+    paymentDeadline: appointment.paymentDeadline,
+    paymentMarkedPaidAt: appointment.paymentMarkedPaidAt,
     patientName: appointment.patient.fullName?.trim() || "Persona",
     patientAvatarUrl: appointment.patient.avatarUrl,
   };

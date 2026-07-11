@@ -1,13 +1,11 @@
 ﻿export type AppointmentStatus =
   | "requested"
   | "pending_payment"
-  | "paid"
   | "confirmed"
   | "meeting_enabled"
   | "completed"
   | "cancelled"
-  | "rejected"
-  | "refund_pending";
+  | "rejected";
 
 export type UserProfileSnippet = {
   fullName: string | null;
@@ -23,6 +21,9 @@ export type Appointment = {
   status: AppointmentStatus;
   googleMeetUrl: string | null;
   psychologistNotes: string | null;
+  paymentProofUrl: string | null;
+  paymentDeadline: string | null;
+  paymentMarkedPaidAt: string | null;
   psychologist: UserProfileSnippet;
   patient: UserProfileSnippet;
 };
@@ -34,6 +35,9 @@ export type PatientAppointmentView = {
   endsAt: string;
   status: AppointmentStatus;
   googleMeetUrl: string | null;
+  paymentProofUrl: string | null;
+  paymentDeadline: string | null;
+  paymentMarkedPaidAt: string | null;
   psychologistId: string;
   psychologistName: string;
   psychologistAvatarUrl: string | null;
@@ -48,6 +52,9 @@ export type PsychologistAppointmentView = {
   status: AppointmentStatus;
   googleMeetUrl: string | null;
   psychologistNotes: string | null;
+  paymentProofUrl: string | null;
+  paymentDeadline: string | null;
+  paymentMarkedPaidAt: string | null;
   patientName: string;
   patientAvatarUrl: string | null;
 };

@@ -8,6 +8,9 @@ export const APPOINTMENT_SELECT = `
   ends_at,
   status,
   google_meet_url,
+  payment_proof_url,
+  payment_deadline,
+  payment_marked_paid_at,
   created_at,
   psychologist:psychologists!appointments_psychologist_id_fkey (
     user_id,

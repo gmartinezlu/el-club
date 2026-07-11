@@ -44,11 +44,9 @@ export function getPastAppointments<T extends HasSchedule>(
 export const STATUS_LABELS: Record<AppointmentStatus, string> = {
   requested: "Solicitada",
   pending_payment: "Pendiente de pago",
-  paid: "Pendiente de pago",
   confirmed: "Confirmada",
   meeting_enabled: "Lista para sesiÃ³n",
   completed: "Completada",
   cancelled: "Cancelada",
   rejected: "Rechazada",
-  refund_pending: "Reembolso",
 };

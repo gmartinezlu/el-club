@@ -119,7 +119,7 @@ function SessionRow({
   };
 }) {
   const canOpenRoom = ["confirmed", "meeting_enabled"].includes(session.status);
-  const shouldShowRequest = ["requested", "pending_payment", "paid"].includes(
+  const shouldShowRequest = ["requested", "pending_payment"].includes(
     session.status,
   );
 

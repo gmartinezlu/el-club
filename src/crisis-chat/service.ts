@@ -97,7 +97,7 @@ export async function fetchOrCreatePatientCrisisThread(
       `,
     )
     .eq("patient_id", patientId)
-    .in("status", ["paid", "confirmed", "meeting_enabled", "completed"])
+    .in("status", ["confirmed", "meeting_enabled", "completed"])
     .order("starts_at", { ascending: false })
     .limit(1);
 

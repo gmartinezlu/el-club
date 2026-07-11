@@ -13,4 +13,7 @@
   cancellationPolicy?: string | null;
   paymentConfirmationHours?: number | null;
   allowWhatsappAfterRequest?: boolean;
+  nequiNumber?: string | null;
+  sessionPriceCents?: number | null;
+  nequiQrUrl?: string | null;
 };
