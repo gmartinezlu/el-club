@@ -11,9 +11,9 @@ export function ForPsychologistsPage() {
         <section className="mx-auto grid w-full max-w-6xl gap-8 px-5 py-14 md:px-8 lg:grid-cols-[1fr,0.95fr] lg:items-center">
           <div>
             <SectionHeader
-              eyebrow="Para psicÃ³logos"
+              eyebrow="Para psicólogos"
               title="Forma parte de una red premium de profesionales de bienestar emocional."
-              subtitle="EL CLUB mantiene la agenda, las notas, el panel profesional y la gestiÃ³n real, pero dentro de una marca mÃ¡s cercana, aspiracional y humana."
+              subtitle="EL CLUB mantiene la agenda, las notas, el panel profesional y la gestión real, pero dentro de una marca más cercana, aspiracional y humana."
             />
             <div className="mt-7 flex flex-col gap-3 sm:flex-row">
               <Link
@@ -26,14 +26,14 @@ export function ForPsychologistsPage() {
                 to="/auth/psychologist/login"
                 className="rounded-2xl border border-club-green/15 bg-white/55 px-6 py-3 text-center text-sm text-club-green shadow-soft"
               >
-                Iniciar sesiÃ³n profesional
+                Iniciar sesión profesional
               </Link>
             </div>
           </div>
 
           <img
             src={clubImages.therapy}
-            alt="Profesional acompaÃ±ando en un espacio premium"
+            alt="Profesional acompañando en un espacio premium"
             loading="lazy"
             className="min-h-[420px] rounded-3xl object-cover shadow-soft"
           />
@@ -44,7 +44,7 @@ export function ForPsychologistsPage() {
             {professionalBenefits.map((benefit) => (
               <article
                 key={benefit}
-                className="rounded-3xl border border-club-green/10 bg-white/45 p-5 shadow-soft backdrop-blur"
+                className="rounded-3xl border border-club-green/10 bg-white/50 p-5 shadow-soft backdrop-blur"
               >
                 <CheckCircle2 className="h-6 w-6 text-club-green" strokeWidth={1.5} />
                 <p className="mt-5 text-sm leading-relaxed text-club-muted">

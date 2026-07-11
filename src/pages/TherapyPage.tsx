@@ -12,7 +12,7 @@ const therapySteps = [
   },
   {
     title: "Agenda con calma",
-    text: "Reserva un espacio disponible y confirma la sesiÃ³n desde EL CLUB.",
+    text: "Reserva un espacio disponible y confirma la sesión desde EL CLUB.",
     icon: CalendarCheck,
   },
   {
@@ -30,8 +30,8 @@ export function TherapyPage() {
           <div className="space-y-7">
             <SectionHeader
               eyebrow="Terapia en EL CLUB"
-              title="AcompaÃ±amiento profesional, sin perder la calma del club."
-              subtitle="Cuando necesitas hablar con una profesional, EL CLUB te conecta con especialistas verificadas dentro de una experiencia cÃ¡lida, clara y segura."
+              title="Acompañamiento profesional, sin perder la calma del club."
+              subtitle="Cuando necesitas hablar con una profesional, EL CLUB te conecta con especialistas verificadas dentro de una experiencia cálida, clara y segura."
             />
 
             <div className="flex flex-wrap gap-2">
@@ -50,7 +50,7 @@ export function TherapyPage() {
                 to="/auth/patient/register"
                 className="inline-flex items-center justify-center gap-2 rounded-2xl bg-club-green px-6 py-3 text-sm text-club-paper shadow-soft transition hover:translate-y-[-1px]"
               >
-                Reservar una sesiÃ³n
+                Reservar una sesión
                 <ArrowRight className="h-4 w-4" strokeWidth={1.7} />
               </Link>
               <Link
@@ -65,7 +65,7 @@ export function TherapyPage() {
           <div className="relative min-h-[500px] overflow-hidden rounded-3xl shadow-soft">
             <img
               src={clubImages.therapy}
-              alt="AcompaÃ±amiento profesional en un ambiente cÃ¡lido"
+              alt="Acompañamiento profesional en un ambiente cálido"
               loading="lazy"
               className="absolute inset-0 h-full w-full object-cover"
             />
@@ -86,7 +86,7 @@ export function TherapyPage() {
             {therapySteps.map((step) => (
               <article
                 key={step.title}
-                className="rounded-3xl border border-club-green/10 bg-white/45 p-6 shadow-soft backdrop-blur"
+                className="rounded-3xl border border-club-green/10 bg-white/50 p-6 shadow-soft backdrop-blur"
               >
                 <step.icon className="h-6 w-6 text-club-green" strokeWidth={1.5} />
                 <h2 className="mt-5 font-display text-2xl text-club-green">
@@ -104,14 +104,14 @@ export function TherapyPage() {
           <SectionHeader
             eyebrow="Especialistas"
             title="Personas reales, perfiles claros."
-            subtitle="La terapia dentro de EL CLUB conserva rigor profesional, pero se presenta de forma cercana, humana y fÃ¡cil de entender."
+            subtitle="La terapia dentro de EL CLUB conserva rigor profesional, pero se presenta de forma cercana, humana y fácil de entender."
           />
 
           <div className="mt-8 grid gap-5 md:grid-cols-3">
             {specialists.map((specialist) => (
               <article
                 key={specialist.name}
-                className="overflow-hidden rounded-3xl border border-club-green/10 bg-white/45 shadow-soft backdrop-blur"
+                className="overflow-hidden rounded-3xl border border-club-green/10 bg-white/50 shadow-soft backdrop-blur"
               >
                 <img
                   src={specialist.image}

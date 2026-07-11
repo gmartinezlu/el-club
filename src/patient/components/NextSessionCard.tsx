@@ -8,6 +8,7 @@ import {
   isSessionSoon,
 } from "../utils/formatDate";
 import { EmotionalGlass } from "./EmotionalGlass";
+import { EmptyState } from "../../components/ui/EmptyState";
 
 export function NextSessionCard({
   appointment,
@@ -16,20 +17,12 @@ export function NextSessionCard({
 }) {
   if (!appointment) {
     return (
-      <EmotionalGlass className="p-8">
-        <p className="font-display text-2xl text-club-green">
-          AÃºn no tienes una sesiÃ³n agendada
-        </p>
-        <p className="mt-3 max-w-md text-sm leading-relaxed text-club-muted">
-          Cuando reserves tu prÃ³xima cita, aparecerÃ¡ aquÃ­ con calma y claridad.
-        </p>
-        <Link
-          to="/patient/psychologists"
-          className="mt-6 inline-flex rounded-2xl border border-club-green/15 bg-white/60 px-5 py-2.5 text-sm text-club-green transition hover:bg-white/80"
-        >
-          Explorar psicÃ³logas
-        </Link>
-      </EmotionalGlass>
+      <EmptyState
+        icon={Calendar}
+        title="Aún no tienes una sesión agendada"
+        description="Cuando reserves tu próxima cita, aparecerá aquí con calma y claridad."
+        action={{ label: "Explorar psicólogas", to: "/patient/psychologists" }}
+      />
     );
   }
 
@@ -48,7 +41,7 @@ export function NextSessionCard({
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div className="space-y-1">
           <p className="text-xs font-medium uppercase tracking-wider text-club-muted">
-            PrÃ³xima sesiÃ³n
+            Próxima sesión
           </p>
           {soon ? (
             <span className="inline-flex rounded-full bg-club-green/10 px-3 py-1 text-xs text-club-green">
@@ -86,15 +79,15 @@ export function NextSessionCard({
             className="inline-flex items-center justify-center gap-2 rounded-2xl bg-club-green px-6 py-3.5 text-base text-club-paper shadow-soft transition hover:translate-y-[-1px] hover:opacity-95"
           >
             <Video className="h-5 w-5" strokeWidth={1.5} />
-            Entrar a tu sesiÃ³n
+            Entrar a tu sesión
           </Link>
         ) : (
           <p className="text-sm text-club-muted">
             {meetPending
-              ? "Tu psicÃ³loga estÃ¡ preparando el enlace de Meet."
+              ? "Tu psicóloga está preparando el enlace de Meet."
               : meetReady
-                ? "El acceso se habilitarÃ¡ unos minutos antes de tu cita."
-                : "El acceso se habilitarÃ¡ cuando la sesiÃ³n estÃ© confirmada."}
+                ? "El acceso se habilitará unos minutos antes de tu cita."
+                : "El acceso se habilitará cuando la sesión esté confirmada."}
           </p>
         )}
         <Link

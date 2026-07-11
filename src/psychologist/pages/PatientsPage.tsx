@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import {
   ArrowLeft,
   CalendarClock,
+  CalendarX,
   ExternalLink,
   FileText,
   StickyNote,
@@ -16,6 +17,7 @@ import {
   formatSessionRange,
 } from "../../patient/utils/formatDate";
 import { usePsychologistAppointments } from "../hooks/usePsychologistAppointments";
+import { EmptyState } from "../../components/ui/EmptyState";
 
 export function PsychologistPatientsPage() {
   const { patientId } = useParams<{ patientId?: string }>();
@@ -63,7 +65,7 @@ export function PsychologistPatientsPage() {
       {loading ? (
         <div className="h-32 animate-pulse rounded-3xl bg-club-green/5" />
       ) : patients.length === 0 ? (
-        <div className="rounded-3xl border border-club-green/10 bg-white/35 p-6">
+        <div className="rounded-3xl border border-club-green/10 bg-white/50 p-6">
           <p className="text-sm text-club-muted">
             Cuando tengas citas, las personas aparecerán aquí.
           </p>
@@ -79,7 +81,7 @@ export function PsychologistPatientsPage() {
             >
               <Link
                 to={`/psychologist/patients/${p.patientId}`}
-                className="block rounded-3xl border border-club-green/10 bg-white/35 px-5 py-4 shadow-soft backdrop-blur transition hover:bg-white/55"
+                className="block rounded-3xl border border-club-green/10 bg-white/50 px-5 py-4 shadow-soft backdrop-blur transition hover:bg-white/55"
               >
                 <div className="flex flex-wrap items-center justify-between gap-4">
                   <div className="flex items-center gap-3">
@@ -175,14 +177,14 @@ function PatientDetail({
       {loading ? (
         <div className="h-64 animate-pulse rounded-3xl bg-club-green/5" />
       ) : appointments.length === 0 ? (
-        <div className="rounded-3xl border border-club-green/10 bg-white/35 p-6">
-          <p className="text-sm text-club-muted">
-            No encontramos sesiones para esta persona.
-          </p>
-        </div>
+        <EmptyState
+          icon={CalendarX}
+          title="No encontramos sesiones para esta persona"
+          description="Cuando agenden un encuentro, aparecerá aquí."
+        />
       ) : (
-        <div className="grid gap-5 lg:grid-cols-[320px,1fr]">
-          <aside className="space-y-4 lg:sticky lg:top-24 lg:self-start">
+        <div className="grid gap-6 lg:grid-cols-[320px,1fr]">
+          <aside className="space-y-5 lg:sticky lg:top-24 lg:self-start">
             <SummaryCard
               icon={<CalendarClock className="h-5 w-5" strokeWidth={1.5} />}
               label="Próxima sesión"
@@ -208,7 +210,7 @@ function PatientDetail({
             />
           </aside>
 
-          <section className="space-y-3">
+          <section className="space-y-4">
             {appointments.map((appointment, index) => (
               <SessionHistoryCard
                 key={appointment.id}
@@ -235,12 +237,12 @@ function SummaryCard({
   detail: string;
 }) {
   return (
-    <div className="rounded-3xl border border-club-green/10 bg-white/40 p-5 shadow-soft backdrop-blur">
+    <div className="rounded-3xl border border-club-green/10 bg-white/50 p-5 shadow-soft backdrop-blur">
       <div className="flex items-center gap-2 text-club-green">
         {icon}
         <p className="text-xs text-club-muted">{label}</p>
       </div>
-      <p className="mt-3 font-display text-2xl text-club-green">{value}</p>
+      <p className="mt-3 font-display text-3xl text-club-green">{value}</p>
       <p className="mt-1 text-sm text-club-muted">{detail}</p>
     </div>
   );
@@ -258,14 +260,14 @@ function SessionHistoryCard({
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.03 }}
-      className="rounded-3xl border border-club-green/10 bg-white/40 p-5 shadow-soft backdrop-blur"
+      className="rounded-3xl border border-club-green/10 bg-white/50 p-5 shadow-soft backdrop-blur"
     >
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <p className="capitalize text-sm text-club-muted">
             {formatSessionDate(appointment.startsAt)}
           </p>
-          <p className="font-display text-2xl text-club-green">
+          <p className="font-display text-xl text-club-green">
             {formatSessionRange(appointment.startsAt, appointment.endsAt)}
           </p>
         </div>
@@ -275,7 +277,7 @@ function SessionHistoryCard({
       </div>
 
       <div className="mt-4 grid gap-3 md:grid-cols-2">
-        <div className="rounded-2xl border border-club-green/10 bg-white/45 p-4">
+        <div className="rounded-2xl border border-club-green/10 bg-white/50 p-4">
           <div className="flex items-center gap-2 text-sm text-club-green">
             <Video className="h-4 w-4" strokeWidth={1.5} />
             Meet
@@ -297,7 +299,7 @@ function SessionHistoryCard({
           )}
         </div>
 
-        <div className="rounded-2xl border border-club-green/10 bg-white/45 p-4">
+        <div className="rounded-2xl border border-club-green/10 bg-white/50 p-4">
           <div className="flex items-center gap-2 text-sm text-club-green">
             <StickyNote className="h-4 w-4" strokeWidth={1.5} />
             Nota privada

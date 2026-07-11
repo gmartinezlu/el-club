@@ -17,15 +17,15 @@ export function AdminOverviewPage() {
       {error ? <p className="text-sm text-red-700">{error}</p> : null}
 
       <div className="grid gap-4 sm:grid-cols-2">
-        <div className="rounded-3xl border border-club-green/10 bg-white/35 p-6">
+        <div className="rounded-3xl border border-club-green/10 bg-white/50 p-6">
           <p className="text-xs text-club-muted">Citas totales</p>
-          <p className="mt-2 font-display text-4xl text-club-green">
+          <p className="mt-2 font-display text-3xl text-club-green">
             {loading ? "—" : appointmentCount}
           </p>
         </div>
-        <div className="rounded-3xl border border-club-green/10 bg-white/35 p-6">
+        <div className="rounded-3xl border border-club-green/10 bg-white/50 p-6">
           <p className="text-xs text-club-muted">Psicólogas por aprobar</p>
-          <p className="mt-2 font-display text-4xl text-club-green">
+          <p className="mt-2 font-display text-3xl text-club-green">
             {loading ? "—" : pendingPsychologists}
           </p>
         </div>

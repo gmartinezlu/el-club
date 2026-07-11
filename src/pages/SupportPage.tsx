@@ -1,6 +1,7 @@
 ﻿import { useState, type FormEvent } from "react";
 import { Link } from "react-router-dom";
 import { HeartHandshake, MessageCircle, Send } from "lucide-react";
+import { toast } from "sonner";
 import { MarketingLayout } from "../layouts/MarketingLayout";
 import { createSupportTicket } from "../support/service";
 import { useSessionStore } from "../store/sessionStore";
@@ -12,15 +13,11 @@ export function SupportPage() {
   const [subject, setSubject] = useState("");
   const [body, setBody] = useState("");
   const [saving, setSaving] = useState(false);
-  const [saved, setSaved] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   async function onSubmit(event: FormEvent) {
     event.preventDefault();
     if (!user) return;
     setSaving(true);
-    setSaved(false);
-    setError(null);
     try {
       await createSupportTicket({
         userId: user.id,
@@ -29,9 +26,9 @@ export function SupportPage() {
       });
       setSubject("");
       setBody("");
-      setSaved(true);
+      toast.success("Ticket creado. El equipo podrá revisarlo desde admin.");
     } catch (e) {
-      setError(getErrorMessage(e, "No pudimos crear tu ticket"));
+      toast.error(getErrorMessage(e, "No pudimos crear tu ticket"));
     } finally {
       setSaving(false);
     }
@@ -51,7 +48,7 @@ export function SupportPage() {
           </p>
         </section>
 
-        <section className="rounded-3xl border border-club-green/10 bg-white/35 p-6 shadow-soft backdrop-blur md:p-8">
+        <section className="rounded-3xl border border-club-green/10 bg-white/50 p-6 shadow-soft backdrop-blur md:p-8">
           <div className="flex items-center gap-2 text-club-green">
             <MessageCircle className="h-5 w-5" strokeWidth={1.5} />
             <p className="font-display text-3xl">Crear ticket</p>
@@ -80,18 +77,6 @@ export function SupportPage() {
             </div>
           ) : (
             <form onSubmit={onSubmit} className="mt-6 space-y-4">
-              {error ? (
-                <p className="rounded-2xl border border-red-200/80 bg-red-50/40 px-4 py-3 text-sm text-red-800">
-                  {error}
-                </p>
-              ) : null}
-
-              {saved ? (
-                <p className="rounded-2xl border border-club-green/10 bg-club-green/10 px-4 py-3 text-sm text-club-green">
-                  Ticket creado. El equipo podrá revisarlo desde admin.
-                </p>
-              ) : null}
-
               <label className="block space-y-2">
                 <span className="text-sm text-club-muted">Asunto</span>
                 <input

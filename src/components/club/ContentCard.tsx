@@ -7,7 +7,7 @@
 
 export function ContentCard({ article }: { article: ContentCardData }) {
   return (
-    <article className="group overflow-hidden rounded-3xl border border-club-green/10 bg-white/45 shadow-soft backdrop-blur">
+    <article className="group overflow-hidden rounded-3xl border border-club-green/10 bg-white/50 shadow-soft backdrop-blur">
       <div className="aspect-[16/11] overflow-hidden">
         <img
           src={article.image}

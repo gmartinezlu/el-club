@@ -57,7 +57,7 @@ export function ResourcePreview() {
                     ? `/patient/meditations?play=${r.id}`
                     : "/patient/resources"
                 }
-                className="flex items-start justify-between gap-4 rounded-2xl border border-club-green/5 bg-white/40 px-4 py-3 transition hover:bg-white/60"
+                className="flex items-start justify-between gap-4 rounded-2xl border border-club-green/5 bg-white/50 px-4 py-3 transition hover:bg-white/60"
               >
                 <div>
                   <p className="font-medium text-club-ink">{r.title}</p>

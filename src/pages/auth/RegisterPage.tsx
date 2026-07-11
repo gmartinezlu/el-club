@@ -136,7 +136,7 @@ export function RegisterPage({ role }: { role: RegisterRole }) {
         </div>
 
         {role === "psychologist" ? (
-          <div className="space-y-4 rounded-3xl border border-club-green/10 bg-white/35 p-4">
+          <div className="space-y-4 rounded-3xl border border-club-green/10 bg-white/50 p-4">
             <div>
               <h2 className="font-display text-2xl text-club-green">
                 Verificación profesional

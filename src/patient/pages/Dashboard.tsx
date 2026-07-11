@@ -37,7 +37,7 @@ export function PatientDashboardPage() {
 
       <section className="space-y-4">
         <p className="text-sm font-medium text-club-muted">
-          Caminos suaves para acompaÃ±arte
+          Caminos suaves para acompañarte
         </p>
         <QuickPathGrid />
       </section>

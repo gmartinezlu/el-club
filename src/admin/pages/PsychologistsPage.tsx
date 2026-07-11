@@ -5,6 +5,7 @@ import {
   FileText,
   PauseCircle,
   Search,
+  SearchX,
   Sparkles,
   XCircle,
 } from "lucide-react";
@@ -16,6 +17,7 @@ import {
 } from "../psychologists";
 import { getErrorMessage } from "../../utils/errors";
 import { createSignedDocumentUrl } from "../../psychologist/documents";
+import { EmptyState } from "../../components/ui/EmptyState";
 
 type ApprovalFilter =
   | "pending"
@@ -170,7 +172,7 @@ export function AdminPsychologistsPage() {
                 "rounded-2xl border px-4 py-2 text-sm transition",
                 filter === item.value
                   ? "border-club-green/20 bg-club-green/10 text-club-green"
-                  : "border-club-green/10 bg-white/45 text-club-muted hover:bg-white/70",
+                  : "border-club-green/10 bg-white/50 text-club-muted hover:bg-white/70",
               ].join(" ")}
             >
               {item.label}
@@ -178,7 +180,7 @@ export function AdminPsychologistsPage() {
           ))}
         </div>
 
-        <label className="flex w-full max-w-md items-center gap-3 rounded-2xl border border-club-green/10 bg-white/45 px-4 py-2.5 shadow-soft backdrop-blur">
+        <label className="flex w-full max-w-md items-center gap-3 rounded-2xl border border-club-green/10 bg-white/50 px-4 py-2.5 shadow-soft backdrop-blur">
           <Search className="h-4 w-4 text-club-green" strokeWidth={1.5} />
           <input
             value={query}
@@ -192,11 +194,11 @@ export function AdminPsychologistsPage() {
       {loading ? (
         <div className="h-72 animate-pulse rounded-3xl bg-club-green/5" />
       ) : filtered.length === 0 ? (
-        <div className="rounded-3xl border border-club-green/10 bg-white/35 p-6">
-          <p className="text-sm text-club-muted">
-            No hay perfiles para este filtro.
-          </p>
-        </div>
+        <EmptyState
+          icon={SearchX}
+          title="No hay perfiles para este filtro"
+          description="Prueba otro estado o ajusta la búsqueda."
+        />
       ) : (
         <div className="grid gap-4">
           {filtered.map((psychologist) => (
@@ -274,7 +276,7 @@ function PsychologistReviewCard({
   }
 
   return (
-    <article className="rounded-3xl border border-club-green/10 bg-white/40 p-5 shadow-soft backdrop-blur">
+    <article className="rounded-3xl border border-club-green/10 bg-white/50 p-5 shadow-soft backdrop-blur">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div className="flex gap-4">
           {psychologist.avatarUrl ? (
@@ -322,7 +324,7 @@ function PsychologistReviewCard({
               />
             </div>
             {psychologist.clinicalApproach ? (
-              <p className="mt-4 max-w-2xl rounded-2xl bg-white/45 p-4 text-sm leading-relaxed text-club-muted">
+              <p className="mt-4 max-w-2xl rounded-2xl bg-white/50 p-4 text-sm leading-relaxed text-club-muted">
                 {psychologist.clinicalApproach}
               </p>
             ) : null}
@@ -333,7 +335,7 @@ function PsychologistReviewCard({
               </p>
             ) : null}
             {psychologist.reviewedAt ? (
-              <div className="mt-3 rounded-2xl border border-club-green/10 bg-white/45 p-4 text-sm text-club-muted">
+              <div className="mt-3 rounded-2xl border border-club-green/10 bg-white/50 p-4 text-sm text-club-muted">
                 <p className="flex items-center gap-2 text-club-green">
                   <Clock3 className="h-4 w-4" strokeWidth={1.5} />
                   Revisada el {formatDate(psychologist.reviewedAt)}
@@ -455,7 +457,7 @@ function ReviewDecisionModal({
             <FileText className="h-5 w-5" strokeWidth={1.5} />
           </div>
           <div>
-            <p className="font-display text-2xl text-club-green">{title}</p>
+            <p className="font-display text-xl text-club-green">{title}</p>
             <p className="mt-1 text-sm leading-relaxed text-club-muted">
               Esta decisión se guardará en el historial y se enviará como aviso
               a {psychologist.fullName}.
@@ -505,7 +507,7 @@ function ReviewFact({
   value: string | null;
 }) {
   return (
-    <div className="rounded-2xl border border-club-green/10 bg-white/40 px-4 py-3">
+    <div className="rounded-2xl border border-club-green/10 bg-white/50 px-4 py-3">
       <p className="text-xs text-club-muted">{label}</p>
       <p className="mt-1 text-club-ink">{value || "Sin registrar"}</p>
     </div>

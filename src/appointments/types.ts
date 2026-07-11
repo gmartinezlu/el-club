@@ -28,7 +28,7 @@ export type Appointment = {
   patient: UserProfileSnippet;
 };
 
-/** Vista paciente: datos de la psicÃ³loga */
+/** Vista paciente: datos de la psicóloga */
 export type PatientAppointmentView = {
   id: string;
   startsAt: string;
@@ -43,7 +43,7 @@ export type PatientAppointmentView = {
   psychologistAvatarUrl: string | null;
 };
 
-/** Vista psicÃ³loga: datos del paciente */
+/** Vista psicóloga: datos del paciente */
 export type PsychologistAppointmentView = {
   id: string;
   patientId: string;

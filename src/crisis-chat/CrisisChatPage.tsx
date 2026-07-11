@@ -132,7 +132,7 @@ export function CrisisChatPage({ mode }: { mode: "patient" | "psychologist" }) {
       {loading ? (
         <div className="h-72 animate-pulse rounded-3xl bg-club-green/5" />
       ) : threads.length === 0 ? (
-        <div className="rounded-3xl border border-club-green/10 bg-white/35 p-6 shadow-soft backdrop-blur">
+        <div className="rounded-3xl border border-club-green/10 bg-white/50 p-6 shadow-soft backdrop-blur">
           <MessageCircle className="h-5 w-5 text-club-green" strokeWidth={1.5} />
           <p className="mt-4 font-display text-2xl text-club-green">
             {mode === "patient"
@@ -157,7 +157,7 @@ export function CrisisChatPage({ mode }: { mode: "patient" | "psychologist" }) {
                   "w-full rounded-3xl border p-4 text-left shadow-soft backdrop-blur transition",
                   selectedThreadId === thread.id
                     ? "border-club-green/25 bg-club-green/10"
-                    : "border-club-green/10 bg-white/35 hover:bg-white/55",
+                    : "border-club-green/10 bg-white/50 hover:bg-white/55",
                 ].join(" ")}
               >
                 <p className="font-display text-2xl text-club-green">
@@ -172,7 +172,7 @@ export function CrisisChatPage({ mode }: { mode: "patient" | "psychologist" }) {
             ))}
           </aside>
 
-          <section className="rounded-3xl border border-club-green/10 bg-white/40 p-4 shadow-soft backdrop-blur md:p-5">
+          <section className="rounded-3xl border border-club-green/10 bg-white/50 p-4 shadow-soft backdrop-blur md:p-5">
             <div className="border-b border-club-green/10 pb-4">
               <p className="text-xs text-club-muted">Conversacion con</p>
               <h2 className="font-display text-3xl text-club-green">

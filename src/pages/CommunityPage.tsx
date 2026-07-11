@@ -25,7 +25,7 @@ export function CommunityPage() {
             {communityPrinciples.map((item) => (
               <article
                 key={item.label}
-                className="rounded-3xl border border-club-green/10 bg-white/45 p-5 shadow-soft backdrop-blur"
+                className="rounded-3xl border border-club-green/10 bg-white/50 p-5 shadow-soft backdrop-blur"
               >
                 <item.icon className="h-6 w-6 text-club-green" strokeWidth={1.5} />
                 <p className="mt-5 font-display text-2xl text-club-green">

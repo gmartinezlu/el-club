@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { CalendarDays, Clock } from "lucide-react";
+import { toast } from "sonner";
 import {
   createAvailabilitySlots,
   deleteAvailabilitySlots,
@@ -45,7 +46,7 @@ function SummaryCard({
   value: string;
 }) {
   return (
-    <div className="rounded-3xl border border-club-green/10 bg-white/40 p-4 shadow-soft backdrop-blur">
+    <div className="rounded-3xl border border-club-green/10 bg-white/50 p-4 shadow-soft backdrop-blur">
       <Icon className="h-5 w-5 text-club-green" strokeWidth={1.5} />
       <p className="mt-3 text-xs text-club-muted">{label}</p>
       <p className="font-display text-3xl text-club-green">{value}</p>
@@ -62,7 +63,6 @@ export function PsychologistAvailabilityPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
 
   const slotsByKey = useMemo(() => {
     const map = new Map<string, AvailabilitySlot>();
@@ -121,7 +121,6 @@ export function PsychologistAvailabilityPage() {
     if (!psychologistId) return;
     setSaving(true);
     setError(null);
-    setSuccess(null);
     try {
       if (mode === "add") {
         await createAvailabilitySlots({
@@ -132,13 +131,13 @@ export function PsychologistAvailabilityPage() {
             return { startsAt: startsAt.toISOString(), endsAt: endsAt.toISOString() };
           }),
         });
-        setSuccess(`${cells.length} horario${cells.length !== 1 ? "s" : ""} publicado${cells.length !== 1 ? "s" : ""}.`);
+        toast.success(`${cells.length} horario${cells.length !== 1 ? "s" : ""} publicado${cells.length !== 1 ? "s" : ""}.`);
       } else {
         const idsToRemove = cells
           .map((cell) => slotsByKey.get(slotKey(cell.date, cell.slotIndex))?.id)
           .filter((id): id is string => Boolean(id));
         await deleteAvailabilitySlots({ slotIds: idsToRemove, psychologistId });
-        setSuccess(`${idsToRemove.length} horario${idsToRemove.length !== 1 ? "s" : ""} eliminado${idsToRemove.length !== 1 ? "s" : ""}.`);
+        toast.success(`${idsToRemove.length} horario${idsToRemove.length !== 1 ? "s" : ""} eliminado${idsToRemove.length !== 1 ? "s" : ""}.`);
       }
       await loadWeek();
     } catch (e) {
@@ -173,13 +172,8 @@ export function PsychologistAvailabilityPage() {
           {error}
         </p>
       ) : null}
-      {success ? (
-        <p className="rounded-2xl border border-club-green/15 bg-club-green/10 px-4 py-3 text-sm text-club-green">
-          {success}
-        </p>
-      ) : null}
 
-      <section className="rounded-3xl border border-club-green/10 bg-white/40 p-5 shadow-soft backdrop-blur">
+      <section className="rounded-3xl border border-club-green/10 bg-white/50 p-5 shadow-soft backdrop-blur">
         <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
           <DurationSelect duration={duration} onChange={setDuration} />
           {saving ? <p className="text-sm text-club-muted">Guardando...</p> : null}

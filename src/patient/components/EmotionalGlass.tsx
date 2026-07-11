@@ -11,7 +11,7 @@ export function EmotionalGlass({
   return (
     <div
       className={cn(
-        "relative overflow-hidden rounded-3xl border border-club-green/10 bg-white/40 shadow-soft backdrop-blur-md",
+        "relative overflow-hidden rounded-3xl border border-club-green/10 bg-white/50 shadow-soft backdrop-blur-md",
         className,
       )}
     >

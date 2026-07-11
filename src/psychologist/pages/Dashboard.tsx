@@ -2,6 +2,7 @@
 import { motion } from "framer-motion";
 import {
   Calendar,
+  CalendarX,
   CheckCircle2,
   Clock,
   XCircle,
@@ -26,6 +27,7 @@ import {
   syncGoogleCalendarEvent,
 } from "../../services/supabase/googleCalendar";
 import { createNotification } from "../../notifications/service";
+import { EmptyState } from "../../components/ui/EmptyState";
 import { useAutoSaveNotes } from "../hooks/useAutoSaveNotes";
 import type {
   AppointmentStatus,
@@ -44,7 +46,7 @@ type AgendaFilter = "today" | "upcoming" | "history" | "all";
 
 const FILTERS: { value: AgendaFilter; label: string }[] = [
   { value: "today", label: "Hoy" },
-  { value: "upcoming", label: "PrÃ³ximas" },
+  { value: "upcoming", label: "Próximas" },
   { value: "history", label: "Historial" },
   { value: "all", label: "Todas" },
 ];
@@ -136,7 +138,7 @@ export function PsychologistDashboardPage() {
           await createNotification({
             userId: appointment.patientId,
             title: "Meet habilitado",
-            body: "Tu enlace de videollamada ya estÃ¡ preparado dentro de El Club.",
+            body: "Tu enlace de videollamada ya está preparado dentro de El Club.",
           });
         }
       } else {
@@ -238,7 +240,7 @@ export function PsychologistDashboardPage() {
       <header className="space-y-2">
         <p className="text-sm font-medium text-club-green">Agenda</p>
         <h1 className="font-display text-4xl text-club-green">
-          Tu dÃ­a, con claridad
+          Tu día, con claridad
         </h1>
         <p className="max-w-2xl text-sm leading-relaxed text-club-muted">
           Citas, notas privadas y acceso a Meet en una sola vista de trabajo.
@@ -251,7 +253,7 @@ export function PsychologistDashboardPage() {
         </p>
       ) : null}
 
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="grid gap-5 sm:grid-cols-3">
         <StatCard icon={Calendar} label="Citas hoy" value={loading ? "-" : String(todayCount)} />
         <StatCard icon={Users} label="Personas activas" value={loading ? "-" : String(patients.length)} />
         <StatCard icon={Video} label="Meet listos" value={loading ? "-" : String(readyForMeet)} />
@@ -269,7 +271,7 @@ export function PsychologistDashboardPage() {
                   "rounded-2xl border px-4 py-2 text-sm transition",
                   filter === item.value
                     ? "border-club-green/20 bg-club-green/10 text-club-green"
-                    : "border-club-green/10 bg-white/45 text-club-muted hover:bg-white/70",
+                    : "border-club-green/10 bg-white/50 text-club-muted hover:bg-white/70",
                 ].join(" ")}
               >
                 {item.label}
@@ -280,11 +282,11 @@ export function PsychologistDashboardPage() {
           {loading ? (
             <div className="h-64 animate-pulse rounded-3xl bg-club-green/5" />
           ) : filteredAppointments.length === 0 ? (
-            <div className="rounded-3xl border border-club-green/10 bg-white/35 p-6">
-              <p className="text-sm text-club-muted">
-                No hay citas para este filtro.
-              </p>
-            </div>
+            <EmptyState
+              icon={CalendarX}
+              title="No hay citas para este filtro"
+              description="Prueba otro filtro o espera nuevas solicitudes de agenda."
+            />
           ) : (
             <ul className="space-y-3">
               {filteredAppointments.map((appointment, index) => (
@@ -312,9 +314,9 @@ export function PsychologistDashboardPage() {
               onMarkCompleted={markCompleted}
             />
           ) : (
-            <div className="rounded-3xl border border-club-green/10 bg-white/35 p-6 shadow-soft backdrop-blur">
+            <div className="rounded-3xl border border-club-green/10 bg-white/50 p-6 shadow-soft backdrop-blur">
               <p className="text-sm text-club-muted">
-                Selecciona una cita para preparar la sesiÃ³n.
+                Selecciona una cita para preparar la sesión.
               </p>
             </div>
           )}
@@ -334,7 +336,7 @@ function StatCard({
   value: string;
 }) {
   return (
-    <div className="rounded-3xl border border-club-green/10 bg-white/35 p-5 backdrop-blur">
+    <div className="rounded-3xl border border-club-green/10 bg-white/50 p-5 backdrop-blur">
       <Icon className="h-5 w-5 text-club-green/80" strokeWidth={1.5} />
       <p className="mt-4 text-xs text-club-muted">{label}</p>
       <p className="font-display text-3xl text-club-green">{value}</p>
@@ -366,7 +368,7 @@ function AgendaItem({
           "w-full rounded-3xl border p-5 text-left shadow-soft backdrop-blur transition",
           selected
             ? "border-club-green/25 bg-club-green/10"
-            : "border-club-green/10 bg-white/35 hover:bg-white/55",
+            : "border-club-green/10 bg-white/50 hover:bg-white/55",
         ].join(" ")}
       >
         <div className="flex flex-wrap items-start justify-between gap-4">
@@ -453,20 +455,20 @@ function AppointmentWorkspace({
   const canCancel = isActionable(appointment.status);
 
   return (
-    <div className="rounded-3xl border border-club-green/10 bg-white/40 p-5 shadow-soft backdrop-blur">
+    <div className="rounded-3xl border border-club-green/10 bg-white/50 p-6 shadow-soft backdrop-blur">
       <p className="text-xs font-medium uppercase tracking-wider text-club-muted">
-        PreparaciÃ³n de sesiÃ³n
+        Preparación de sesión
       </p>
       <h2 className="mt-2 font-display text-3xl text-club-green">
         {appointment.patientName}
       </h2>
       <p className="mt-1 capitalize text-sm text-club-muted">
-        {formatSessionDate(appointment.startsAt)} Â·{" "}
+        {formatSessionDate(appointment.startsAt)} ·{" "}
         {formatSessionRange(appointment.startsAt, appointment.endsAt)}
       </p>
 
-      <div className="mt-6 space-y-5">
-        <div className="rounded-2xl border border-club-green/10 bg-club-green/5 p-4">
+      <div className="mt-6 space-y-6">
+        <div className="rounded-2xl border border-club-green/10 bg-club-green/5 p-5">
           <p className="text-xs text-club-muted">Estado actual</p>
           <p className="mt-1 font-display text-2xl text-club-green">
             {STATUS_LABELS[appointment.status]}
@@ -478,7 +480,7 @@ function AppointmentWorkspace({
         </div>
 
         {appointment.status === "pending_payment" ? (
-          <div className="rounded-2xl border border-club-green/10 bg-white/45 p-4">
+          <div className="rounded-2xl border border-club-green/10 bg-white/50 p-5">
             <p className="text-sm text-club-green">Comprobante de pago</p>
             {proofError ? (
               <p className="mt-2 text-xs text-red-800">{proofError}</p>
@@ -620,7 +622,7 @@ function AppointmentWorkspace({
               {autoSaving ? "Guardando..." : "Guardar notas"}
             </button>
             {hasUnsavedChanges && !autoSaving ? (
-              <p className="text-xs text-amber-700">Guardando automÃ¡ticamente...</p>
+              <p className="text-xs text-amber-700">Guardando automáticamente...</p>
             ) : null}
           </div>
         </div>

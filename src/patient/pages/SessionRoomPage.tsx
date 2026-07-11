@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowLeft, Shield, Video } from "lucide-react";
+import { ArrowLeft, SearchX, Shield, Video } from "lucide-react";
 import { fetchPatientAppointmentById } from "../../appointments/patient";
 import type { PatientAppointmentView } from "../../appointments/types";
 import { useSessionStore } from "../../store/sessionStore";
@@ -12,6 +12,7 @@ import {
 } from "../utils/formatDate";
 import { EmotionalGlass } from "../components/EmotionalGlass";
 import { PatientFlowSteps } from "../components/PatientFlowSteps";
+import { EmptyState } from "../../components/ui/EmptyState";
 
 export function SessionRoomPage() {
   const { appointmentId } = useParams<{ appointmentId: string }>();
@@ -103,15 +104,12 @@ export function SessionRoomPage() {
       {loading ? (
         <div className="h-64 animate-pulse rounded-3xl bg-club-green/5" />
       ) : !appointment ? (
-        <EmotionalGlass className="p-8 text-center">
-          <p className="text-club-muted">No encontramos esta sesión.</p>
-          <Link
-            to="/patient"
-            className="mt-4 inline-block text-sm text-club-green hover:underline"
-          >
-            Ir al inicio
-          </Link>
-        </EmotionalGlass>
+        <EmptyState
+          icon={SearchX}
+          title="No encontramos esta sesión"
+          description="Puede que el enlace esté vencido o la cita haya cambiado."
+          action={{ label: "Ir al inicio", to: "/patient" }}
+        />
       ) : (
         <EmotionalGlass className="p-8 md:p-10">
           <div className="flex items-center gap-3 text-club-green">

@@ -1,5 +1,6 @@
 ﻿import { useCallback, useEffect, useState } from "react";
 import { Save, Sparkles } from "lucide-react";
+import { toast } from "sonner";
 import {
   fetchPatientOnboarding,
   savePatientOnboarding,
@@ -38,7 +39,6 @@ export function PatientSettingsPage() {
   const [onboardingNotes, setOnboardingNotes] = useState("");
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [saved, setSaved] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const loadProfile = useCallback(async () => {
@@ -76,7 +76,6 @@ export function PatientSettingsPage() {
   async function saveProfile() {
     if (!user) return;
     setSaving(true);
-    setSaved(false);
     setError(null);
     try {
       await updateUserProfile({
@@ -95,7 +94,7 @@ export function PatientSettingsPage() {
         onboardingNotes: onboardingNotes.trim() || null,
       });
       await refreshRole();
-      setSaved(true);
+      toast.success("Perfil guardado.");
     } catch (e) {
       setError(getErrorMessage(e, "No se pudo guardar tu perfil"));
     } finally {
@@ -119,11 +118,6 @@ export function PatientSettingsPage() {
         </p>
       ) : null}
 
-      {saved ? (
-        <p className="rounded-2xl border border-club-green/10 bg-club-green/10 px-4 py-3 text-sm text-club-green">
-          Perfil guardado.
-        </p>
-      ) : null}
 
       {loading ? (
         <div className="h-96 animate-pulse rounded-3xl bg-club-green/5" />
@@ -156,7 +150,7 @@ export function PatientSettingsPage() {
                 <input
                   value={mainConcern}
                   onChange={(e) => setMainConcern(e.target.value)}
-                  placeholder="Ansiedad, duelo, estrÃ©s..."
+                  placeholder="Ansiedad, duelo, estrés..."
                   className="w-full rounded-2xl border border-club-green/10 bg-white/60 px-4 py-3 text-sm text-club-ink outline-none ring-club-green/10 focus:ring-2"
                 />
               </label>
@@ -184,7 +178,7 @@ export function PatientSettingsPage() {
               <input
                 value={emotionalGoals}
                 onChange={(e) => setEmotionalGoals(e.target.value)}
-                placeholder="Regular ansiedad, poner lÃ­mites, dormir mejor"
+                placeholder="Regular ansiedad, poner límites, dormir mejor"
                 className="w-full rounded-2xl border border-club-green/10 bg-white/60 px-4 py-3 text-sm text-club-ink outline-none ring-club-green/10 focus:ring-2"
               />
               <span className="block text-xs text-club-muted">
@@ -194,12 +188,12 @@ export function PatientSettingsPage() {
 
             <label className="space-y-2">
               <span className="text-sm text-club-muted">
-                Preferencias de acompaÃ±amiento
+                Preferencias de acompañamiento
               </span>
               <input
                 value={therapyPreferences}
                 onChange={(e) => setTherapyPreferences(e.target.value)}
-                placeholder="CÃ¡lida, con ejercicios, ritmo suave"
+                placeholder="Cálida, con ejercicios, ritmo suave"
                 className="w-full rounded-2xl border border-club-green/10 bg-white/60 px-4 py-3 text-sm text-club-ink outline-none ring-club-green/10 focus:ring-2"
               />
               <span className="block text-xs text-club-muted">
@@ -222,7 +216,7 @@ export function PatientSettingsPage() {
                 <input
                   value={supportStyle}
                   onChange={(e) => setSupportStyle(e.target.value)}
-                  placeholder="Escucha y contenciÃ³n"
+                  placeholder="Escucha y contención"
                   className="w-full rounded-2xl border border-club-green/10 bg-white/60 px-4 py-3 text-sm text-club-ink outline-none ring-club-green/10 focus:ring-2"
                 />
               </label>
@@ -253,7 +247,7 @@ export function PatientSettingsPage() {
                 onClick={() => void signOut()}
                 className="rounded-2xl border border-club-green/15 bg-white/50 px-5 py-3 text-sm text-club-green transition hover:bg-white/70"
               >
-                Cerrar sesiÃ³n
+                Cerrar sesión
               </button>
             </div>
           </EmotionalGlass>

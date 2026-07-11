@@ -53,7 +53,7 @@ export function AdminActivityPage() {
       {loading ? (
         <div className="h-52 animate-pulse rounded-3xl bg-club-green/5" />
       ) : activity.length === 0 ? (
-        <div className="rounded-3xl border border-club-green/10 bg-white/35 p-6">
+        <div className="rounded-3xl border border-club-green/10 bg-white/50 p-6">
           <p className="text-sm text-club-muted">Aún no hay actividad.</p>
         </div>
       ) : (
@@ -61,7 +61,7 @@ export function AdminActivityPage() {
           {activity.map((item) => (
             <article
               key={item.id}
-              className="flex flex-wrap items-start justify-between gap-4 rounded-3xl border border-club-green/10 bg-white/35 p-5 shadow-soft backdrop-blur"
+              className="flex flex-wrap items-start justify-between gap-4 rounded-3xl border border-club-green/10 bg-white/50 p-5 shadow-soft backdrop-blur"
             >
               <div className="flex gap-3">
                 <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-club-green/10 text-club-green">
@@ -72,7 +72,7 @@ export function AdminActivityPage() {
                   )}
                 </div>
                 <div>
-                  <p className="font-display text-2xl text-club-green">
+                  <p className="font-display text-xl text-club-green">
                     {item.title}
                   </p>
                   <p className="mt-1 text-sm text-club-muted">

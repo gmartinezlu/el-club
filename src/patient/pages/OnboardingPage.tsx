@@ -11,7 +11,7 @@ const CONCERNS = [
   "Ansiedad",
   "Autoestima",
   "Duelo",
-  "EstrÃ©s",
+  "Estrés",
   "Relaciones",
   "Burnout",
 ];
@@ -19,23 +19,23 @@ const CONCERNS = [
 const GOALS = [
   "Entender lo que siento",
   "Regular ansiedad",
-  "Poner lÃ­mites",
+  "Poner límites",
   "Dormir mejor",
-  "Sentirme acompaÃ±ada",
+  "Sentirme acompañada",
   "Procesar un cambio",
 ];
 
 const PREFERENCES = [
-  "CÃ¡lida",
+  "Cálida",
   "Directa",
   "Con ejercicios",
-  "MÃ¡s conversacional",
+  "Más conversacional",
   "Con seguimiento",
   "Ritmo suave",
 ];
 
 const URGENCY = ["Estoy bien, quiero empezar", "Necesito apoyo pronto", "Me siento muy cargada"];
-const SUPPORT_STYLE = ["Escucha y contenciÃ³n", "Herramientas prÃ¡cticas", "Explorar a profundidad"];
+const SUPPORT_STYLE = ["Escucha y contención", "Herramientas prácticas", "Explorar a profundidad"];
 
 function toggleValue(values: string[], value: string): string[] {
   return values.includes(value)
@@ -87,10 +87,10 @@ export function PatientOnboardingPage() {
       <header className="space-y-2">
         <p className="text-sm font-medium text-club-green">Bienvenida</p>
         <h1 className="font-display text-4xl text-club-green">
-          CuÃ©ntanos cÃ³mo llegas hoy
+          Cuéntanos cómo llegas hoy
         </h1>
         <p className="max-w-2xl text-sm leading-relaxed text-club-muted">
-          Esto nos ayuda a hacer tu experiencia mÃ¡s humana desde el primer paso.
+          Esto nos ayuda a hacer tu experiencia más humana desde el primer paso.
         </p>
       </header>
 
@@ -102,7 +102,7 @@ export function PatientOnboardingPage() {
 
       <form onSubmit={onSubmit} className="space-y-5">
         <EmotionalGlass className="p-6">
-          <SectionTitle icon={Heart} title="Â¿QuÃ© te gustarÃ­a trabajar?" />
+          <SectionTitle icon={Heart} title="¿Qué te gustaría trabajar?" />
           <OptionGrid
             options={CONCERNS}
             selected={mainConcern ? [mainConcern] : []}
@@ -123,7 +123,7 @@ export function PatientOnboardingPage() {
         </EmotionalGlass>
 
         <EmotionalGlass className="p-6">
-          <SectionTitle icon={Sparkles} title="Â¿CÃ³mo te gustarÃ­a sentir el acompaÃ±amiento?" />
+          <SectionTitle icon={Sparkles} title="¿Cómo te gustaría sentir el acompañamiento?" />
           <OptionGrid
             options={PREFERENCES}
             selected={therapyPreferences}
@@ -136,7 +136,7 @@ export function PatientOnboardingPage() {
         <div className="grid gap-5 lg:grid-cols-3">
           <EmotionalGlass className="p-6">
             <label className="space-y-3">
-              <span className="font-display text-2xl text-club-green">
+              <span className="font-display text-lg text-club-green">
                 Mood hoy
               </span>
               <select
@@ -156,7 +156,7 @@ export function PatientOnboardingPage() {
           <EmotionalGlass className="p-6 lg:col-span-2">
             <div className="grid gap-4 md:grid-cols-2">
               <label className="space-y-3">
-                <span className="font-display text-2xl text-club-green">
+                <span className="font-display text-lg text-club-green">
                   Ritmo
                 </span>
                 <select
@@ -174,7 +174,7 @@ export function PatientOnboardingPage() {
               </label>
 
               <label className="space-y-3">
-                <span className="font-display text-2xl text-club-green">
+                <span className="font-display text-lg text-club-green">
                   Estilo
                 </span>
                 <select
@@ -196,14 +196,14 @@ export function PatientOnboardingPage() {
 
         <EmotionalGlass className="p-6">
           <label className="space-y-3">
-            <span className="font-display text-2xl text-club-green">
-              Algo mÃ¡s que quieras nombrar
+            <span className="font-display text-lg text-club-green">
+              Algo más que quieras nombrar
             </span>
             <textarea
               value={onboardingNotes}
               onChange={(e) => setOnboardingNotes(e.target.value)}
               rows={4}
-              placeholder="Puedes escribirlo con tus palabras. Sin presiÃ³n."
+              placeholder="Puedes escribirlo con tus palabras. Sin presión."
               className="w-full resize-none rounded-2xl border border-club-green/10 bg-white/60 px-4 py-3 text-sm leading-relaxed text-club-ink outline-none ring-club-green/10 focus:ring-2"
             />
           </label>
@@ -231,7 +231,7 @@ function SectionTitle({
   return (
     <div className="mb-4 flex items-center gap-2 text-club-green">
       <Icon className="h-5 w-5" strokeWidth={1.5} />
-      <h2 className="font-display text-2xl">{title}</h2>
+      <h2 className="font-display text-xl">{title}</h2>
     </div>
   );
 }

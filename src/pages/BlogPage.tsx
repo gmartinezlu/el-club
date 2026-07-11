@@ -9,8 +9,8 @@ export function BlogPage() {
       <main className="mx-auto w-full max-w-6xl px-5 py-14 md:px-8">
         <SectionHeader
           eyebrow="Blog"
-          title="Contenido para cuidar tu mente todos los dÃ­as."
-          subtitle="Un magazine emocional: breve, cÃ¡lido y Ãºtil. Por ahora queda con contenido mockeado para definir lÃ­nea editorial."
+          title="Contenido para cuidar tu mente todos los días."
+          subtitle="Un magazine emocional: breve, cálido y útil. Por ahora queda con contenido mockeado para definir línea editorial."
         />
 
         <div className="mt-8 flex flex-wrap gap-2">

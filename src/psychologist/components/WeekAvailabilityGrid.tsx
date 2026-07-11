@@ -193,7 +193,7 @@ export function WeekAvailabilityGrid({
                             : "cursor-pointer bg-club-green/60"
                           : state === "available"
                             ? "cursor-pointer bg-club-green/25 hover:bg-club-green/35"
-                            : "cursor-pointer bg-white/40 hover:bg-club-green/10",
+                            : "cursor-pointer bg-white/50 hover:bg-club-green/10",
                   ].join(" ")}
                 />
               );
@@ -205,7 +205,7 @@ export function WeekAvailabilityGrid({
       <div className="mt-4 flex flex-wrap items-center gap-4 text-xs text-club-muted">
         <LegendDot className="bg-club-green/25" label="Disponible" />
         <LegendDot className="bg-club-green/40" label="Reservada" />
-        <LegendDot className="bg-white/40" label="Libre" />
+        <LegendDot className="bg-white/50" label="Libre" />
       </div>
     </div>
   );

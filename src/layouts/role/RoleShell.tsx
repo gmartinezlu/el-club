@@ -1,5 +1,6 @@
 ﻿import type { ReactNode } from "react";
 import { NavLink } from "react-router-dom";
+import type { LucideIcon } from "lucide-react";
 import type { AppRole } from "../../shared/auth/roles";
 import { ROLE_LABELS } from "../../shared/auth/roles";
 import { useSessionStore } from "../../store/sessionStore";
@@ -9,8 +10,7 @@ type NavItem = {
   label: string;
   end?: boolean;
   group?: string;
-  // Optional icon component (from lucide-react or similar)
-  icon?: any;
+  icon?: LucideIcon;
 };
 
 const ROLE_SUBTITLES: Record<AppRole, string> = {
@@ -63,7 +63,7 @@ export function RoleShell({
         }}
       />
 
-      <header className="sticky top-0 z-20 border-b border-club-green/10 bg-white/35 backdrop-blur-md">
+      <header className="sticky top-0 z-20 border-b border-club-green/10 bg-white/50 backdrop-blur-md">
         <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-5 py-4 md:px-8">
           <div className="flex min-w-0 items-center gap-3">
             <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-club-green text-club-paper shadow-soft">
@@ -104,14 +104,14 @@ export function RoleShell({
       </header>
 
       <div className="mx-auto grid w-full max-w-6xl grid-cols-1 gap-6 px-5 py-6 md:grid-cols-[220px,1fr] md:px-8 md:py-8">
-        <aside className="min-w-0 overflow-hidden rounded-3xl border border-club-green/10 bg-white/35 p-3 shadow-soft backdrop-blur md:sticky md:top-24 md:self-start md:p-4">
+        <aside className="min-w-0 overflow-hidden rounded-3xl border border-club-green/10 bg-white/50 p-3 shadow-soft backdrop-blur md:sticky md:top-24 md:self-start md:p-4">
           <nav className="flex w-full min-w-0 flex-row gap-2 overflow-x-auto pb-1 md:flex-col md:gap-5 md:overflow-visible md:pb-0">
             {groupedNav.map((group) => (
               <div
                 key={group.group}
                 className="flex shrink-0 flex-row gap-2 md:flex-col md:gap-1"
               >
-                <p className="hidden px-3 text-[11px] font-medium uppercase tracking-[0.18em] text-club-muted/70 md:block">
+                <p className="hidden px-3 text-[11px] font-medium uppercase tracking-[0.18em] text-club-muted/90 md:block">
                   {group.group}
                 </p>
                 {group.items.map((item) => (

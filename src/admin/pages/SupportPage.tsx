@@ -1,11 +1,18 @@
 ﻿import { useCallback, useEffect, useMemo, useState } from "react";
-import { CheckCircle2, MessageCircle, Search, Send } from "lucide-react";
+import {
+  CheckCircle2,
+  MessageCircle,
+  MessageCircleOff,
+  Search,
+  Send,
+} from "lucide-react";
 import {
   fetchAdminSupportTickets,
   respondSupportTicket,
   updateSupportTicketStatus,
   type AdminSupportTicket,
 } from "../services/operations";
+import { EmptyState } from "../../components/ui/EmptyState";
 
 export function AdminSupportPage() {
   const [tickets, setTickets] = useState<AdminSupportTicket[]>([]);
@@ -91,7 +98,7 @@ export function AdminSupportPage() {
 
       {error ? <p className="text-sm text-red-700">{error}</p> : null}
 
-      <label className="flex max-w-xl items-center gap-3 rounded-3xl border border-club-green/10 bg-white/45 px-4 py-3 shadow-soft backdrop-blur">
+      <label className="flex max-w-xl items-center gap-3 rounded-3xl border border-club-green/10 bg-white/50 px-4 py-3 shadow-soft backdrop-blur">
         <Search className="h-4 w-4 text-club-green" strokeWidth={1.5} />
         <input
           value={query}
@@ -104,17 +111,17 @@ export function AdminSupportPage() {
       {loading ? (
         <div className="h-52 animate-pulse rounded-3xl bg-club-green/5" />
       ) : filtered.length === 0 ? (
-        <div className="rounded-3xl border border-club-green/10 bg-white/35 p-6">
-          <p className="text-sm text-club-muted">
-            No hay tickets para revisar.
-          </p>
-        </div>
+        <EmptyState
+          icon={MessageCircleOff}
+          title="No hay tickets para revisar"
+          description="Cuando lleguen nuevas solicitudes de soporte, aparecerán aquí."
+        />
       ) : (
         <div className="grid gap-3">
           {filtered.map((ticket) => (
             <article
               key={ticket.id}
-              className="rounded-3xl border border-club-green/10 bg-white/35 p-5 shadow-soft backdrop-blur"
+              className="rounded-3xl border border-club-green/10 bg-white/50 p-5 shadow-soft backdrop-blur"
             >
               <div className="flex flex-wrap items-start justify-between gap-4">
                 <div>
@@ -122,7 +129,7 @@ export function AdminSupportPage() {
                     <MessageCircle className="h-4 w-4" strokeWidth={1.5} />
                     <p className="text-xs text-club-muted">{ticket.userName}</p>
                   </div>
-                  <h2 className="mt-2 font-display text-2xl text-club-green">
+                  <h2 className="mt-2 font-display text-xl text-club-green">
                     {ticket.subject}
                   </h2>
                   <p className="mt-2 max-w-2xl text-sm leading-relaxed text-club-muted">
@@ -135,7 +142,7 @@ export function AdminSupportPage() {
               </div>
 
               {ticket.adminResponse ? (
-                <div className="mt-4 rounded-2xl border border-club-green/10 bg-white/45 p-4">
+                <div className="mt-4 rounded-2xl border border-club-green/10 bg-white/50 p-4">
                   <p className="text-xs text-club-muted">Respuesta enviada</p>
                   <p className="mt-1 text-sm leading-relaxed text-club-ink">
                     {ticket.adminResponse}

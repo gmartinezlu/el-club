@@ -1,6 +1,7 @@
 ﻿import { useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Save, Sparkles } from "lucide-react";
+import { toast } from "sonner";
 import {
   fetchPsychologistProfile,
   updatePsychologistProfile,
@@ -58,7 +59,6 @@ export function PsychologistSettingsPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [uploadingDocument, setUploadingDocument] = useState(false);
-  const [saved, setSaved] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const [searchParams, setSearchParams] = useSearchParams();
@@ -136,9 +136,14 @@ export function PsychologistSettingsPage() {
   }, [loadGoogleStatus]);
 
   // Limpia el parámetro ?google= de la URL tras leerlo, así un refresh
-  // de la página no vuelve a mostrar el mensaje de éxito/error.
+  // de la página no vuelve a mostrar el toast de éxito/error.
   useEffect(() => {
     if (!googleRedirectResult) return;
+    if (googleRedirectResult === "connected") {
+      toast.success("Conectaste tu Google Calendar correctamente.");
+    } else if (googleRedirectResult === "error") {
+      toast.error("No se pudo completar la conexión con Google. Intenta de nuevo.");
+    }
     setSearchParams(
       (prev) => {
         const next = new URLSearchParams(prev);
@@ -176,7 +181,6 @@ export function PsychologistSettingsPage() {
   async function saveProfile() {
     if (!userId) return;
     setSaving(true);
-    setSaved(false);
     setError(null);
     try {
       await updatePsychologistProfile({
@@ -200,7 +204,7 @@ export function PsychologistSettingsPage() {
         nequiQrUrl,
       });
       await refreshRole();
-      setSaved(true);
+      toast.success("Perfil guardado.");
     } catch (e) {
       setError(getErrorMessage(e, "No se pudo guardar tu perfil"));
     } finally {
@@ -211,7 +215,6 @@ export function PsychologistSettingsPage() {
   async function uploadQr(file: File | null) {
     if (!userId || !file) return;
     setUploadingQr(true);
-    setSaved(false);
     setError(null);
     try {
       const url = await uploadNequiQr({ userId, file });
@@ -226,13 +229,12 @@ export function PsychologistSettingsPage() {
   async function uploadDocument(file: File | null) {
     if (!userId || !file) return;
     setUploadingDocument(true);
-    setSaved(false);
     setError(null);
     try {
       const path = await uploadPsychologistDocument({ userId, file });
       setDocumentPath(path);
       setApplicationStatus("pending");
-      setSaved(true);
+      toast.success("Soporte profesional subido.");
     } catch (e) {
       setError(getErrorMessage(e, "No se pudo subir el soporte profesional"));
     } finally {
@@ -272,28 +274,11 @@ export function PsychologistSettingsPage() {
         </p>
       ) : null}
 
-      {saved ? (
-        <p className="rounded-2xl border border-club-green/10 bg-club-green/10 px-4 py-3 text-sm text-club-green">
-          Perfil guardado.
-        </p>
-      ) : null}
-
-      {googleRedirectResult === "connected" ? (
-        <p className="rounded-2xl border border-club-green/10 bg-club-green/10 px-4 py-3 text-sm text-club-green">
-          Conectaste tu Google Calendar correctamente.
-        </p>
-      ) : null}
-      {googleRedirectResult === "error" ? (
-        <p className="rounded-2xl border border-red-200/80 bg-red-50/40 px-4 py-3 text-sm text-red-800">
-          No se pudo completar la conexión con Google. Intenta de nuevo.
-        </p>
-      ) : null}
-
       {loading ? (
         <div className="h-96 animate-pulse rounded-3xl bg-club-green/5" />
       ) : (
         <div className="grid gap-5 lg:grid-cols-[1fr,300px]">
-          <section className="space-y-5 rounded-3xl border border-club-green/10 bg-white/40 p-5 shadow-soft backdrop-blur">
+          <section className="space-y-5 rounded-3xl border border-club-green/10 bg-white/50 p-5 shadow-soft backdrop-blur">
             <label className="space-y-2">
               <span className="text-sm text-club-muted">Nombre visible</span>
               <input
@@ -353,7 +338,7 @@ export function PsychologistSettingsPage() {
               </label>
             </div>
 
-            <div className="rounded-3xl border border-club-green/10 bg-white/40 p-4">
+            <div className="rounded-3xl border border-club-green/10 bg-white/50 p-4">
               <p className="font-display text-2xl text-club-green">
                 Pagos gestionados por ti
               </p>
@@ -498,7 +483,7 @@ export function PsychologistSettingsPage() {
                   />
                 </label>
 
-                <label className="flex items-start gap-3 rounded-2xl border border-club-green/10 bg-white/45 p-4">
+                <label className="flex items-start gap-3 rounded-2xl border border-club-green/10 bg-white/50 p-4">
                   <input
                     type="checkbox"
                     checked={allowWhatsappAfterRequest}
@@ -520,7 +505,7 @@ export function PsychologistSettingsPage() {
               </div>
             </div>
 
-            <div className="rounded-3xl border border-club-green/10 bg-white/40 p-4">
+            <div className="rounded-3xl border border-club-green/10 bg-white/50 p-4">
               <p className="font-display text-2xl text-club-green">
                 Google Calendar
               </p>
@@ -574,7 +559,7 @@ export function PsychologistSettingsPage() {
               </p>
             </div>
 
-            <div className="rounded-3xl border border-club-green/10 bg-white/40 p-4">
+            <div className="rounded-3xl border border-club-green/10 bg-white/50 p-4">
               <p className="font-display text-2xl text-club-green">
                 Soporte profesional
               </p>
@@ -630,7 +615,7 @@ export function PsychologistSettingsPage() {
             </div>
           </section>
 
-          <aside className="rounded-3xl border border-club-green/10 bg-white/40 p-5 shadow-soft backdrop-blur lg:self-start">
+          <aside className="rounded-3xl border border-club-green/10 bg-white/50 p-5 shadow-soft backdrop-blur lg:self-start">
             <p className="text-xs font-medium uppercase tracking-wider text-club-muted">
               Vista previa
             </p>
