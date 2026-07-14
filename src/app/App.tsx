@@ -1,4 +1,4 @@
-﻿import { lazy, Suspense } from "react";
+import { lazy, Suspense } from "react";
 import type { ComponentType } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { MotionConfig } from "framer-motion";
@@ -57,6 +57,10 @@ const LoginPage = lazyPage(
 const RegisterPage = lazyPage(
   () => import("../pages/auth/RegisterPage"),
   "RegisterPage",
+);
+const ForgotPasswordPage = lazyPage(
+  () => import("../pages/auth/ForgotPasswordPage"),
+  "ForgotPasswordPage",
 );
 const OnboardingRolePage = lazyPage(
   () => import("../pages/auth/OnboardingRolePage"),
@@ -222,6 +226,7 @@ export default function App() {
             element={<RegisterPage role="psychologist" />}
           />
           <Route path="admin/login" element={<LoginPage role="admin" />} />
+          <Route path="forgot-password" element={<ForgotPasswordPage />} />
           <Route path="onboarding" element={<OnboardingRolePage />} />
         </Route>
 
