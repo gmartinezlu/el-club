@@ -1,4 +1,4 @@
-import { supabase } from "./client";
+import { getSupabaseClient } from "./client";
 
 const MAX_SIZE = 2 * 1024 * 1024;
 const ALLOWED_TYPES = new Set(["image/png", "image/jpeg"]);
@@ -16,6 +16,7 @@ export async function uploadAvatar(
 
   const ext = file.type === "image/png" ? "png" : "jpg";
   const path = `${userId}/avatar.${ext}`;
+  const supabase = getSupabaseClient();
 
   const { error } = await supabase.storage
     .from("avatars")
