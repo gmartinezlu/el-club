@@ -1,4 +1,4 @@
-﻿import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Save, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import {
@@ -10,6 +10,7 @@ import { useSessionStore } from "../../store/sessionStore";
 import { getErrorMessage } from "../../utils/errors";
 import { EmotionalGlass } from "../components/EmotionalGlass";
 import { PageTitle } from "../../components/ui/Typography";
+import { AvatarUpload } from "../../components/AvatarUpload";
 
 function splitList(value: string): string[] {
   return value
@@ -125,25 +126,22 @@ export function PatientSettingsPage() {
       ) : (
         <div className="grid gap-5 lg:grid-cols-[1fr,300px]">
           <EmotionalGlass className="space-y-5 p-6 md:p-8">
-            <div className="grid gap-5 md:grid-cols-2">
-              <label className="space-y-2">
-                <span className="text-sm text-club-muted">Nombre</span>
-                <input
-                  value={fullName}
-                  onChange={(e) => setFullName(e.target.value)}
-                  className="w-full rounded-2xl border border-club-green/10 bg-white/60 px-4 py-3 text-sm text-club-ink outline-none ring-club-green/10 focus:ring-2"
-                />
-              </label>
-              <label className="space-y-2">
-                <span className="text-sm text-club-muted">Avatar URL</span>
-                <input
-                  value={avatarUrl}
-                  onChange={(e) => setAvatarUrl(e.target.value)}
-                  placeholder="https://..."
-                  className="w-full rounded-2xl border border-club-green/10 bg-white/60 px-4 py-3 text-sm text-club-ink outline-none ring-club-green/10 focus:ring-2"
-                />
-              </label>
-            </div>
+            {user && (
+              <AvatarUpload
+                userId={user.id}
+                currentUrl={avatarUrl}
+                onUploaded={(url) => setAvatarUrl(url)}
+              />
+            )}
+
+            <label className="space-y-2">
+              <span className="text-sm text-club-muted">Nombre</span>
+              <input
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+                className="w-full rounded-2xl border border-club-green/10 bg-white/60 px-4 py-3 text-sm text-club-ink outline-none ring-club-green/10 focus:ring-2"
+              />
+            </label>
 
             <div className="grid gap-5 md:grid-cols-2">
               <label className="space-y-2">
