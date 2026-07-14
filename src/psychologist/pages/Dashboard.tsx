@@ -5,6 +5,7 @@ import {
   CalendarX,
   CheckCircle2,
   Clock,
+  Trash2,
   XCircle,
   ExternalLink,
   Link as LinkIcon,
@@ -12,6 +13,7 @@ import {
   Users,
   Video,
 } from "lucide-react";
+import { toast } from "sonner";
 import {
   updateAppointmentMeetUrl,
   updateAppointmentPsychologistNotes,
@@ -34,6 +36,7 @@ import type {
   PsychologistAppointmentView,
 } from "../../appointments/types";
 import { STATUS_HELP, STATUS_LABELS } from "../../appointments/utils";
+import { clearAppointmentHistory } from "../../appointments/history";
 import { useSessionStore } from "../../store/sessionStore";
 import { getErrorMessage } from "../../utils/errors";
 import { usePsychologistAppointments } from "../hooks/usePsychologistAppointments";
@@ -74,6 +77,7 @@ export function PsychologistDashboardPage() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [savingId, setSavingId] = useState<string | null>(null);
   const [actionError, setActionError] = useState<string | null>(null);
+  const [clearing, setClearing] = useState(false);
   const [now, setNow] = useState(() => new Date());
 
   useEffect(() => {
@@ -236,6 +240,21 @@ export function PsychologistDashboardPage() {
     }
   }
 
+  async function handleClearHistory() {
+    if (!psychologistId) return;
+    if (!window.confirm("¿Eliminar todas las citas completadas y canceladas del historial?")) return;
+    setClearing(true);
+    try {
+      const count = await clearAppointmentHistory(psychologistId);
+      toast.success(`${count} cita${count !== 1 ? "s" : ""} eliminada${count !== 1 ? "s" : ""} del historial.`);
+      await reload();
+    } catch {
+      toast.error("No se pudo limpiar el historial.");
+    } finally {
+      setClearing(false);
+    }
+  }
+
   return (
     <div className="space-y-8">
       <header className="space-y-2">
@@ -262,7 +281,7 @@ export function PsychologistDashboardPage() {
 
       <div className="grid gap-5 lg:grid-cols-[minmax(0,1.1fr),minmax(340px,0.9fr)]">
         <section className="space-y-4">
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             {FILTERS.map((item) => (
               <button
                 key={item.value}
@@ -278,6 +297,17 @@ export function PsychologistDashboardPage() {
                 {item.label}
               </button>
             ))}
+            {filter === "history" && filteredAppointments.length > 0 ? (
+              <button
+                type="button"
+                disabled={clearing}
+                onClick={() => void handleClearHistory()}
+                className="ml-auto inline-flex items-center gap-1.5 rounded-full border border-red-200/80 bg-red-50/40 px-3 py-1.5 text-xs text-red-700 transition hover:bg-red-100/60 disabled:opacity-60"
+              >
+                <Trash2 className="h-3.5 w-3.5" strokeWidth={1.5} />
+                {clearing ? "Limpiando..." : "Limpiar historial"}
+              </button>
+            ) : null}
           </div>
 
           {loading ? (
