@@ -1,4 +1,6 @@
-﻿export type ContentCardData = {
+﻿import { CardTitle } from "../ui/Typography";
+
+export type ContentCardData = {
   title: string;
   category: string;
   readTime: string;
@@ -20,9 +22,9 @@ export function ContentCard({ article }: { article: ContentCardData }) {
         <p className="text-xs uppercase tracking-[0.16em] text-club-muted">
           {article.category} Â· {article.readTime}
         </p>
-        <h3 className="mt-3 font-display text-2xl leading-tight text-club-green">
+        <CardTitle className="mt-3 text-2xl leading-tight">
           {article.title}
-        </h3>
+        </CardTitle>
       </div>
     </article>
   );

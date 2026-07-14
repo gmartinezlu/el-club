@@ -11,6 +11,7 @@ import {
 import { useSessionStore } from "../../store/sessionStore";
 import { getErrorMessage } from "../../utils/errors";
 import { usePsychologistAppointments } from "../hooks/usePsychologistAppointments";
+import { PageTitle } from "../../components/ui/Typography";
 
 export function PsychologistNotesPage() {
   const psychologistId = useSessionStore((s) => s.user?.id);
@@ -57,7 +58,7 @@ export function PsychologistNotesPage() {
     <div className="space-y-8">
       <header className="space-y-2">
         <p className="text-sm font-medium text-club-green">Seguimiento</p>
-        <h1 className="font-display text-4xl text-club-green">Notas</h1>
+        <PageTitle>Notas</PageTitle>
         <p className="max-w-2xl text-sm leading-relaxed text-club-muted">
           Observaciones privadas por sesión, ordenadas para preparar el próximo encuentro.
         </p>

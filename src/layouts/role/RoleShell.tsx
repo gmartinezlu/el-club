@@ -4,6 +4,8 @@ import type { LucideIcon } from "lucide-react";
 import type { AppRole } from "../../shared/auth/roles";
 import { ROLE_LABELS } from "../../shared/auth/roles";
 import { useSessionStore } from "../../store/sessionStore";
+import { OnboardingTour } from "../../components/onboarding/OnboardingTour";
+import { useOnboardingTour } from "../../components/onboarding/useOnboardingTour";
 
 type NavItem = {
   to: string;
@@ -31,6 +33,7 @@ export function RoleShell({
   const fullName = useSessionStore((s) => s.fullName);
   const avatarUrl = useSessionStore((s) => s.avatarUrl);
   const signOut = useSessionStore((s) => s.signOut);
+  const tour = useOnboardingTour(role);
   const displayLabel =
     role === "patient" ? fullName?.trim() || "Mi espacio" : ROLE_LABELS[role];
   const groupedNav = nav.reduce<Array<{ group: string; items: NavItem[] }>>(
@@ -141,6 +144,10 @@ export function RoleShell({
 
         <section className="min-w-0 pb-16">{children}</section>
       </div>
+
+      {tour.open && (role === "patient" || role === "psychologist") ? (
+        <OnboardingTour role={role} onClose={tour.dismiss} />
+      ) : null}
     </div>
   );
 }

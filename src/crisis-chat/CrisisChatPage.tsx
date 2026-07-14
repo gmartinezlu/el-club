@@ -13,9 +13,11 @@ import {
   fetchOrCreatePatientCrisisThread,
   fetchPsychologistCrisisThreads,
   sendCrisisMessage,
+  subscribeToCrisisMessages,
   type CrisisMessage,
   type CrisisThread,
 } from "./service";
+import { PageTitle } from "../components/ui/Typography";
 
 export function CrisisChatPage({ mode }: { mode: "patient" | "psychologist" }) {
   const user = useSessionStore((s) => s.user);
@@ -78,6 +80,17 @@ export function CrisisChatPage({ mode }: { mode: "patient" | "psychologist" }) {
     });
   }, [loadMessages]);
 
+  useEffect(() => {
+    if (!selectedThreadId) return;
+    return subscribeToCrisisMessages(selectedThreadId, (message) => {
+      setMessages((current) =>
+        current.some((m) => m.id === message.id)
+          ? current
+          : [...current, message],
+      );
+    });
+  }, [selectedThreadId]);
+
   async function onSend(event: FormEvent) {
     event.preventDefault();
     if (!user || !selectedThread || !body.trim()) return;
@@ -102,11 +115,9 @@ export function CrisisChatPage({ mode }: { mode: "patient" | "psychologist" }) {
     <div className="space-y-8">
       <header className="space-y-2">
         <p className="text-sm font-medium text-club-green">
-          Intervencion en crisis
+          Intervención en crisis
         </p>
-        <h1 className="font-display text-4xl text-club-green">
-          Chat de apoyo
-        </h1>
+        <PageTitle>Chat de apoyo</PageTitle>
         <p className="max-w-2xl text-sm leading-relaxed text-club-muted">
           Un canal breve para acompañamiento entre sesiones. No reemplaza
           servicios de emergencia.
@@ -117,7 +128,7 @@ export function CrisisChatPage({ mode }: { mode: "patient" | "psychologist" }) {
         <div className="flex items-start gap-2">
           <ShieldAlert className="mt-0.5 h-4 w-4" strokeWidth={1.5} />
           <p>
-            Si hay riesgo inmediato para ti o alguien mas, contacta servicios de
+            Si hay riesgo inmediato para ti o alguien más, contacta servicios de
             emergencia de tu ciudad. Este chat es apoyo complementario.
           </p>
         </div>
@@ -136,13 +147,13 @@ export function CrisisChatPage({ mode }: { mode: "patient" | "psychologist" }) {
           <MessageCircle className="h-5 w-5 text-club-green" strokeWidth={1.5} />
           <p className="mt-4 font-display text-2xl text-club-green">
             {mode === "patient"
-              ? "Aun no tienes un chat activo"
-              : "Aun no hay chats activos"}
+              ? "Aún no tienes un chat activo"
+              : "Aún no hay chats activos"}
           </p>
           <p className="mt-2 text-sm text-club-muted">
             {mode === "patient"
-              ? "El chat se activa cuando tienes una cita pagada o confirmada con una especialista."
-              : "Apareceran aqui las personas con relacion activa contigo."}
+              ? "El chat se activa cuando tienes una cita pagada o confirmada con tu psicóloga."
+              : "Aparecerán aquí las personas con relación activa contigo."}
           </p>
         </div>
       ) : (
@@ -174,7 +185,7 @@ export function CrisisChatPage({ mode }: { mode: "patient" | "psychologist" }) {
 
           <section className="rounded-3xl border border-club-green/10 bg-white/50 p-4 shadow-soft backdrop-blur md:p-5">
             <div className="border-b border-club-green/10 pb-4">
-              <p className="text-xs text-club-muted">Conversacion con</p>
+              <p className="text-xs text-club-muted">Conversación con</p>
               <h2 className="font-display text-3xl text-club-green">
                 {selectedThread
                   ? mode === "patient"
@@ -187,7 +198,7 @@ export function CrisisChatPage({ mode }: { mode: "patient" | "psychologist" }) {
             <div className="mt-5 max-h-[460px] min-h-[280px] space-y-3 overflow-y-auto pr-1">
               {messages.length === 0 ? (
                 <p className="rounded-2xl bg-white/55 p-4 text-sm text-club-muted">
-                  Aun no hay mensajes. Puedes iniciar con una descripcion breve
+                  Aún no hay mensajes. Puedes iniciar con una descripción breve
                   de lo que necesitas.
                 </p>
               ) : (

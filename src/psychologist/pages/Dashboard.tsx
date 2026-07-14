@@ -33,10 +33,11 @@ import type {
   AppointmentStatus,
   PsychologistAppointmentView,
 } from "../../appointments/types";
-import { STATUS_LABELS } from "../../appointments/utils";
+import { STATUS_HELP, STATUS_LABELS } from "../../appointments/utils";
 import { useSessionStore } from "../../store/sessionStore";
 import { getErrorMessage } from "../../utils/errors";
 import { usePsychologistAppointments } from "../hooks/usePsychologistAppointments";
+import { Highlight, PageTitle } from "../../components/ui/Typography";
 import {
   formatSessionDate,
   formatSessionRange,
@@ -78,7 +79,7 @@ export function PsychologistDashboardPage() {
   useEffect(() => {
     const timer = setInterval(() => {
       setNow(new Date());
-    }, 60000); // Refresh every minute
+    }, 15000); // Refresh every 15s to keep "hoy"/"próximas" al día
     return () => clearInterval(timer);
   }, []);
 
@@ -174,8 +175,8 @@ export function PsychologistDashboardPage() {
       if (appointment) {
         await createNotification({
           userId: appointment.patientId,
-          title: "Actualizacion de tu cita",
-          body: `Tu cita ahora esta ${STATUS_LABELS[status].toLowerCase()}.`,
+          title: "Actualización de tu cita",
+          body: `Tu cita ahora está ${STATUS_LABELS[status].toLowerCase()}.`,
         });
       }
 
@@ -239,9 +240,9 @@ export function PsychologistDashboardPage() {
     <div className="space-y-8">
       <header className="space-y-2">
         <p className="text-sm font-medium text-club-green">Agenda</p>
-        <h1 className="font-display text-4xl text-club-green">
-          Tu día, con claridad
-        </h1>
+        <PageTitle>
+          Tu día, con <Highlight>claridad</Highlight>
+        </PageTitle>
         <p className="max-w-2xl text-sm leading-relaxed text-club-muted">
           Citas, notas privadas y acceso a Meet en una sola vista de trabajo.
         </p>
@@ -473,8 +474,11 @@ function AppointmentWorkspace({
           <p className="mt-1 font-display text-2xl text-club-green">
             {STATUS_LABELS[appointment.status]}
           </p>
+          <p className="mt-1 text-sm text-club-muted">
+            {STATUS_HELP[appointment.status]}
+          </p>
           <p className="mt-2 text-sm leading-relaxed text-club-muted">
-            El pago se coordina directamente entre tu y la persona. EL CLUB no
+            El pago se coordina directamente entre tú y la persona. EL CLUB no
             procesa dinero de sesiones.
           </p>
         </div>
@@ -509,7 +513,7 @@ function AppointmentWorkspace({
         ) : null}
 
         <div className="space-y-3">
-          <p className="text-sm text-club-green">Gestion de la cita</p>
+          <p className="text-sm text-club-green">Gestión de la cita</p>
           <div className="flex flex-wrap gap-2">
             {canSetPendingPayment ? (
               <button
@@ -550,7 +554,11 @@ function AppointmentWorkspace({
               <button
                 type="button"
                 disabled={saving}
-                onClick={() => void onChangeStatus(appointment.id, "cancelled")}
+                onClick={() => {
+                  if (window.confirm("¿Seguro que quieres cancelar esta cita? Esta acción no se puede deshacer.")) {
+                    void onChangeStatus(appointment.id, "cancelled");
+                  }
+                }}
                 className="inline-flex items-center gap-2 rounded-2xl border border-red-200/80 bg-red-50/60 px-4 py-2 text-sm text-red-800 transition hover:bg-red-50 disabled:opacity-60"
               >
                 <XCircle className="h-4 w-4" strokeWidth={1.5} />

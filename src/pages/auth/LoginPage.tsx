@@ -15,7 +15,7 @@ const LOGIN_COPY: Record<
     registerTo: "/auth/patient/register",
   },
   psychologist: {
-    title: "Ingreso especialista",
+    title: "Ingreso psicóloga",
     description: "Accede a tu agenda, personas activas, notas y disponibilidad.",
     registerTo: "/auth/psychologist/register",
   },

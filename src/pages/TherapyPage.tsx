@@ -6,7 +6,7 @@ import { clubImages, specialists, therapyNeeds } from "../components/club/clubCo
 
 const therapySteps = [
   {
-    title: "Encuentra una especialista",
+    title: "Encuentra una psicóloga",
     text: "Explora perfiles verificados y elige a alguien que conecte con tu momento.",
     icon: HeartHandshake,
   },
@@ -31,7 +31,7 @@ export function TherapyPage() {
             <SectionHeader
               eyebrow="Terapia en EL CLUB"
               title="Acompañamiento profesional, sin perder la calma del club."
-              subtitle="Cuando necesitas hablar con una profesional, EL CLUB te conecta con especialistas verificadas dentro de una experiencia cálida, clara y segura."
+              subtitle="Cuando necesitas hablar con una psicóloga, EL CLUB te conecta con psicólogas verificadas dentro de una experiencia cálida, clara y segura."
             />
 
             <div className="flex flex-wrap gap-2">
@@ -102,7 +102,7 @@ export function TherapyPage() {
 
         <section className="mx-auto w-full max-w-6xl px-5 py-12 md:px-8">
           <SectionHeader
-            eyebrow="Especialistas"
+            eyebrow="Psicólogas"
             title="Personas reales, perfiles claros."
             subtitle="La terapia dentro de EL CLUB conserva rigor profesional, pero se presenta de forma cercana, humana y fácil de entender."
           />

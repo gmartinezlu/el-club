@@ -69,7 +69,8 @@ export const useSessionStore = create<SessionState>((set, get) => ({
             if (nextUser) {
               try {
                 await get().refreshRole();
-              } catch {
+              } catch (error) {
+                console.error("Failed to refresh role after auth change", error);
                 set({
                   role: null,
                   fullName: null,

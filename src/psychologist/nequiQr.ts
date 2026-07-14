@@ -1,6 +1,8 @@
 import { getSupabaseClient } from "../services/supabase/client";
 
 const BUCKET = "nequi-qr-codes";
+const MAX_SIZE = 2 * 1024 * 1024;
+const ALLOWED_TYPES = new Set(["image/png", "image/jpeg", "image/webp"]);
 
 function sanitizeFileName(fileName: string): string {
   return fileName
@@ -17,6 +19,13 @@ export async function uploadNequiQr({
   userId: string;
   file: File;
 }): Promise<string> {
+  if (!ALLOWED_TYPES.has(file.type)) {
+    throw new Error("Solo se permiten imágenes PNG, JPEG o WebP.");
+  }
+  if (file.size > MAX_SIZE) {
+    throw new Error("La imagen no debe superar 2 MB.");
+  }
+
   const supabase = getSupabaseClient();
   const extension = file.name.includes(".") ? file.name.split(".").pop() : "png";
   const safeName = sanitizeFileName(file.name) || `qr.${extension}`;

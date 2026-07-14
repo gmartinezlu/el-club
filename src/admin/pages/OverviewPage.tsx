@@ -1,4 +1,5 @@
 ﻿import { useAdminStats } from "../hooks/useAdminStats";
+import { PageTitle } from "../../components/ui/Typography";
 
 export function AdminOverviewPage() {
   const { appointmentCount, pendingPsychologists, loading, error } =
@@ -8,7 +9,7 @@ export function AdminOverviewPage() {
     <div className="space-y-10">
       <header className="space-y-2">
         <p className="text-sm font-medium text-club-green">Sistema</p>
-        <h1 className="font-display text-4xl text-club-green">Resumen</h1>
+        <PageTitle>Resumen</PageTitle>
         <p className="max-w-lg text-sm leading-relaxed text-club-muted">
           Visión general con datos reales de Supabase.
         </p>

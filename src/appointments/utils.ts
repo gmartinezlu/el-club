@@ -50,3 +50,13 @@ export const STATUS_LABELS: Record<AppointmentStatus, string> = {
   cancelled: "Cancelada",
   rejected: "Rechazada",
 };
+
+export const STATUS_HELP: Record<AppointmentStatus, string> = {
+  requested: "Esperando que la psicóloga confirme o rechace la solicitud.",
+  pending_payment: "Falta coordinar y confirmar el pago para agendar la sesión.",
+  confirmed: "La cita está agendada. El enlace de la sesión se habilitará más cerca de la fecha.",
+  meeting_enabled: "Ya puedes ingresar a la sesión desde el enlace disponible.",
+  completed: "La sesión ya se realizó.",
+  cancelled: "Esta cita fue cancelada.",
+  rejected: "Esta solicitud fue rechazada.",
+};

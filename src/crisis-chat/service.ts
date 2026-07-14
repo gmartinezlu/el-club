@@ -75,7 +75,7 @@ function mapThread(row: ThreadRow): CrisisThread {
     psychologistId: row.psychologist_id,
     patientName: row.patient?.profile?.full_name?.trim() || "Persona",
     psychologistName:
-      row.psychologist?.profile?.full_name?.trim() || "Tu especialista",
+      row.psychologist?.profile?.full_name?.trim() || "Tu psicóloga",
     updatedAt: row.updated_at,
   };
 }
@@ -161,6 +161,39 @@ export async function fetchCrisisMessages(
     body: row.body,
     createdAt: row.created_at,
   }));
+}
+
+export function subscribeToCrisisMessages(
+  threadId: string,
+  onMessage: (message: CrisisMessage) => void,
+): () => void {
+  const supabase = getSupabaseClient();
+  const channel = supabase
+    .channel(`crisis-chat-messages-${threadId}`)
+    .on(
+      "postgres_changes",
+      {
+        event: "INSERT",
+        schema: "public",
+        table: "crisis_chat_messages",
+        filter: `thread_id=eq.${threadId}`,
+      },
+      (payload) => {
+        const row = payload.new as MessageRow;
+        onMessage({
+          id: row.id,
+          threadId: row.thread_id,
+          senderId: row.sender_id,
+          body: row.body,
+          createdAt: row.created_at,
+        });
+      },
+    )
+    .subscribe();
+
+  return () => {
+    void supabase.removeChannel(channel);
+  };
 }
 
 export async function sendCrisisMessage({

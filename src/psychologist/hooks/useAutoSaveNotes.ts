@@ -1,4 +1,5 @@
 ﻿import { useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
 
 /**
  * Auto-save notes with debounce.
@@ -42,6 +43,7 @@ export function useAutoSaveNotes(
         setHasUnsavedChanges(false);
       } catch (error) {
         console.error("Failed to auto-save notes:", error);
+        toast.error("No se pudieron guardar las notas. Revisa tu conexión.");
         // Keep hasUnsavedChanges = true so user knows there's an issue
       } finally {
         setSaving(false);
@@ -54,6 +56,18 @@ export function useAutoSaveNotes(
       }
     };
   }, [notes, onSave, debounceMs]);
+
+  // Warn before leaving the tab/closing the browser with unsaved notes,
+  // since the debounced save (and the unmount flush) never gets to run.
+  useEffect(() => {
+    if (!hasUnsavedChanges) return;
+
+    function onBeforeUnload(event: BeforeUnloadEvent) {
+      event.preventDefault();
+    }
+    window.addEventListener("beforeunload", onBeforeUnload);
+    return () => window.removeEventListener("beforeunload", onBeforeUnload);
+  }, [hasUnsavedChanges]);
 
   // Update initial notes when appointment changes
   useEffect(() => {
@@ -71,7 +85,10 @@ export function useAutoSaveNotes(
         clearTimeout(debounceTimeoutRef.current);
       }
       if (notesRef.current !== lastSavedRef.current) {
-        void onSaveRef.current(notesRef.current);
+        void onSaveRef.current(notesRef.current).catch((error) => {
+          console.error("Failed to flush notes on unmount:", error);
+          toast.error("No se pudieron guardar las notas antes de salir.");
+        });
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps

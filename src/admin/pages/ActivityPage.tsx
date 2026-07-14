@@ -6,6 +6,7 @@ import {
   fetchAdminActivity,
   type AdminActivityRow,
 } from "../services/operations";
+import { PageTitle } from "../../components/ui/Typography";
 
 export function AdminActivityPage() {
   const [activity, setActivity] = useState<AdminActivityRow[]>([]);
@@ -42,7 +43,7 @@ export function AdminActivityPage() {
     <div className="space-y-8">
       <header className="space-y-2">
         <p className="text-sm font-medium text-club-green">Auditoría</p>
-        <h1 className="font-display text-4xl text-club-green">Actividad</h1>
+        <PageTitle>Actividad</PageTitle>
         <p className="max-w-2xl text-sm leading-relaxed text-club-muted">
           Últimos movimientos de citas y preparación de sesiones.
         </p>

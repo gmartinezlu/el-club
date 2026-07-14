@@ -6,6 +6,7 @@ import { useSessionStore } from "../../store/sessionStore";
 import { getErrorMessage } from "../../utils/errors";
 import { EmotionalGlass } from "../components/EmotionalGlass";
 import { PatientFlowSteps } from "../components/PatientFlowSteps";
+import { Highlight, PageTitle } from "../../components/ui/Typography";
 
 const CONCERNS = [
   "Ansiedad",
@@ -86,11 +87,9 @@ export function PatientOnboardingPage() {
 
       <header className="space-y-2">
         <p className="text-sm font-medium text-club-green">Bienvenida</p>
-        <h1 className="font-display text-4xl text-club-green">
-          Cuéntanos cómo llegas hoy
-        </h1>
+        <PageTitle>Cuéntanos cómo llegas hoy</PageTitle>
         <p className="max-w-2xl text-sm leading-relaxed text-club-muted">
-          Esto nos ayuda a hacer tu experiencia más humana desde el primer paso.
+          Esto nos ayuda a hacer tu experiencia <Highlight>más humana</Highlight> desde el primer paso.
         </p>
       </header>
 
@@ -136,7 +135,7 @@ export function PatientOnboardingPage() {
         <div className="grid gap-5 lg:grid-cols-3">
           <EmotionalGlass className="p-6">
             <label className="space-y-3">
-              <span className="font-display text-lg text-club-green">
+              <span className="text-base font-semibold text-club-green">
                 Mood hoy
               </span>
               <select
@@ -156,7 +155,7 @@ export function PatientOnboardingPage() {
           <EmotionalGlass className="p-6 lg:col-span-2">
             <div className="grid gap-4 md:grid-cols-2">
               <label className="space-y-3">
-                <span className="font-display text-lg text-club-green">
+                <span className="text-base font-semibold text-club-green">
                   Ritmo
                 </span>
                 <select
@@ -174,7 +173,7 @@ export function PatientOnboardingPage() {
               </label>
 
               <label className="space-y-3">
-                <span className="font-display text-lg text-club-green">
+                <span className="text-base font-semibold text-club-green">
                   Estilo
                 </span>
                 <select
@@ -196,7 +195,7 @@ export function PatientOnboardingPage() {
 
         <EmotionalGlass className="p-6">
           <label className="space-y-3">
-            <span className="font-display text-lg text-club-green">
+            <span className="text-base font-semibold text-club-green">
               Algo más que quieras nombrar
             </span>
             <textarea
@@ -214,7 +213,7 @@ export function PatientOnboardingPage() {
           disabled={saving || !mainConcern || emotionalGoals.length === 0}
           className="w-full rounded-2xl bg-club-green px-5 py-3 text-sm text-club-paper shadow-soft transition hover:opacity-95 disabled:opacity-60"
         >
-          {saving ? "Guardando..." : "Continuar a especialistas"}
+          {saving ? "Guardando..." : "Continuar a psicólogas"}
         </button>
       </form>
     </div>

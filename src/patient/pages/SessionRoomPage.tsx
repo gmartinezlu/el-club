@@ -13,6 +13,7 @@ import {
 import { EmotionalGlass } from "../components/EmotionalGlass";
 import { PatientFlowSteps } from "../components/PatientFlowSteps";
 import { EmptyState } from "../../components/ui/EmptyState";
+import { PageTitle } from "../../components/ui/Typography";
 
 export function SessionRoomPage() {
   const { appointmentId } = useParams<{ appointmentId: string }>();
@@ -90,9 +91,7 @@ export function SessionRoomPage() {
         transition={{ duration: 0.5, ease: "easeOut" }}
       >
         <p className="text-sm font-medium text-club-green">Sesión en El Club</p>
-        <h1 className="mt-2 font-display text-4xl text-club-green">
-          Tu espacio seguro
-        </h1>
+        <PageTitle className="mt-2">Tu espacio seguro</PageTitle>
         <p className="mt-3 text-sm leading-relaxed text-club-muted">
           Aquí queda preparada tu sesión: fecha, estado y acceso a Google Meet
           cuando el enlace esté habilitado.

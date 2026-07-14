@@ -11,6 +11,7 @@ import {
   Wind,
 } from "lucide-react";
 import { MarketingLayout } from "../layouts/MarketingLayout";
+import { Highlight } from "../components/ui/Typography";
 import { FeatureCard } from "../components/landing/FeatureCard";
 import { Section } from "../components/landing/Section";
 import { PsychologistCard } from "../components/landing/PsychologistCard";
@@ -78,7 +79,7 @@ export function LandingPage() {
     {
       title: "Solicitud y coordinación",
       description:
-        "Tu cita se solicita en El Club. El pago de terapia se coordina directamente con la profesional.",
+        "Tu cita se solicita en El Club. El pago de terapia se coordina directamente con la psicóloga.",
     },
     {
       title: "Sesión y seguimiento",
@@ -168,7 +169,7 @@ export function LandingPage() {
     {
       question: "¿El Club procesa pagos de terapia?",
       answer:
-        "No. Las sesiones se solicitan en El Club, pero el pago se coordina directamente con cada profesional, por lo general vía Nequi.",
+        "No. Las sesiones se solicitan en El Club, pero el pago se coordina directamente con cada psicóloga, por lo general vía Nequi.",
     },
   ];
 
@@ -369,7 +370,7 @@ export function LandingPage() {
                   El primer paso se siente ligero
                 </p>
                 <h3 className="font-display text-4xl leading-tight text-club-paper">
-                  Entra a El Club y comienza a respirar.
+                  Entra a El Club y comienza a <Highlight>respirar</Highlight>.
                 </h3>
                 <p className="text-sm leading-relaxed text-club-cream/75">
                   Terapia, recursos y acompañamiento emocional en un espacio

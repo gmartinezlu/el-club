@@ -29,7 +29,7 @@ export const clubImages = {
 export const ecosystemItems = [
   {
     title: "Terapia y acompañamiento profesional",
-    text: "Especialistas verificados cuando necesitas sostén claro y humano.",
+    text: "Psicólogas verificadas cuando necesitas sostén claro y humano.",
     icon: HeartHandshake,
   },
   {
@@ -208,7 +208,7 @@ export const therapyNeeds = [
 export const professionalBenefits = [
   "Perfil profesional dentro de una marca premium",
   "Agenda, notas y disponibilidad organizada",
-  "Métodos de pago configurados por cada profesional",
+  "Métodos de pago configurados por cada psicóloga",
   "Comunidad de bienestar con límites claros",
   "Aprobación y revisión profesional por admin",
   "Experiencia cálida para personas, no clínica fría",
