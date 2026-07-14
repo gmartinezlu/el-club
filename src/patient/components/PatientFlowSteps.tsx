@@ -1,11 +1,11 @@
-﻿import { Check } from "lucide-react";
+import { Check } from "lucide-react";
 
-const STEPS = ["Bienvenida", "Especialista", "Agenda", "Solicitud", "sesión"];
+const STEPS = ["Explorar", "Elegir horario", "Confirmar", "Pago"];
 
 export function PatientFlowSteps({ current }: { current: number }) {
   return (
     <div className="rounded-3xl border border-club-green/10 bg-white/50 p-3 shadow-soft backdrop-blur">
-      <ol className="grid gap-2 sm:grid-cols-5">
+      <ol className="grid gap-2 sm:grid-cols-4">
         {STEPS.map((step, index) => {
           const active = index === current;
           const done = index < current;
@@ -31,7 +31,11 @@ export function PatientFlowSteps({ current }: { current: number }) {
                       : "bg-club-green/10 text-club-green",
                 ].join(" ")}
               >
-                {done ? <Check className="h-3 w-3" strokeWidth={1.8} /> : index + 1}
+                {done ? (
+                  <Check className="h-3 w-3" strokeWidth={1.8} />
+                ) : (
+                  index + 1
+                )}
               </span>
               <span className="truncate">{step}</span>
             </li>
@@ -41,3 +45,4 @@ export function PatientFlowSteps({ current }: { current: number }) {
     </div>
   );
 }
+

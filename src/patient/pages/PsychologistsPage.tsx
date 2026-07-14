@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowLeft,
   CalendarPlus,
@@ -12,6 +12,7 @@ import {
   Sparkles,
   Users,
   WalletCards,
+  X,
 } from "lucide-react";
 import { EmptyState } from "../../components/ui/EmptyState";
 import { CardTitle, PageTitle } from "../../components/ui/Typography";
@@ -29,6 +30,12 @@ import { EmotionalGlass } from "../components/EmotionalGlass";
 import { PatientFlowSteps } from "../components/PatientFlowSteps";
 import { formatSessionDate, formatSessionRange } from "../utils/formatDate";
 
+const COP = new Intl.NumberFormat("es-CO", {
+  style: "currency",
+  currency: "COP",
+  maximumFractionDigits: 0,
+});
+
 export function PatientPsychologistsPage() {
   const navigate = useNavigate();
   const { psychologistId } = useParams<{ psychologistId?: string }>();
@@ -45,6 +52,7 @@ export function PatientPsychologistsPage() {
   const [loadingSlots, setLoadingSlots] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showConfirm, setShowConfirm] = useState(false);
 
   const selectedPsychologist = useMemo(
     () =>
@@ -57,13 +65,17 @@ export function PatientPsychologistsPage() {
 
   const isDetailView = Boolean(psychologistId);
 
+  const currentStep = showConfirm ? 2 : isDetailView ? 1 : 0;
+
   const loadPsychologists = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
       const data = await fetchApprovedPsychologists();
       setPsychologists(data);
-      setSelectedPsychologistId((current) => current ?? data[0]?.userId ?? null);
+      setSelectedPsychologistId(
+        (current) => current ?? data[0]?.userId ?? null,
+      );
     } catch (e) {
       setError(getErrorMessage(e, "No pudimos cargar las psicólogas"));
     } finally {
@@ -139,6 +151,7 @@ export function PatientPsychologistsPage() {
       navigate(`/patient/requests/${appointmentId}`);
     } catch (e) {
       setError(getErrorMessage(e, "No se pudo agendar la sesión"));
+      setShowConfirm(false);
     } finally {
       setSaving(false);
     }
@@ -146,7 +159,7 @@ export function PatientPsychologistsPage() {
 
   return (
     <div className="space-y-8">
-      <PatientFlowSteps current={isDetailView ? 2 : 1} />
+      <PatientFlowSteps current={currentStep} />
 
       <header className="space-y-2">
         {isDetailView ? (
@@ -189,7 +202,10 @@ export function PatientPsychologistsPage() {
           icon={SearchX}
           title="No encontramos este perfil"
           description="Puede que aún no esté aprobado o que haya sido pausado."
-          action={{ label: "Ver todas las psicólogas", to: "/patient/psychologists" }}
+          action={{
+            label: "Ver todas las psicólogas",
+            to: "/patient/psychologists",
+          }}
         />
       ) : (
         <div
@@ -227,14 +243,171 @@ export function PatientPsychologistsPage() {
               saving={saving}
               selectedPsychologist={selectedPsychologist}
               onSelectSlot={setSelectedSlot}
-              onSchedule={() => void scheduleSession()}
+              onSchedule={() => setShowConfirm(true)}
             />
           </section>
         </div>
       )}
+
+      <AnimatePresence>
+        {showConfirm && selectedPsychologist && selectedSlot ? (
+          <ConfirmationModal
+            psychologist={selectedPsychologist}
+            slot={selectedSlot}
+            saving={saving}
+            onConfirm={() => void scheduleSession()}
+            onCancel={() => setShowConfirm(false)}
+          />
+        ) : null}
+      </AnimatePresence>
     </div>
   );
 }
+
+/* ─── Confirmation modal ─────────────────────────────────────────── */
+
+function ConfirmationModal({
+  psychologist,
+  slot,
+  saving,
+  onConfirm,
+  onCancel,
+}: {
+  psychologist: PsychologistProfile;
+  slot: AvailabilitySlot;
+  saving: boolean;
+  onConfirm: () => void;
+  onCancel: () => void;
+}) {
+  const priceLine =
+    psychologist.sessionPriceCents != null
+      ? COP.format(psychologist.sessionPriceCents / 100)
+      : null;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-50 flex items-center justify-center bg-club-ink/40 p-4 backdrop-blur-sm"
+      onClick={(e) => {
+        if (e.target === e.currentTarget && !saving) onCancel();
+      }}
+    >
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95, y: 12 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.95, y: 12 }}
+        transition={{ type: "spring", duration: 0.4 }}
+        className="relative w-full max-w-lg overflow-hidden rounded-3xl border border-club-green/10 bg-club-paper shadow-xl"
+      >
+        <div className="bg-club-green px-6 py-5 text-club-paper">
+          <div className="flex items-start justify-between">
+            <div>
+              <p className="text-sm text-club-paper/70">Confirmar solicitud</p>
+              <h2 className="font-display text-3xl">Resumen de tu cita</h2>
+            </div>
+            {!saving ? (
+              <button
+                type="button"
+                onClick={onCancel}
+                className="rounded-full p-1 text-club-paper/60 transition hover:text-club-paper"
+              >
+                <X className="h-5 w-5" strokeWidth={1.5} />
+              </button>
+            ) : null}
+          </div>
+        </div>
+
+        <div className="grid gap-4 p-6">
+          <div className="grid gap-3 sm:grid-cols-2">
+            <SummaryItem label="Psicóloga" value={psychologist.fullName} />
+            <SummaryItem
+              label="Fecha"
+              value={formatSessionDate(slot.startsAt)}
+              capitalize
+            />
+            <SummaryItem
+              label="Horario"
+              value={formatSessionRange(slot.startsAt, slot.endsAt)}
+            />
+            {priceLine ? (
+              <SummaryItem label="Valor de la sesión" value={priceLine} />
+            ) : null}
+          </div>
+
+          <div className="rounded-2xl border border-club-green/10 bg-club-green/5 p-4">
+            <p className="text-xs font-medium text-club-green">
+              ¿Cómo funciona el pago?
+            </p>
+            <p className="mt-1 text-sm leading-relaxed text-club-muted">
+              EL CLUB no procesa pagos de sesiones. Una vez confirmes, la
+              psicóloga te compartirá sus métodos de pago y coordinarás
+              directamente con ella.
+            </p>
+            {psychologist.paymentMethods?.length ? (
+              <div className="mt-2 flex flex-wrap gap-1.5">
+                {psychologist.paymentMethods.map((method) => (
+                  <span
+                    key={method}
+                    className="rounded-full bg-white/70 px-2.5 py-0.5 text-xs text-club-green"
+                  >
+                    {method}
+                  </span>
+                ))}
+              </div>
+            ) : null}
+          </div>
+
+          <div className="flex gap-3 pt-2">
+            <button
+              type="button"
+              disabled={saving}
+              onClick={onCancel}
+              className="flex-1 rounded-2xl border border-club-green/15 bg-white/70 px-5 py-3 text-sm text-club-green transition hover:bg-white/90 disabled:opacity-60"
+            >
+              Volver
+            </button>
+            <button
+              type="button"
+              disabled={saving}
+              onClick={onConfirm}
+              className="flex-1 rounded-2xl bg-club-green px-5 py-3 text-sm text-club-paper shadow-soft transition hover:opacity-95 disabled:opacity-60"
+            >
+              {saving ? "Solicitando..." : "Confirmar solicitud"}
+            </button>
+          </div>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+function SummaryItem({
+  label,
+  value,
+  capitalize,
+}: {
+  label: string;
+  value: string;
+  capitalize?: boolean;
+}) {
+  return (
+    <div className="rounded-2xl border border-club-green/10 bg-white/50 p-3">
+      <p className="text-xs text-club-muted">{label}</p>
+      <p
+        className={[
+          "mt-0.5 text-sm font-medium text-club-ink",
+          capitalize ? "capitalize" : "",
+        ].join(" ")}
+      >
+        {value}
+      </p>
+    </div>
+  );
+}
+
+/* ─── Existing sub-components (unchanged logic, kept inline) ───── */
 
 function PsychologistOption({
   psychologist,
@@ -247,6 +420,11 @@ function PsychologistOption({
   index: number;
   onSelect: () => void;
 }) {
+  const priceLine =
+    psychologist.sessionPriceCents != null
+      ? COP.format(psychologist.sessionPriceCents / 100)
+      : null;
+
   return (
     <motion.article
       initial={{ opacity: 0, y: 10 }}
@@ -270,6 +448,11 @@ function PsychologistOption({
               <p className="mt-1 max-w-xl text-sm leading-relaxed text-club-muted">
                 {psychologist.bio}
               </p>
+              {priceLine ? (
+                <p className="mt-1.5 text-sm font-medium text-club-brass">
+                  {priceLine} / sesión
+                </p>
+              ) : null}
             </div>
           </div>
           {selected ? (
@@ -320,6 +503,11 @@ function PsychologistFullProfile({
 }: {
   psychologist: PsychologistProfile;
 }) {
+  const priceLine =
+    psychologist.sessionPriceCents != null
+      ? COP.format(psychologist.sessionPriceCents / 100)
+      : null;
+
   return (
     <EmotionalGlass className="overflow-hidden p-0">
       <div className="bg-club-green px-6 py-8 text-club-paper md:px-8">
@@ -349,8 +537,8 @@ function PsychologistFullProfile({
           />
           <MiniFact
             icon={<WalletCards className="h-4 w-4" strokeWidth={1.5} />}
-            label="Pago"
-            value="Directo con la psicóloga"
+            label="Valor"
+            value={priceLine ?? "Consultar con la psicóloga"}
           />
         </div>
 
@@ -360,8 +548,8 @@ function PsychologistFullProfile({
           </CardTitle>
           <p className="mt-2 text-sm leading-relaxed text-club-muted">
             EL CLUB no procesa pagos de sesiones. Una vez solicites tu cita, la
-            psicóloga te compartirá sus métodos de pago y confirmará contigo
-            los detalles.
+            psicóloga te compartirá sus métodos de pago y confirmará contigo los
+            detalles.
           </p>
           {psychologist.paymentMethods?.length ? (
             <div className="mt-3 flex flex-wrap gap-2">
@@ -378,9 +566,7 @@ function PsychologistFullProfile({
         </section>
 
         <section>
-          <CardTitle className="text-2xl">
-            Áreas de acompañamiento
-          </CardTitle>
+          <CardTitle className="text-2xl">Áreas de acompañamiento</CardTitle>
           <div className="mt-3 flex flex-wrap gap-2">
             {psychologist.specialties.map((item) => (
               <span
@@ -401,9 +587,7 @@ function PsychologistFullProfile({
         </section>
 
         <section className="rounded-3xl border border-club-green/10 bg-white/50 p-5">
-          <CardTitle className="text-2xl">
-            Cómo se siente este espacio
-          </CardTitle>
+          <CardTitle className="text-2xl">Cómo se siente este espacio</CardTitle>
           <p className="mt-2 text-sm leading-relaxed text-club-muted">
             Una primera sesión para ordenar lo que estás viviendo, hacer
             preguntas con tranquilidad y decidir el ritmo de acompañamiento que
@@ -439,8 +623,8 @@ function BookingPanel({
         <p className="font-display text-2xl">Reservar sesión</p>
       </div>
       <p className="mt-2 text-sm text-club-muted">
-        Elige un horario disponible. La psicóloga revisará tu solicitud y el
-        pago se acordará directamente con ella.
+        Elige un horario disponible. Antes de confirmar verás un resumen con
+        todos los detalles.
       </p>
 
       {selectedPsychologist ? (
@@ -449,9 +633,15 @@ function BookingPanel({
           <p className="mt-1 font-display text-2xl text-club-green">
             {selectedPsychologist.fullName}
           </p>
-          <p className="mt-1 text-xs text-club-muted">
-            Coordinar pago con la psicóloga
-          </p>
+          {selectedPsychologist.sessionPriceCents != null ? (
+            <p className="mt-1 text-sm font-medium text-club-brass">
+              {COP.format(selectedPsychologist.sessionPriceCents / 100)} / sesión
+            </p>
+          ) : (
+            <p className="mt-1 text-xs text-club-muted">
+              Coordinar valor con la psicóloga
+            </p>
+          )}
         </div>
       ) : null}
 
@@ -497,11 +687,11 @@ function BookingPanel({
         onClick={onSchedule}
         className="mt-5 w-full rounded-2xl bg-club-green px-5 py-3 text-sm text-club-paper shadow-soft transition hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-60"
       >
-        {saving ? "Solicitando..." : "Solicitar cita"}
+        Revisar y confirmar
       </button>
       {!selectedSlot && !saving ? (
         <p className="mt-2 text-xs text-club-muted">
-          Selecciona un horario disponible para poder solicitar la cita.
+          Selecciona un horario para continuar.
         </p>
       ) : null}
     </EmotionalGlass>
@@ -516,9 +706,7 @@ function ProfileAvatar({
   size: "md" | "lg";
 }) {
   const className =
-    size === "lg"
-      ? "h-24 w-24 rounded-[2rem]"
-      : "h-14 w-14 rounded-3xl";
+    size === "lg" ? "h-24 w-24 rounded-[2rem]" : "h-14 w-14 rounded-3xl";
 
   if (profile.avatarUrl) {
     return (
@@ -558,3 +746,4 @@ function MiniFact({
     </div>
   );
 }
+
