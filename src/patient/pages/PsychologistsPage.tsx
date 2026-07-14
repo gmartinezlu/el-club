@@ -5,8 +5,10 @@ import {
   ArrowLeft,
   CalendarPlus,
   Check,
+  CheckCircle,
   Clock,
   Languages,
+  MessageCircle,
   SearchX,
   ShieldCheck,
   Sparkles,
@@ -36,6 +38,13 @@ const COP = new Intl.NumberFormat("es-CO", {
   maximumFractionDigits: 0,
 });
 
+function buildWhatsAppUrl(phone: string, psychName: string, date: string, time: string): string {
+  const clean = phone.replace(/[^+\d]/g, "");
+  const num = clean.startsWith("+") ? clean.slice(1) : clean;
+  const text = `Hola ${psychName}, acabo de solicitar una cita en El Club para el ${date} a las ${time}. ¿Me podrías indicar cómo realizar el pago?`;
+  return `https://wa.me/${num}?text=${encodeURIComponent(text)}`;
+}
+
 export function PatientPsychologistsPage() {
   const navigate = useNavigate();
   const { psychologistId } = useParams<{ psychologistId?: string }>();
@@ -53,6 +62,7 @@ export function PatientPsychologistsPage() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showConfirm, setShowConfirm] = useState(false);
+  const [bookedId, setBookedId] = useState<string | null>(null);
 
   const selectedPsychologist = useMemo(
     () =>
@@ -65,7 +75,7 @@ export function PatientPsychologistsPage() {
 
   const isDetailView = Boolean(psychologistId);
 
-  const currentStep = showConfirm ? 2 : isDetailView ? 1 : 0;
+  const currentStep = bookedId ? 3 : showConfirm ? 2 : isDetailView ? 1 : 0;
 
   const loadPsychologists = useCallback(async () => {
     setLoading(true);
@@ -148,13 +158,21 @@ export function PatientPsychologistsPage() {
           body: "Una persona solicitó un horario. Revisa la solicitud y coordina el pago directamente.",
         }),
       ]);
-      navigate(`/patient/requests/${appointmentId}`);
+      setBookedId(appointmentId);
     } catch (e) {
       setError(getErrorMessage(e, "No se pudo agendar la sesión"));
       setShowConfirm(false);
     } finally {
       setSaving(false);
     }
+  }
+
+  function closeModalAndNavigate() {
+    if (bookedId) {
+      navigate(`/patient/requests/${bookedId}`);
+    }
+    setShowConfirm(false);
+    setBookedId(null);
   }
 
   return (
@@ -255,8 +273,15 @@ export function PatientPsychologistsPage() {
             psychologist={selectedPsychologist}
             slot={selectedSlot}
             saving={saving}
+            booked={Boolean(bookedId)}
             onConfirm={() => void scheduleSession()}
-            onCancel={() => setShowConfirm(false)}
+            onCancel={() => {
+              if (!saving) {
+                setShowConfirm(false);
+                setBookedId(null);
+              }
+            }}
+            onDone={closeModalAndNavigate}
           />
         ) : null}
       </AnimatePresence>
@@ -270,19 +295,39 @@ function ConfirmationModal({
   psychologist,
   slot,
   saving,
+  booked,
   onConfirm,
   onCancel,
+  onDone,
 }: {
   psychologist: PsychologistProfile;
   slot: AvailabilitySlot;
   saving: boolean;
+  booked: boolean;
   onConfirm: () => void;
   onCancel: () => void;
+  onDone: () => void;
 }) {
   const priceLine =
     psychologist.sessionPriceCents != null
       ? COP.format(psychologist.sessionPriceCents / 100)
       : null;
+
+  const dateStr = formatSessionDate(slot.startsAt);
+  const timeStr = formatSessionRange(slot.startsAt, slot.endsAt);
+
+  const hasWhatsApp =
+    psychologist.allowWhatsappAfterRequest !== false &&
+    Boolean(psychologist.professionalWhatsapp?.trim());
+
+  const whatsAppUrl = hasWhatsApp
+    ? buildWhatsAppUrl(
+        psychologist.professionalWhatsapp!,
+        psychologist.fullName,
+        dateStr,
+        timeStr,
+      )
+    : null;
 
   return (
     <motion.div
@@ -291,7 +336,10 @@ function ConfirmationModal({
       exit={{ opacity: 0 }}
       className="fixed inset-0 z-50 flex items-center justify-center bg-club-ink/40 p-4 backdrop-blur-sm"
       onClick={(e) => {
-        if (e.target === e.currentTarget && !saving) onCancel();
+        if (e.target === e.currentTarget && !saving) {
+          if (booked) onDone();
+          else onCancel();
+        }
       }}
     >
       <motion.div
@@ -301,83 +349,190 @@ function ConfirmationModal({
         transition={{ type: "spring", duration: 0.4 }}
         className="relative w-full max-w-lg overflow-hidden rounded-3xl border border-club-green/10 bg-club-paper shadow-xl"
       >
-        <div className="bg-club-green px-6 py-5 text-club-paper">
-          <div className="flex items-start justify-between">
-            <div>
-              <p className="text-sm text-club-paper/70">Confirmar solicitud</p>
-              <h2 className="font-display text-3xl">Resumen de tu cita</h2>
+        {booked ? (
+          /* ─── Success / next-steps view ─── */
+          <>
+            <div className="bg-club-green px-6 py-5 text-club-paper">
+              <div className="flex items-start justify-between">
+                <div className="flex items-center gap-3">
+                  <CheckCircle className="h-7 w-7 text-club-paper/90" strokeWidth={1.5} />
+                  <div>
+                    <p className="text-sm text-club-paper/70">Solicitud enviada</p>
+                    <h2 className="font-display text-3xl">¡Listo!</h2>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={onDone}
+                  className="rounded-full p-1 text-club-paper/60 transition hover:text-club-paper"
+                >
+                  <X className="h-5 w-5" strokeWidth={1.5} />
+                </button>
+              </div>
             </div>
-            {!saving ? (
+
+            <div className="grid gap-4 p-6">
+              <div className="grid gap-3 sm:grid-cols-2">
+                <SummaryItem label="Psicóloga" value={psychologist.fullName} />
+                <SummaryItem label="Fecha" value={dateStr} capitalize />
+                <SummaryItem label="Horario" value={timeStr} />
+                {priceLine ? (
+                  <SummaryItem label="Valor" value={priceLine} />
+                ) : null}
+              </div>
+
+              <div className="rounded-2xl border border-club-green/10 bg-club-green/5 p-4">
+                <p className="text-xs font-medium text-club-green">
+                  Siguiente paso: coordina tu pago
+                </p>
+                <p className="mt-1 text-sm leading-relaxed text-club-muted">
+                  {hasWhatsApp
+                    ? `Escríbele a ${psychologist.fullName} por WhatsApp para coordinar el pago y confirmar tu cita.`
+                    : `${psychologist.fullName} se pondrá en contacto contigo para coordinar el pago y confirmar tu cita.`}
+                </p>
+              </div>
+
+              {hasWhatsApp && whatsAppUrl ? (
+                <a
+                  href={whatsAppUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-center gap-2 rounded-2xl bg-[#25D366] px-5 py-3.5 text-sm font-medium text-white shadow-soft transition hover:opacity-90"
+                >
+                  <MessageCircle className="h-5 w-5" strokeWidth={1.5} />
+                  Escribir por WhatsApp
+                </a>
+              ) : null}
+
+              {psychologist.paymentMethods?.length ? (
+                <div className="rounded-2xl border border-club-green/10 bg-white/50 p-4">
+                  <p className="text-xs text-club-muted">Métodos de pago aceptados</p>
+                  <div className="mt-2 flex flex-wrap gap-1.5">
+                    {psychologist.paymentMethods.map((method) => (
+                      <span
+                        key={method}
+                        className="rounded-full bg-club-green/10 px-2.5 py-0.5 text-xs text-club-green"
+                      >
+                        {method}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              ) : null}
+
+              {psychologist.nequiNumber || psychologist.nequiQrUrl ? (
+                <div className="rounded-2xl border border-club-green/10 bg-white/50 p-4">
+                  <p className="text-xs text-club-muted">Nequi</p>
+                  <div className="mt-2 flex flex-wrap items-center gap-4">
+                    {psychologist.nequiNumber ? (
+                      <p className="text-sm font-medium text-club-ink">
+                        {psychologist.nequiNumber}
+                      </p>
+                    ) : null}
+                    {psychologist.nequiQrUrl ? (
+                      <img
+                        src={psychologist.nequiQrUrl}
+                        alt="QR de Nequi"
+                        className="h-24 w-24 rounded-2xl border border-club-green/10 object-cover"
+                      />
+                    ) : null}
+                  </div>
+                </div>
+              ) : null}
+
+              {psychologist.paymentInstructions ? (
+                <div className="rounded-2xl border border-club-green/10 bg-white/50 p-4">
+                  <p className="text-xs text-club-muted">Instrucciones de pago</p>
+                  <p className="mt-1 whitespace-pre-line text-sm leading-relaxed text-club-ink">
+                    {psychologist.paymentInstructions}
+                  </p>
+                </div>
+              ) : null}
+
               <button
                 type="button"
-                onClick={onCancel}
-                className="rounded-full p-1 text-club-paper/60 transition hover:text-club-paper"
+                onClick={onDone}
+                className="w-full rounded-2xl border border-club-green/15 bg-white/70 px-5 py-3 text-sm text-club-green transition hover:bg-white/90"
               >
-                <X className="h-5 w-5" strokeWidth={1.5} />
+                Ver mi solicitud
               </button>
-            ) : null}
-          </div>
-        </div>
-
-        <div className="grid gap-4 p-6">
-          <div className="grid gap-3 sm:grid-cols-2">
-            <SummaryItem label="Psicóloga" value={psychologist.fullName} />
-            <SummaryItem
-              label="Fecha"
-              value={formatSessionDate(slot.startsAt)}
-              capitalize
-            />
-            <SummaryItem
-              label="Horario"
-              value={formatSessionRange(slot.startsAt, slot.endsAt)}
-            />
-            {priceLine ? (
-              <SummaryItem label="Valor de la sesión" value={priceLine} />
-            ) : null}
-          </div>
-
-          <div className="rounded-2xl border border-club-green/10 bg-club-green/5 p-4">
-            <p className="text-xs font-medium text-club-green">
-              ¿Cómo funciona el pago?
-            </p>
-            <p className="mt-1 text-sm leading-relaxed text-club-muted">
-              EL CLUB no procesa pagos de sesiones. Una vez confirmes, la
-              psicóloga te compartirá sus métodos de pago y coordinarás
-              directamente con ella.
-            </p>
-            {psychologist.paymentMethods?.length ? (
-              <div className="mt-2 flex flex-wrap gap-1.5">
-                {psychologist.paymentMethods.map((method) => (
-                  <span
-                    key={method}
-                    className="rounded-full bg-white/70 px-2.5 py-0.5 text-xs text-club-green"
+            </div>
+          </>
+        ) : (
+          /* ─── Confirmation view (original) ─── */
+          <>
+            <div className="bg-club-green px-6 py-5 text-club-paper">
+              <div className="flex items-start justify-between">
+                <div>
+                  <p className="text-sm text-club-paper/70">Confirmar solicitud</p>
+                  <h2 className="font-display text-3xl">Resumen de tu cita</h2>
+                </div>
+                {!saving ? (
+                  <button
+                    type="button"
+                    onClick={onCancel}
+                    className="rounded-full p-1 text-club-paper/60 transition hover:text-club-paper"
                   >
-                    {method}
-                  </span>
-                ))}
+                    <X className="h-5 w-5" strokeWidth={1.5} />
+                  </button>
+                ) : null}
               </div>
-            ) : null}
-          </div>
+            </div>
 
-          <div className="flex gap-3 pt-2">
-            <button
-              type="button"
-              disabled={saving}
-              onClick={onCancel}
-              className="flex-1 rounded-2xl border border-club-green/15 bg-white/70 px-5 py-3 text-sm text-club-green transition hover:bg-white/90 disabled:opacity-60"
-            >
-              Volver
-            </button>
-            <button
-              type="button"
-              disabled={saving}
-              onClick={onConfirm}
-              className="flex-1 rounded-2xl bg-club-green px-5 py-3 text-sm text-club-paper shadow-soft transition hover:opacity-95 disabled:opacity-60"
-            >
-              {saving ? "Solicitando..." : "Confirmar solicitud"}
-            </button>
-          </div>
-        </div>
+            <div className="grid gap-4 p-6">
+              <div className="grid gap-3 sm:grid-cols-2">
+                <SummaryItem label="Psicóloga" value={psychologist.fullName} />
+                <SummaryItem label="Fecha" value={dateStr} capitalize />
+                <SummaryItem label="Horario" value={timeStr} />
+                {priceLine ? (
+                  <SummaryItem label="Valor de la sesión" value={priceLine} />
+                ) : null}
+              </div>
+
+              <div className="rounded-2xl border border-club-green/10 bg-club-green/5 p-4">
+                <p className="text-xs font-medium text-club-green">
+                  ¿Cómo funciona el pago?
+                </p>
+                <p className="mt-1 text-sm leading-relaxed text-club-muted">
+                  EL CLUB no procesa pagos de sesiones. Una vez confirmes, la
+                  psicóloga te compartirá sus métodos de pago y coordinarás
+                  directamente con ella.
+                </p>
+                {psychologist.paymentMethods?.length ? (
+                  <div className="mt-2 flex flex-wrap gap-1.5">
+                    {psychologist.paymentMethods.map((method) => (
+                      <span
+                        key={method}
+                        className="rounded-full bg-white/70 px-2.5 py-0.5 text-xs text-club-green"
+                      >
+                        {method}
+                      </span>
+                    ))}
+                  </div>
+                ) : null}
+              </div>
+
+              <div className="flex gap-3 pt-2">
+                <button
+                  type="button"
+                  disabled={saving}
+                  onClick={onCancel}
+                  className="flex-1 rounded-2xl border border-club-green/15 bg-white/70 px-5 py-3 text-sm text-club-green transition hover:bg-white/90 disabled:opacity-60"
+                >
+                  Volver
+                </button>
+                <button
+                  type="button"
+                  disabled={saving}
+                  onClick={onConfirm}
+                  className="flex-1 rounded-2xl bg-club-green px-5 py-3 text-sm text-club-paper shadow-soft transition hover:opacity-95 disabled:opacity-60"
+                >
+                  {saving ? "Solicitando..." : "Confirmar solicitud"}
+                </button>
+              </div>
+            </div>
+          </>
+        )}
       </motion.div>
     </motion.div>
   );
@@ -746,4 +901,3 @@ function MiniFact({
     </div>
   );
 }
-

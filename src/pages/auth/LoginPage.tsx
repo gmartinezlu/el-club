@@ -1,4 +1,4 @@
-﻿import { useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import type { AppRole } from "../../shared/auth/roles";
 import { getSupabaseClient } from "../../services/supabase/client";
@@ -105,9 +105,17 @@ export function LoginPage({ role }: { role: AppRole }) {
         </div>
 
         <div className="space-y-2">
-          <label className="text-sm text-club-muted" htmlFor="password">
-            Contraseña
-          </label>
+          <div className="flex items-center justify-between">
+            <label className="text-sm text-club-muted" htmlFor="password">
+              Contraseña
+            </label>
+            <Link
+              to="/auth/forgot-password"
+              className="text-xs text-club-green hover:underline"
+            >
+              ¿Olvidaste tu contraseña?
+            </Link>
+          </div>
           <input
             id="password"
             className="w-full rounded-2xl border border-club-green/10 bg-white/60 px-4 py-3 outline-none ring-club-green/10 focus:ring-2"

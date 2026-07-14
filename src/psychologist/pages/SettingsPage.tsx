@@ -1,4 +1,4 @@
-﻿import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Save, Sparkles } from "lucide-react";
 import { toast } from "sonner";
@@ -20,6 +20,7 @@ import {
   uploadPsychologistDocument,
 } from "../documents";
 import { uploadNequiQr } from "../nequiQr";
+import { AvatarUpload } from "../../components/AvatarUpload";
 
 function splitList(value: string): string[] {
   return value
@@ -136,8 +137,6 @@ export function PsychologistSettingsPage() {
     });
   }, [loadGoogleStatus]);
 
-  // Limpia el parámetro ?google= de la URL tras leerlo, así un refresh
-  // de la página no vuelve a mostrar el toast de éxito/error.
   useEffect(() => {
     if (!googleRedirectResult) return;
     if (googleRedirectResult === "connected") {
@@ -280,22 +279,20 @@ export function PsychologistSettingsPage() {
       ) : (
         <div className="grid gap-5 lg:grid-cols-[1fr,300px]">
           <section className="space-y-5 rounded-3xl border border-club-green/10 bg-white/50 p-5 shadow-soft backdrop-blur">
+            {userId && (
+              <AvatarUpload
+                userId={userId}
+                currentUrl={avatarUrl}
+                onUploaded={(url) => setAvatarUrl(url)}
+              />
+            )}
+
             <label className="space-y-2">
               <span className="text-sm text-club-muted">Nombre visible</span>
               <input
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
                 placeholder="Dra. Camila Rodríguez"
-                className="w-full rounded-2xl border border-club-green/10 bg-white/60 px-4 py-3 text-sm text-club-ink outline-none ring-club-green/10 focus:ring-2"
-              />
-            </label>
-
-            <label className="space-y-2">
-              <span className="text-sm text-club-muted">Foto / avatar URL</span>
-              <input
-                value={avatarUrl}
-                onChange={(e) => setAvatarUrl(e.target.value)}
-                placeholder="https://..."
                 className="w-full rounded-2xl border border-club-green/10 bg-white/60 px-4 py-3 text-sm text-club-ink outline-none ring-club-green/10 focus:ring-2"
               />
             </label>
