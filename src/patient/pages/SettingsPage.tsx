@@ -27,11 +27,13 @@ export function PatientSettingsPage() {
   const user = useSessionStore((s) => s.user);
   const fullNameSession = useSessionStore((s) => s.fullName);
   const avatarUrlSession = useSessionStore((s) => s.avatarUrl);
+  const whatsappPhoneSession = useSessionStore((s) => s.whatsappPhone);
   const refreshRole = useSessionStore((s) => s.refreshRole);
   const signOut = useSessionStore((s) => s.signOut);
 
   const [fullName, setFullName] = useState(fullNameSession ?? "");
   const [avatarUrl, setAvatarUrl] = useState(avatarUrlSession ?? "");
+  const [whatsappPhone, setWhatsappPhone] = useState(whatsappPhoneSession ?? "");
   const [mainConcern, setMainConcern] = useState("");
   const [emotionalGoals, setEmotionalGoals] = useState("");
   const [therapyPreferences, setTherapyPreferences] = useState("");
@@ -55,6 +57,7 @@ export function PatientSettingsPage() {
       const onboarding = await fetchPatientOnboarding(user.id);
       setFullName(fullNameSession ?? "");
       setAvatarUrl(avatarUrlSession ?? "");
+      setWhatsappPhone(whatsappPhoneSession ?? "");
       setMainConcern(onboarding?.mainConcern ?? "");
       setEmotionalGoals(joinList(onboarding?.emotionalGoals ?? []));
       setTherapyPreferences(joinList(onboarding?.therapyPreferences ?? []));
@@ -67,7 +70,7 @@ export function PatientSettingsPage() {
     } finally {
       setLoading(false);
     }
-  }, [avatarUrlSession, fullNameSession, user]);
+  }, [avatarUrlSession, fullNameSession, user, whatsappPhoneSession]);
 
   useEffect(() => {
     queueMicrotask(() => {
@@ -84,6 +87,7 @@ export function PatientSettingsPage() {
         userId: user.id,
         fullName: fullName.trim() || null,
         avatarUrl: avatarUrl.trim() || null,
+        whatsappPhone: whatsappPhone.trim() || null,
       });
       await savePatientOnboarding({
         patientId: user.id,
@@ -141,6 +145,21 @@ export function PatientSettingsPage() {
                 onChange={(e) => setFullName(e.target.value)}
                 className="w-full rounded-2xl border border-club-green/10 bg-white/60 px-4 py-3 text-sm text-club-ink outline-none ring-club-green/10 focus:ring-2"
               />
+            </label>
+
+            <label className="space-y-2">
+              <span className="text-sm text-club-muted">
+                WhatsApp para recordatorios
+              </span>
+              <input
+                value={whatsappPhone}
+                onChange={(e) => setWhatsappPhone(e.target.value)}
+                placeholder="+57 300 000 0000"
+                className="w-full rounded-2xl border border-club-green/10 bg-white/60 px-4 py-3 text-sm text-club-ink outline-none ring-club-green/10 focus:ring-2"
+              />
+              <span className="block text-xs text-club-muted">
+                Se usará solo para recordatorios de citas si activas WhatsApp.
+              </span>
             </label>
 
             <div className="grid gap-5 md:grid-cols-2">

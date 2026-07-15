@@ -14,6 +14,7 @@ type SessionState = {
   role: AppRole | null;
   fullName: string | null;
   avatarUrl: string | null;
+  whatsappPhone: string | null;
   init: () => Promise<void>;
   refreshRole: () => Promise<void>;
   signOut: () => Promise<void>;
@@ -29,6 +30,7 @@ export const useSessionStore = create<SessionState>((set, get) => ({
   role: null,
   fullName: null,
   avatarUrl: null,
+  whatsappPhone: null,
 
   init: async () => {
     if (get().initialized) return;
@@ -51,7 +53,7 @@ export const useSessionStore = create<SessionState>((set, get) => ({
       if (user) {
         await get().refreshRole();
       } else {
-        set({ role: null, fullName: null, avatarUrl: null });
+        set({ role: null, fullName: null, avatarUrl: null, whatsappPhone: null });
       }
 
       if (!unsubscribe) {
@@ -75,6 +77,7 @@ export const useSessionStore = create<SessionState>((set, get) => ({
                   role: null,
                   fullName: null,
                   avatarUrl: null,
+                  whatsappPhone: null,
                 });
               }
             } else {
@@ -82,6 +85,7 @@ export const useSessionStore = create<SessionState>((set, get) => ({
                 role: null,
                 fullName: null,
                 avatarUrl: null,
+                whatsappPhone: null,
               });
             }
           },
@@ -101,6 +105,7 @@ export const useSessionStore = create<SessionState>((set, get) => ({
         role: null,
         fullName: null,
         avatarUrl: null,
+        whatsappPhone: null,
       });
       console.error("Auth init failed", e);
     }
@@ -112,7 +117,7 @@ export const useSessionStore = create<SessionState>((set, get) => ({
 
     const profile = await fetchAppRoleByUserId(user.id);
     if (!profile) {
-      set({ role: null, fullName: null, avatarUrl: null });
+      set({ role: null, fullName: null, avatarUrl: null, whatsappPhone: null });
       return;
     }
 
@@ -120,6 +125,7 @@ export const useSessionStore = create<SessionState>((set, get) => ({
       role: profile.role,
       fullName: profile.fullName,
       avatarUrl: profile.avatarUrl,
+      whatsappPhone: profile.whatsappPhone,
     });
   },
 
@@ -132,6 +138,7 @@ export const useSessionStore = create<SessionState>((set, get) => ({
       role: null,
       fullName: null,
       avatarUrl: null,
+      whatsappPhone: null,
       status: "unauthenticated",
     });
   },

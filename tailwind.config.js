@@ -1,18 +1,19 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+  darkMode: "class",
   content: ["./index.html", "./src/**/*.{ts,tsx}"],
   theme: {
     extend: {
       colors: {
         club: {
-          cream: "#eadac8",
-          green: "#084739",
-          sand: "#f4efe8",
-          paper: "#fbf8f3",
-          ink: "#1f2a26",
-          muted: "#44504a",
-          brass: "#b8863f",
-          rose: "#c98577",
+          cream: "rgb(var(--club-cream-rgb) / <alpha-value>)",
+          green: "rgb(var(--club-green-rgb) / <alpha-value>)",
+          sand: "rgb(var(--club-sand-rgb) / <alpha-value>)",
+          paper: "rgb(var(--club-paper-rgb) / <alpha-value>)",
+          ink: "rgb(var(--club-ink-rgb) / <alpha-value>)",
+          muted: "rgb(var(--club-muted-rgb) / <alpha-value>)",
+          brass: "rgb(var(--club-brass-rgb) / <alpha-value>)",
+          rose: "rgb(var(--club-rose-rgb) / <alpha-value>)",
         },
       },
       borderRadius: {

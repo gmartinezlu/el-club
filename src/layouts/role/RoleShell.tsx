@@ -6,6 +6,7 @@ import { ROLE_LABELS } from "../../shared/auth/roles";
 import { useSessionStore } from "../../store/sessionStore";
 import { OnboardingTour } from "../../components/onboarding/OnboardingTour";
 import { useOnboardingTour } from "../../components/onboarding/useOnboardingTour";
+import { ThemeToggle } from "../../components/ThemeToggle";
 
 type NavItem = {
   to: string;
@@ -83,6 +84,7 @@ export function RoleShell({
           </div>
 
           <div className="flex shrink-0 items-center gap-3">
+            <ThemeToggle />
             {avatarUrl ? (
               <img
                 src={avatarUrl}

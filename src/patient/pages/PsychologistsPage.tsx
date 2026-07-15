@@ -25,10 +25,12 @@ import {
   type AvailabilitySlot,
 } from "../../appointments/availability";
 import { bookAppointmentAtomically } from "../../appointments/patient";
+import { sendAppointmentEventNotification } from "../../appointments/notifications";
 import { createNotification } from "../../notifications/service";
 import { fetchApprovedPsychologists } from "../../services/supabase/psychologists";
 import { useSessionStore } from "../../store/sessionStore";
 import { getErrorMessage } from "../../utils/errors";
+import { fetchPatientOnboarding } from "../onboarding/service";
 import type { PsychologistProfile } from "../../psychologist/types";
 import { EmotionalGlass } from "../components/EmotionalGlass";
 import { PatientFlowSteps } from "../components/PatientFlowSteps";
@@ -45,6 +47,37 @@ function buildWhatsAppUrl(phone: string, psychName: string, date: string, time: 
   const num = clean.startsWith("+") ? clean.slice(1) : clean;
   const text = `Hola ${psychName}, acabo de solicitar una cita en El Club para el ${date} a las ${time}. ¿Me podrías indicar cómo realizar el pago?`;
   return `https://wa.me/${num}?text=${encodeURIComponent(text)}`;
+}
+
+function normalizeText(value: string): string {
+  return value
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim();
+}
+
+function getRecommendationScore(
+  psychologist: PsychologistProfile,
+  terms: Set<string>,
+): number {
+  if (terms.size === 0) return 0;
+  const haystack = [
+    psychologist.bio,
+    ...psychologist.specialties,
+    ...psychologist.languages,
+  ]
+    .filter(Boolean)
+    .map((value) => normalizeText(String(value)));
+
+  let score = 0;
+  for (const term of terms) {
+    if (!term) continue;
+    if (haystack.some((value) => value.includes(term) || term.includes(value))) {
+      score += 1;
+    }
+  }
+  return score;
 }
 
 type PriceSort = "none" | "asc" | "desc";
@@ -73,6 +106,7 @@ export function PatientPsychologistsPage() {
   const [activeLanguages, setActiveLanguages] = useState<Set<string>>(new Set());
   const [priceSort, setPriceSort] = useState<PriceSort>("none");
   const [showFilters, setShowFilters] = useState(false);
+  const [recommendedSpecialties, setRecommendedSpecialties] = useState<Set<string>>(new Set());
 
   const allSpecialties = useMemo(() => {
     const set = new Set<string>();
@@ -117,10 +151,16 @@ export function PatientPsychologistsPage() {
         const pb = b.sessionPriceCents ?? Infinity;
         return priceSort === "asc" ? pa - pb : pb - pa;
       });
+    } else if (recommendedSpecialties.size > 0) {
+      result = [...result].sort(
+        (a, b) =>
+          getRecommendationScore(b, recommendedSpecialties) -
+          getRecommendationScore(a, recommendedSpecialties),
+      );
     }
 
     return result;
-  }, [psychologists, searchQuery, activeSpecialties, activeLanguages, priceSort]);
+  }, [psychologists, searchQuery, activeSpecialties, activeLanguages, priceSort, recommendedSpecialties]);
 
   const hasActiveFilters =
     searchQuery.trim().length > 0 ||
@@ -179,6 +219,27 @@ export function PatientPsychologistsPage() {
   }, [loadPsychologists]);
 
   useEffect(() => {
+    if (!patientId) return;
+
+    queueMicrotask(async () => {
+      try {
+        const onboarding = await fetchPatientOnboarding(patientId);
+        const terms = [
+          onboarding?.mainConcern,
+          ...(onboarding?.emotionalGoals ?? []),
+          ...(onboarding?.therapyPreferences ?? []),
+          onboarding?.supportStyle,
+        ]
+          .filter(Boolean)
+          .map((value) => normalizeText(String(value)));
+        setRecommendedSpecialties(new Set(terms));
+      } catch (e) {
+        console.error("Failed to load onboarding recommendations", e);
+      }
+    });
+  }, [patientId]);
+
+  useEffect(() => {
     if (psychologistId) {
       queueMicrotask(() => {
         setSelectedPsychologistId(psychologistId);
@@ -220,6 +281,10 @@ export function PatientPsychologistsPage() {
           userId: selectedPsychologist.userId,
           title: "Nueva solicitud de cita",
           body: "Una persona solicitó un horario. Revisa la solicitud y coordina el pago directamente.",
+        }),
+        sendAppointmentEventNotification({
+          appointmentId,
+          event: "requested",
         }),
       ]);
       setBookedId(appointmentId);
@@ -485,6 +550,9 @@ export function PatientPsychologistsPage() {
                   psychologist={psychologist}
                   selected={
                     psychologist.userId === selectedPsychologist?.userId
+                  }
+                  recommended={
+                    getRecommendationScore(psychologist, recommendedSpecialties) > 0
                   }
                   index={index}
                   onSelect={() => {
@@ -809,11 +877,13 @@ function SummaryItem({
 function PsychologistOption({
   psychologist,
   selected,
+  recommended,
   index,
   onSelect,
 }: {
   psychologist: PsychologistProfile;
   selected: boolean;
+  recommended: boolean;
   index: number;
   onSelect: () => void;
 }) {
@@ -852,12 +922,20 @@ function PsychologistOption({
               ) : null}
             </div>
           </div>
-          {selected ? (
-            <span className="inline-flex items-center gap-1 rounded-full bg-white/70 px-3 py-1 text-xs text-club-green">
-              <Check className="h-3.5 w-3.5" strokeWidth={1.5} />
-              Seleccionada
-            </span>
-          ) : null}
+          <div className="flex flex-wrap gap-2">
+            {recommended ? (
+              <span className="inline-flex items-center gap-1 rounded-full bg-club-brass/15 px-3 py-1 text-xs text-club-brass">
+                <Sparkles className="h-3.5 w-3.5" strokeWidth={1.5} />
+                Afinidad
+              </span>
+            ) : null}
+            {selected ? (
+              <span className="inline-flex items-center gap-1 rounded-full bg-white/70 px-3 py-1 text-xs text-club-green">
+                <Check className="h-3.5 w-3.5" strokeWidth={1.5} />
+                Seleccionada
+              </span>
+            ) : null}
+          </div>
         </div>
       </button>
 
