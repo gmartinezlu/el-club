@@ -8,10 +8,12 @@ import App from './app/App.tsx'
 
 initializeTheme()
 
+const routerBasename = import.meta.env.BASE_URL.replace(/\/$/, "")
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ErrorBoundary>
-      <BrowserRouter>
+      <BrowserRouter basename={routerBasename}>
         <App />
       </BrowserRouter>
     </ErrorBoundary>

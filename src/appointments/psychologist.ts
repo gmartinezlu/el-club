@@ -204,7 +204,7 @@ export async function updateAppointmentPsychologistNotes(
       psychologist_id: psychologistId,
       notes,
     },
-    { onConflict: "appointment_id" },
+    { onConflict: "appointment_id,psychologist_id" },
   );
 
   if (error) throw error;

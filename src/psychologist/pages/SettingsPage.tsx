@@ -343,7 +343,9 @@ export function PsychologistSettingsPage() {
               <p className="mt-1 text-sm leading-relaxed text-club-muted">
                 EL CLUB no procesa pagos de sesiones. Cuando una persona
                 solicite una cita, podrás compartir tus métodos de pago y
-                confirmar los detalles directamente con ella.
+                confirmar los detalles directamente con ella. Si manejas
+                paquetes de sesiones, explícalo en tu bio o en las
+                instrucciones de pago.
               </p>
 
               <div className="mt-5 grid gap-5 md:grid-cols-2">
@@ -445,7 +447,7 @@ export function PsychologistSettingsPage() {
                     value={paymentInstructions}
                     onChange={(e) => setPaymentInstructions(e.target.value)}
                     rows={5}
-                    placeholder="Comparte aquí tus condiciones, cuenta o pasos generales. Evita publicar datos sensibles si prefieres enviarlos por WhatsApp."
+                    placeholder="Comparte condiciones, pasos generales y si ofreces paquetes de sesiones. Evita publicar datos sensibles si prefieres enviarlos por WhatsApp."
                     className="w-full resize-none rounded-2xl border border-club-green/10 bg-white/60 px-4 py-3 text-sm leading-relaxed text-club-ink outline-none ring-club-green/10 focus:ring-2"
                   />
                 </label>

@@ -54,7 +54,7 @@ export function WhatsAppCommunityBlock({ compact = false }: { compact?: boolean 
             to="/comunidad"
             className="mt-7 inline-flex rounded-2xl bg-club-green px-5 py-3 text-sm text-club-paper shadow-soft transition hover:translate-y-[-1px]"
           >
-            Entrar a la comunidad
+            Solicitar invitación
           </Link>
         </div>
       </div>

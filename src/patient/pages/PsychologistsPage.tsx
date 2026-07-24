@@ -45,7 +45,7 @@ const COP = new Intl.NumberFormat("es-CO", {
 function buildWhatsAppUrl(phone: string, psychName: string, date: string, time: string): string {
   const clean = phone.replace(/[^+\d]/g, "");
   const num = clean.startsWith("+") ? clean.slice(1) : clean;
-  const text = `Hola ${psychName}, acabo de solicitar una cita en El Club para el ${date} a las ${time}. ¿Me podrías indicar cómo realizar el pago?`;
+  const text = `Hola ${psychName}, acabo de solicitar una cita en El Club para el ${date} a las ${time}. Quiero coordinar si pago esta sesión individual o si manejas un paquete de sesiones.`;
   return `https://wa.me/${num}?text=${encodeURIComponent(text)}`;
 }
 
@@ -351,7 +351,7 @@ export function PatientPsychologistsPage() {
         <p className="max-w-2xl text-sm leading-relaxed text-club-muted">
           {isDetailView
             ? "Conoce su enfoque, revisa horarios disponibles y reserva tu primer espacio con calma."
-            : "Explora perfiles aprobados por El Club y elige la psicóloga que se sienta más cercana para ti."}
+            : "Explora perfiles aprobados por El Club, revisa precios visibles y elige la psicóloga que se sienta más cercana para ti."}
         </p>
       </header>
 
@@ -697,8 +697,8 @@ function ConfirmationModal({
                 </p>
                 <p className="mt-1 text-sm leading-relaxed text-club-muted">
                   {hasWhatsApp
-                    ? `Escríbele a ${psychologist.fullName} por WhatsApp para coordinar el pago y confirmar tu cita.`
-                    : `${psychologist.fullName} se pondrá en contacto contigo para coordinar el pago y confirmar tu cita.`}
+                    ? `Escríbele a ${psychologist.fullName} por WhatsApp para coordinar si pagarás esta sesión o un paquete de sesiones.`
+                    : `${psychologist.fullName} se pondrá en contacto contigo para coordinar si pagarás esta sesión o un paquete de sesiones.`}
                 </p>
               </div>
 
@@ -805,8 +805,8 @@ function ConfirmationModal({
                 </p>
                 <p className="mt-1 text-sm leading-relaxed text-club-muted">
                   EL CLUB no procesa pagos de sesiones. Una vez confirmes, la
-                  psicóloga te compartirá sus métodos de pago y coordinarás
-                  directamente con ella.
+                  psicóloga te compartirá sus métodos de pago. Puedes acordar
+                  con ella una sesión individual o un paquete de sesiones.
                 </p>
                 {psychologist.paymentMethods?.length ? (
                   <div className="mt-2 flex flex-wrap gap-1.5">
@@ -1024,7 +1024,8 @@ function PsychologistFullProfile({
           <p className="mt-2 text-sm leading-relaxed text-club-muted">
             EL CLUB no procesa pagos de sesiones. Una vez solicites tu cita, la
             psicóloga te compartirá sus métodos de pago y confirmará contigo los
-            detalles.
+            detalles. Si quieres un paquete de sesiones, lo coordinas
+            directamente con ella.
           </p>
           {psychologist.paymentMethods?.length ? (
             <div className="mt-3 flex flex-wrap gap-2">
@@ -1099,7 +1100,8 @@ function BookingPanel({
       </div>
       <p className="mt-2 text-sm text-club-muted">
         Elige un horario disponible. Antes de confirmar verás un resumen con
-        todos los detalles.
+        el valor de referencia y los detalles para coordinar pago individual o
+        paquete directamente con tu psicóloga.
       </p>
 
       {selectedPsychologist ? (

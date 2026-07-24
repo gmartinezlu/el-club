@@ -53,14 +53,16 @@ export function PatientSessionsPage() {
         <p className="text-sm font-medium text-club-green">Tu camino</p>
         <PageTitle>Sesiones</PageTitle>
         <p className="max-w-lg text-sm leading-relaxed text-club-muted">
-          Tus solicitudes, citas confirmadas y accesos a Meet en un solo lugar.
+          Tus solicitudes, citas confirmadas, comprobantes, tareas asignadas y
+          accesos a Meet en un solo lugar.
         </p>
       </header>
 
       <div className="rounded-3xl border border-club-green/10 bg-white/50 p-4 text-sm leading-relaxed text-club-muted shadow-soft backdrop-blur">
         Coordina el pago directamente con tu psicóloga. EL CLUB no solicita
         pagos por WhatsApp ni procesa dinero de sesiones dentro de la
-        plataforma.
+        plataforma. Si tu psicóloga te deja una tarea, la recibirás como
+        notificación privada.
       </div>
 
       {error ? <p className="text-sm text-red-700">{error}</p> : null}
