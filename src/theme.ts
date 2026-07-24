@@ -7,20 +7,13 @@ function readStoredTheme(): ThemePreference | null {
   return value === "light" || value === "dark" ? value : null;
 }
 
-function preferredTheme(): ThemePreference {
-  if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-    return "dark";
-  }
-  return "light";
-}
-
 export function applyTheme(theme: ThemePreference) {
   document.documentElement.classList.toggle("dark", theme === "dark");
   localStorage.setItem(THEME_KEY, theme);
 }
 
 export function initializeTheme() {
-  applyTheme(readStoredTheme() ?? preferredTheme());
+  applyTheme(readStoredTheme() ?? "light");
 }
 
 export function getCurrentTheme(): ThemePreference {

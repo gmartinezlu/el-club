@@ -11,6 +11,7 @@ import { EmotionalGlass } from "../components/EmotionalGlass";
 import { EmptyState } from "../../components/ui/EmptyState";
 import { PageTitle } from "../../components/ui/Typography";
 import { useSessionStore } from "../../store/sessionStore";
+import { getErrorMessage } from "../../utils/errors";
 
 export function PatientSessionsPage() {
   const userId = useSessionStore((s) => s.user?.id);
@@ -40,8 +41,8 @@ export function PatientSessionsPage() {
       const count = await clearAppointmentHistory(userId);
       toast.success(`${count} cita${count !== 1 ? "s" : ""} eliminada${count !== 1 ? "s" : ""} del historial.`);
       await reload();
-    } catch {
-      toast.error("No se pudo limpiar el historial.");
+    } catch (e) {
+      toast.error(getErrorMessage(e, "No se pudo limpiar el historial."));
     } finally {
       setClearing(false);
     }

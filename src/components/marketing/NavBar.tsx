@@ -1,6 +1,7 @@
 ﻿import { useState } from "react";
 import { Link } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
+import { ThemeToggle } from "../ThemeToggle";
 
 const LINKS = [
   { href: "#beneficios", label: "Beneficios" },
@@ -37,6 +38,7 @@ export function NavBar() {
         </nav>
 
         <div className="flex items-center gap-3">
+          <ThemeToggle />
           <Link
             to="/auth/patient/login"
             className="hidden rounded-2xl border border-club-green/15 bg-white/50 px-4 py-2 text-sm text-club-green shadow-soft backdrop-blur transition hover:translate-y-[-1px] sm:inline-flex"
@@ -105,6 +107,10 @@ export function NavBar() {
                 </a>
               ))}
               <div className="mt-2 flex flex-col gap-2 border-t border-club-green/10 pt-3">
+                <div className="flex items-center justify-between rounded-2xl border border-club-green/10 bg-club-paper/70 px-4 py-3">
+                  <span className="text-sm text-club-muted">Tema</span>
+                  <ThemeToggle />
+                </div>
                 <Link
                   to="/auth/patient/login"
                   onClick={() => setOpen(false)}
