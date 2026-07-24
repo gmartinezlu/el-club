@@ -1,4 +1,5 @@
 import { getSupabaseClient } from "../services/supabase/client";
+import { sendAppointmentEventNotification } from "./notifications";
 
 const BUCKET = "payment-proofs";
 
@@ -74,6 +75,11 @@ export async function markAppointmentPendingPayment(
   });
 
   if (error) throw error;
+
+  await sendAppointmentEventNotification({
+    appointmentId,
+    event: "pending_payment",
+  });
 }
 
 export async function confirmPaymentReceived(
@@ -85,6 +91,8 @@ export async function confirmPaymentReceived(
   });
 
   if (error) throw error;
+
+  await sendAppointmentEventNotification({ appointmentId, event: "confirmed" });
 }
 
 export async function releaseUnpaidAppointment(

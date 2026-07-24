@@ -6,6 +6,7 @@ export type UpsertUserProfileInput = {
   role: AppRole;
   fullName?: string | null;
   avatarUrl?: string | null;
+  whatsappPhone?: string | null;
 };
 
 export async function upsertUserProfile(
@@ -19,6 +20,9 @@ export async function upsertUserProfile(
       role: input.role,
       full_name: input.fullName ?? null,
       avatar_url: input.avatarUrl ?? null,
+      ...(input.whatsappPhone !== undefined
+        ? { whatsapp_phone: input.whatsappPhone }
+        : {}),
     },
     { onConflict: "id" },
   );
@@ -52,10 +56,12 @@ export async function updateUserProfile({
   userId,
   fullName,
   avatarUrl,
+  whatsappPhone,
 }: {
   userId: string;
   fullName: string | null;
   avatarUrl: string | null;
+  whatsappPhone?: string | null;
 }): Promise<void> {
   const supabase = getSupabaseClient();
   const { error } = await supabase
@@ -63,6 +69,7 @@ export async function updateUserProfile({
     .update({
       full_name: fullName,
       avatar_url: avatarUrl,
+      ...(whatsappPhone !== undefined ? { whatsapp_phone: whatsappPhone } : {}),
     })
     .eq("id", userId);
 

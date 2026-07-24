@@ -11,7 +11,7 @@ export function getFirstName(fullName: string | null): string {
 }
 
 const AFFIRMATIONS = [
-  "No tienes que cargarlo todo sola.",
+  "Hoy puedes hablarlo con calma.",
   "Tu ritmo es válido. Hoy también cuenta.",
   "Pedir ayuda es un acto de valentía.",
   "Respira. Estás en un espacio seguro.",

@@ -11,6 +11,7 @@ import { EmotionalGlass } from "../components/EmotionalGlass";
 import { EmptyState } from "../../components/ui/EmptyState";
 import { PageTitle } from "../../components/ui/Typography";
 import { useSessionStore } from "../../store/sessionStore";
+import { getErrorMessage } from "../../utils/errors";
 
 export function PatientSessionsPage() {
   const userId = useSessionStore((s) => s.user?.id);
@@ -40,8 +41,8 @@ export function PatientSessionsPage() {
       const count = await clearAppointmentHistory(userId);
       toast.success(`${count} cita${count !== 1 ? "s" : ""} eliminada${count !== 1 ? "s" : ""} del historial.`);
       await reload();
-    } catch {
-      toast.error("No se pudo limpiar el historial.");
+    } catch (e) {
+      toast.error(getErrorMessage(e, "No se pudo limpiar el historial."));
     } finally {
       setClearing(false);
     }
@@ -53,14 +54,16 @@ export function PatientSessionsPage() {
         <p className="text-sm font-medium text-club-green">Tu camino</p>
         <PageTitle>Sesiones</PageTitle>
         <p className="max-w-lg text-sm leading-relaxed text-club-muted">
-          Tus solicitudes, citas confirmadas y accesos a Meet en un solo lugar.
+          Tus solicitudes, citas confirmadas, comprobantes, tareas asignadas y
+          accesos a Meet en un solo lugar.
         </p>
       </header>
 
       <div className="rounded-3xl border border-club-green/10 bg-white/50 p-4 text-sm leading-relaxed text-club-muted shadow-soft backdrop-blur">
         Coordina el pago directamente con tu psicóloga. EL CLUB no solicita
         pagos por WhatsApp ni procesa dinero de sesiones dentro de la
-        plataforma.
+        plataforma. Si tu psicóloga te deja una tarea, la recibirás como
+        notificación privada.
       </div>
 
       {error ? <p className="text-sm text-red-700">{error}</p> : null}

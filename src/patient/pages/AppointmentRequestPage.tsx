@@ -48,7 +48,7 @@ function formatDeadline(deadline: string): string {
 function createWhatsappUrl(value: string, psychologistName: string) {
   const digits = value.replace(/\D/g, "");
   const message = encodeURIComponent(
-    `Hola ${psychologistName}, solicité una cita contigo en EL CLUB y quiero coordinar los detalles.`,
+    `Hola ${psychologistName}, solicité una cita contigo en EL CLUB y quiero coordinar si pago esta sesión individual o un paquete de sesiones.`,
   );
   return `https://wa.me/${digits}?text=${message}`;
 }
@@ -189,7 +189,8 @@ export function PatientAppointmentRequestPage() {
             </PageTitle>
             <p className="mt-3 max-w-2xl text-sm leading-relaxed text-club-muted">
               Tu psicóloga revisará tu solicitud. El pago se coordina
-              directamente con ella según sus métodos disponibles.
+              directamente con ella según sus métodos disponibles. Puedes
+              acordar una sesión individual o un paquete de sesiones.
             </p>
 
             <div className="mt-6 grid gap-4 rounded-3xl border border-club-green/10 bg-white/50 p-5 md:grid-cols-2">
@@ -304,7 +305,8 @@ export function PatientAppointmentRequestPage() {
                 </p>
                 <p className="mt-2 text-sm leading-relaxed text-club-muted">
                   EL CLUB no solicita pagos por WhatsApp ni procesa dinero de
-                  sesiones dentro de la plataforma.
+                  sesiones dentro de la plataforma. La psicóloga te indicará si
+                  conviene pagar una sesión individual o un paquete.
                 </p>
                 {psychologist?.paymentMethods?.length ? (
                   <div className="mt-3 flex flex-wrap gap-2">

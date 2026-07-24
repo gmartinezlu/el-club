@@ -11,7 +11,7 @@ const MOOD_LABELS = [
 ];
 
 export function MoodCheckIn() {
-  const { todayMood, saved, saveMood } = useMoodCheckIn();
+  const { todayMood, saved, saving, syncError, saveMood } = useMoodCheckIn();
 
   return (
     <EmotionalGlass className="p-6 md:p-8">
@@ -33,6 +33,7 @@ export function MoodCheckIn() {
               key={value}
               type="button"
               onClick={() => saveMood(value)}
+              disabled={saving}
               className={[
                 "flex min-w-[3.5rem] flex-col items-center rounded-2xl border px-3 py-3 text-center transition",
                 selected
@@ -55,8 +56,14 @@ export function MoodCheckIn() {
           animate={{ opacity: 1 }}
           className="mt-4 text-sm text-club-green"
         >
-          Gracias por escucharte. Hoy registraste: {MOOD_LABELS[todayMood - 1]}.
+          {saving
+            ? "Guardando tu registro..."
+            : `Gracias por escucharte. Hoy registraste: ${MOOD_LABELS[todayMood - 1]}.`}
         </motion.p>
+      ) : null}
+
+      {syncError ? (
+        <p className="mt-2 text-xs text-club-muted">{syncError}</p>
       ) : null}
     </EmotionalGlass>
   );

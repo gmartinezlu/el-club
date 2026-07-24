@@ -11,6 +11,10 @@ import type {
   PsychologistAppointmentView,
   PsychologistPatientSummary,
 } from "./types";
+import {
+  isNotifiableAppointmentStatus,
+  sendAppointmentEventNotification,
+} from "./notifications";
 
 type PsychologistNoteRow = {
   appointment_id: string;
@@ -167,6 +171,10 @@ export async function updateAppointmentStatus(
     .eq("psychologist_id", psychologistId);
 
   if (error) throw error;
+
+  if (isNotifiableAppointmentStatus(status)) {
+    await sendAppointmentEventNotification({ appointmentId, event: status });
+  }
 }
 
 export async function updateAppointmentMeetUrl(
@@ -196,7 +204,7 @@ export async function updateAppointmentPsychologistNotes(
       psychologist_id: psychologistId,
       notes,
     },
-    { onConflict: "appointment_id" },
+    { onConflict: "appointment_id,psychologist_id" },
   );
 
   if (error) throw error;

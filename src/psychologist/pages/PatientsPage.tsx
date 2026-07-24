@@ -7,11 +7,14 @@ import {
   CalendarX,
   ExternalLink,
   FileText,
+  Send,
   StickyNote,
   Video,
 } from "lucide-react";
+import { toast } from "sonner";
 import type { PsychologistAppointmentView } from "../../appointments/types";
 import { STATUS_LABELS } from "../../appointments/utils";
+import { createNotification } from "../../notifications/service";
 import {
   formatSessionDate,
   formatSessionRange,
@@ -166,8 +169,8 @@ function PatientDetail({
         <p className="text-sm font-medium text-club-green">Acompañamiento</p>
         <PageTitle>{patientName}</PageTitle>
         <p className="max-w-2xl text-sm leading-relaxed text-club-muted">
-          Historial de encuentros, notas privadas y preparación de próximas
-          sesiones.
+          Historia clínica personalizada: sesiones, notas privadas, tareas
+          enviadas al paciente y preparación de próximos encuentros.
         </p>
       </header>
 
@@ -205,8 +208,14 @@ function PatientDetail({
               icon={<StickyNote className="h-5 w-5" strokeWidth={1.5} />}
               label="Notas guardadas"
               value={String(notesCount)}
-              detail="Notas privadas visibles solo para tu espacio profesional."
+              detail="Notas clínicas visibles solo para tu espacio profesional."
             />
+            <Link
+              to="/psychologist/notes"
+              className="block rounded-3xl border border-club-green/10 bg-white/50 p-5 text-sm text-club-green shadow-soft backdrop-blur transition hover:bg-white/60"
+            >
+              Abrir notas clínicas
+            </Link>
           </aside>
 
           <section className="space-y-4">
@@ -254,6 +263,29 @@ function SessionHistoryCard({
   appointment: PsychologistAppointmentView;
   index: number;
 }) {
+  const [task, setTask] = useState("");
+  const [sendingTask, setSendingTask] = useState(false);
+
+  async function sendTask() {
+    const body = task.trim();
+    if (!body) return;
+
+    setSendingTask(true);
+    try {
+      await createNotification({
+        userId: appointment.patientId,
+        title: "Tarea de tu psicóloga",
+        body,
+      });
+      setTask("");
+      toast.success("Tarea enviada al paciente.");
+    } catch {
+      toast.error("No se pudo enviar la tarea.");
+    } finally {
+      setSendingTask(false);
+    }
+  }
+
   return (
     <motion.article
       initial={{ opacity: 0, y: 8 }}
@@ -301,13 +333,39 @@ function SessionHistoryCard({
         <div className="rounded-2xl border border-club-green/10 bg-white/50 p-4">
           <div className="flex items-center gap-2 text-sm text-club-green">
             <StickyNote className="h-4 w-4" strokeWidth={1.5} />
-            Nota privada
+            Nota clínica privada
           </div>
           <p className="mt-2 text-sm leading-relaxed text-club-muted">
             {appointment.psychologistNotes?.trim() ||
               "Sin notas guardadas para esta sesión."}
           </p>
         </div>
+      </div>
+
+      <div className="mt-4 rounded-2xl border border-club-green/10 bg-white/50 p-4">
+        <div className="flex items-center gap-2 text-sm text-club-green">
+          <Send className="h-4 w-4" strokeWidth={1.5} />
+          Tarea para el paciente
+        </div>
+        <p className="mt-1 text-xs leading-relaxed text-club-muted">
+          Se envía como notificación privada y solo este paciente puede verla.
+        </p>
+        <textarea
+          value={task}
+          onChange={(event) => setTask(event.target.value)}
+          rows={3}
+          placeholder="Ejemplo: escribe tres situaciones de la semana y qué emoción apareció en cada una."
+          className="mt-3 w-full resize-none rounded-2xl border border-club-green/10 bg-white/60 px-4 py-3 text-sm leading-relaxed text-club-ink outline-none ring-club-green/10 focus:ring-2"
+        />
+        <button
+          type="button"
+          disabled={sendingTask || !task.trim()}
+          onClick={() => void sendTask()}
+          className="mt-3 inline-flex items-center gap-2 rounded-2xl bg-club-green px-4 py-2 text-sm text-club-paper transition hover:opacity-95 disabled:opacity-60"
+        >
+          <Send className="h-4 w-4" strokeWidth={1.5} />
+          {sendingTask ? "Enviando..." : "Enviar tarea"}
+        </button>
       </div>
     </motion.article>
   );

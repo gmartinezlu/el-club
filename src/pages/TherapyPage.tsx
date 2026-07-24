@@ -1,8 +1,11 @@
-﻿import { Link } from "react-router-dom";
+﻿import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { ArrowRight, CalendarCheck, HeartHandshake, ShieldCheck, Video } from "lucide-react";
 import { MarketingLayout } from "../layouts/MarketingLayout";
 import { SectionHeader } from "../components/club/SectionHeader";
-import { clubImages, specialists, therapyNeeds } from "../components/club/clubContent";
+import { clubImages, therapyNeeds } from "../components/club/clubContent";
+import { fetchApprovedPsychologists } from "../services/supabase/psychologists";
+import type { PsychologistProfile } from "../psychologist/types";
 
 const therapySteps = [
   {
@@ -23,6 +26,25 @@ const therapySteps = [
 ];
 
 export function TherapyPage() {
+  const [psychologists, setPsychologists] = useState<PsychologistProfile[]>([]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    queueMicrotask(async () => {
+      try {
+        const data = await fetchApprovedPsychologists();
+        if (!cancelled) setPsychologists(data.slice(0, 3));
+      } catch {
+        if (!cancelled) setPsychologists([]);
+      }
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   return (
     <MarketingLayout>
       <main>
@@ -107,29 +129,57 @@ export function TherapyPage() {
             subtitle="La terapia dentro de EL CLUB conserva rigor profesional, pero se presenta de forma cercana, humana y fácil de entender."
           />
 
-          <div className="mt-8 grid gap-5 md:grid-cols-3">
-            {specialists.map((specialist) => (
+          {psychologists.length > 0 ? (
+            <div className="mt-8 grid gap-5 md:grid-cols-3">
+              {psychologists.map((psychologist) => (
               <article
-                key={specialist.name}
+                key={psychologist.userId}
                 className="overflow-hidden rounded-3xl border border-club-green/10 bg-white/50 shadow-soft backdrop-blur"
               >
-                <img
-                  src={specialist.image}
-                  alt={specialist.name}
-                  loading="lazy"
-                  className="h-56 w-full object-cover"
-                />
+                {psychologist.avatarUrl ? (
+                  <img
+                    src={psychologist.avatarUrl}
+                    alt=""
+                    loading="lazy"
+                    className="h-56 w-full object-cover"
+                  />
+                ) : (
+                  <div className="flex h-56 w-full items-center justify-center bg-club-green/10 text-club-green">
+                    <HeartHandshake className="h-10 w-10" strokeWidth={1.5} />
+                  </div>
+                )}
                 <div className="p-5">
                   <h3 className="font-display text-2xl text-club-green">
-                    {specialist.name}
+                    {psychologist.fullName}
                   </h3>
                   <p className="mt-2 text-sm leading-relaxed text-club-muted">
-                    {specialist.focus}
+                    {psychologist.bio}
                   </p>
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    {psychologist.specialties.slice(0, 3).map((item) => (
+                      <span
+                        key={item}
+                        className="rounded-full bg-club-green/10 px-3 py-1 text-xs text-club-green"
+                      >
+                        {item}
+                      </span>
+                    ))}
+                  </div>
                 </div>
               </article>
-            ))}
-          </div>
+              ))}
+            </div>
+          ) : (
+            <div className="mt-8 rounded-3xl border border-club-green/10 bg-white/50 p-6 shadow-soft backdrop-blur">
+              <p className="font-display text-2xl text-club-green">
+                Los perfiles aparecen cuando estén aprobados
+              </p>
+              <p className="mt-2 text-sm leading-relaxed text-club-muted">
+                Esta página ya no muestra psicólogas de prueba. El catálogo se
+                llena con registros reales aprobados por El Club.
+              </p>
+            </div>
+          )}
         </section>
 
         <section className="mx-auto w-full max-w-6xl px-5 pb-16 pt-8 md:px-8">

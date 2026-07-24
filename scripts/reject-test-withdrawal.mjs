@@ -7,7 +7,10 @@ const env = Object.fromEntries(
     .trim()
     .split(/\r?\n/)
     .filter(Boolean)
-    .map((line) => line.split("=")),
+    .map((line) => {
+      const index = line.indexOf("=");
+      return [line.slice(0, index), line.slice(index + 1)];
+    }),
 );
 
 const withdrawalId = process.env.TEST_WITHDRAWAL_ID;

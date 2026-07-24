@@ -1,4 +1,4 @@
-﻿import { useRef } from "react";
+﻿import { useEffect, useRef, useState } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { Link } from "react-router-dom";
 import {
@@ -14,12 +14,20 @@ import { MarketingLayout } from "../layouts/MarketingLayout";
 import { Highlight } from "../components/ui/Typography";
 import { FeatureCard } from "../components/landing/FeatureCard";
 import { Section } from "../components/landing/Section";
-import { PsychologistCard } from "../components/landing/PsychologistCard";
 import { GlassCard } from "../components/landing/GlassCard";
 import { FAQAccordion } from "../components/landing/FAQAccordion";
-import { QuoteCard } from "../components/landing/QuoteCard";
 import { BreathLine } from "../components/landing/BreathLine";
-import heroImage from "../assets/hero.png";
+import { fetchApprovedPsychologists } from "../services/supabase/psychologists";
+import type { PsychologistProfile } from "../psychologist/types";
+
+const therapySessionImage =
+  "https://unsplash.com/photos/rG5elqddGzo/download?force=true&w=900";
+
+const COP = new Intl.NumberFormat("es-CO", {
+  style: "currency",
+  currency: "COP",
+  maximumFractionDigits: 0,
+});
 
 export function LandingPage() {
   const benefits = [
@@ -88,23 +96,24 @@ export function LandingPage() {
     },
   ];
 
-  const psychologists = [
-    {
-      name: "Dra. Camila R.",
-      tagline: "Ansiedad y regulación emocional",
-      specialties: ["Ansiedad", "Respiración", "Autoestima"],
-    },
-    {
-      name: "Psic. Valeria S.",
-      tagline: "Procesos de vínculo y acompañamiento",
-      specialties: ["Vínculos", "Duelo", "Límites"],
-    },
-    {
-      name: "Dra. Paula M.",
-      tagline: "Estrés, burnout y bienestar",
-      specialties: ["Estrés", "Burnout", "Rutinas"],
-    },
-  ];
+  const [psychologists, setPsychologists] = useState<PsychologistProfile[]>([]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    queueMicrotask(async () => {
+      try {
+        const data = await fetchApprovedPsychologists();
+        if (!cancelled) setPsychologists(data.slice(0, 3));
+      } catch {
+        if (!cancelled) setPsychologists([]);
+      }
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const resources = [
     {
@@ -126,27 +135,6 @@ export function LandingPage() {
       title: "Mini ejercicios",
       description: "Respira, nombra y suelta, sin exigencia.",
       icon: <Sparkles className="h-5 w-5" />,
-    },
-  ];
-
-  const testimonials = [
-    {
-      quote:
-        "Por primera vez sentí que la plataforma me entendía. Es cálida y tranquila.",
-      name: "Sofía",
-      context: "Miembro",
-    },
-    {
-      quote:
-        "Todo está claro, pero sin sentirse médico. La experiencia es premium y humana.",
-      name: "María Fernanda",
-      context: "Miembro",
-    },
-    {
-      quote:
-        "Mis sesiones y mis notas se ven ordenadas, pero no frías. Se siente profesional.",
-      name: "Laura",
-      context: "Psicóloga",
     },
   ];
 
@@ -176,7 +164,7 @@ export function LandingPage() {
   return (
     <MarketingLayout>
       <main>
-        <HeroSection heroImage={heroImage} />
+        <HeroSection heroImage={therapySessionImage} />
 
         <Section
           id="beneficios"
@@ -234,19 +222,70 @@ export function LandingPage() {
         <Section
           id="psicólogas"
           eyebrow="Profesionales"
-          title="psicólogas que se sienten cercanas"
-          subtitle="Perfiles pensados para crear confianza: enfoque, experiencia y un estilo de acompañamiento humano."
+          title="Psicólogas reales, perfiles vivos"
+          subtitle="Esta sección se alimenta de psicólogas aprobadas en El Club. Si aún no hay perfiles públicos, no mostramos nombres inventados."
         >
-          <div className="grid gap-4 md:grid-cols-3">
-            {psychologists.map((p) => (
-              <PsychologistCard
-                key={p.name}
-                name={p.name}
-                tagline={p.tagline}
-                specialties={p.specialties}
-              />
-            ))}
-          </div>
+          {psychologists.length > 0 ? (
+            <div className="grid gap-4 md:grid-cols-3">
+              {psychologists.map((p) => (
+                <GlassCard key={p.userId} className="h-full">
+                  <div className="flex items-center gap-3">
+                    {p.avatarUrl ? (
+                      <img
+                        src={p.avatarUrl}
+                        alt=""
+                        className="h-12 w-12 rounded-2xl object-cover"
+                      />
+                    ) : (
+                      <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-club-green/10 text-club-green">
+                        <UserCheck className="h-5 w-5" strokeWidth={1.5} />
+                      </div>
+                    )}
+                    <div>
+                      <p className="font-display text-2xl text-club-green">
+                        {p.fullName}
+                      </p>
+                      {p.sessionPriceCents != null ? (
+                        <p className="text-xs font-medium text-club-brass">
+                          {COP.format(p.sessionPriceCents / 100)} / sesión
+                        </p>
+                      ) : null}
+                    </div>
+                  </div>
+                  <p className="mt-4 text-sm leading-relaxed text-club-muted">
+                    {p.bio}
+                  </p>
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    {p.specialties.slice(0, 4).map((item) => (
+                      <span
+                        key={item}
+                        className="rounded-full bg-club-green/10 px-3 py-1 text-xs text-club-green"
+                      >
+                        {item}
+                      </span>
+                    ))}
+                  </div>
+                </GlassCard>
+              ))}
+            </div>
+          ) : (
+            <GlassCard>
+              <p className="font-display text-2xl text-club-green">
+                El catálogo se activa con perfiles aprobados
+              </p>
+              <p className="mt-3 text-sm leading-relaxed text-club-muted">
+                Las psicólogas que ve el consultante son las que se registran,
+                completan su perfil y quedan aprobadas. Cada una puede mostrar
+                su precio por sesión, métodos de pago y condiciones.
+              </p>
+              <Link
+                to="/auth/patient/register"
+                className="mt-5 inline-flex rounded-2xl bg-club-green px-5 py-3 text-sm text-club-paper transition hover:opacity-95"
+              >
+                Entrar al catálogo
+              </Link>
+            </GlassCard>
+          )}
         </Section>
 
         <Section
@@ -326,19 +365,26 @@ export function LandingPage() {
         <Section
           id="testimonios"
           eyebrow="Voces"
-          title="Historias reales de calma"
-          subtitle="Lo que se siente cuando el acompañamiento es premium y humano."
+          title="Historias reales, cuando existan"
+          subtitle="Los testimonios deben venir de usuarios reales. Hasta entonces, El Club no publica frases simuladas."
           tone="dark"
         >
           <div className="grid gap-4 md:grid-cols-3">
-            {testimonials.map((t) => (
-              <QuoteCard
-                key={t.name}
-                quote={t.quote}
-                name={t.name}
-                context={t.context}
-                tone="dark"
-              />
+            {[
+              "Testimonios enviados por consultantes",
+              "Historias aprobadas antes de publicarse",
+              "Privacidad y consentimiento explícito",
+            ].map((item) => (
+              <div
+                key={item}
+                className="rounded-3xl border border-club-paper/10 bg-club-paper/5 p-5"
+              >
+                <p className="font-display text-2xl text-club-paper">{item}</p>
+                <p className="mt-2 text-sm leading-relaxed text-club-cream/70">
+                  Esta área queda lista para contenido real, sin nombres ni
+                  experiencias inventadas.
+                </p>
+              </div>
             ))}
           </div>
         </Section>
@@ -485,11 +531,11 @@ function HeroSection({ heroImage }: { heroImage: string }) {
           >
             <img
               src={heroImage}
-              alt="Ilustración de una persona en un momento de calma, rodeada de elementos suaves de bienestar"
-              className="mx-auto w-full max-w-[280px]"
+              alt="Sesión de terapia en un espacio claro y profesional"
+              className="h-72 w-full rounded-[1.5rem] object-cover"
             />
             <p className="mt-2 text-center font-display text-2xl leading-tight text-club-green">
-              No tienes que cargarlo todo sola.
+              Un espacio para hablar con calma.
             </p>
             <div className="mt-5 grid grid-cols-2 gap-3">
               <Mini value="8 min" label="Meditación" />

@@ -9,8 +9,10 @@ import {
   Clock,
   Languages,
   MessageCircle,
+  Search,
   SearchX,
   ShieldCheck,
+  SlidersHorizontal,
   Sparkles,
   Users,
   WalletCards,
@@ -23,10 +25,12 @@ import {
   type AvailabilitySlot,
 } from "../../appointments/availability";
 import { bookAppointmentAtomically } from "../../appointments/patient";
+import { sendAppointmentEventNotification } from "../../appointments/notifications";
 import { createNotification } from "../../notifications/service";
 import { fetchApprovedPsychologists } from "../../services/supabase/psychologists";
 import { useSessionStore } from "../../store/sessionStore";
 import { getErrorMessage } from "../../utils/errors";
+import { fetchPatientOnboarding } from "../onboarding/service";
 import type { PsychologistProfile } from "../../psychologist/types";
 import { EmotionalGlass } from "../components/EmotionalGlass";
 import { PatientFlowSteps } from "../components/PatientFlowSteps";
@@ -41,9 +45,42 @@ const COP = new Intl.NumberFormat("es-CO", {
 function buildWhatsAppUrl(phone: string, psychName: string, date: string, time: string): string {
   const clean = phone.replace(/[^+\d]/g, "");
   const num = clean.startsWith("+") ? clean.slice(1) : clean;
-  const text = `Hola ${psychName}, acabo de solicitar una cita en El Club para el ${date} a las ${time}. ¿Me podrías indicar cómo realizar el pago?`;
+  const text = `Hola ${psychName}, acabo de solicitar una cita en El Club para el ${date} a las ${time}. Quiero coordinar si pago esta sesión individual o si manejas un paquete de sesiones.`;
   return `https://wa.me/${num}?text=${encodeURIComponent(text)}`;
 }
+
+function normalizeText(value: string): string {
+  return value
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim();
+}
+
+function getRecommendationScore(
+  psychologist: PsychologistProfile,
+  terms: Set<string>,
+): number {
+  if (terms.size === 0) return 0;
+  const haystack = [
+    psychologist.bio,
+    ...psychologist.specialties,
+    ...psychologist.languages,
+  ]
+    .filter(Boolean)
+    .map((value) => normalizeText(String(value)));
+
+  let score = 0;
+  for (const term of terms) {
+    if (!term) continue;
+    if (haystack.some((value) => value.includes(term) || term.includes(value))) {
+      score += 1;
+    }
+  }
+  return score;
+}
+
+type PriceSort = "none" | "asc" | "desc";
 
 export function PatientPsychologistsPage() {
   const navigate = useNavigate();
@@ -63,6 +100,73 @@ export function PatientPsychologistsPage() {
   const [error, setError] = useState<string | null>(null);
   const [showConfirm, setShowConfirm] = useState(false);
   const [bookedId, setBookedId] = useState<string | null>(null);
+
+  const [searchQuery, setSearchQuery] = useState("");
+  const [activeSpecialties, setActiveSpecialties] = useState<Set<string>>(new Set());
+  const [activeLanguages, setActiveLanguages] = useState<Set<string>>(new Set());
+  const [priceSort, setPriceSort] = useState<PriceSort>("none");
+  const [showFilters, setShowFilters] = useState(false);
+  const [recommendedSpecialties, setRecommendedSpecialties] = useState<Set<string>>(new Set());
+
+  const allSpecialties = useMemo(() => {
+    const set = new Set<string>();
+    psychologists.forEach((p) => p.specialties.forEach((s) => set.add(s)));
+    return Array.from(set).sort((a, b) => a.localeCompare(b, "es"));
+  }, [psychologists]);
+
+  const allLanguages = useMemo(() => {
+    const set = new Set<string>();
+    psychologists.forEach((p) => p.languages.forEach((l) => set.add(l)));
+    return Array.from(set).sort((a, b) => a.localeCompare(b, "es"));
+  }, [psychologists]);
+
+  const filteredPsychologists = useMemo(() => {
+    let result = psychologists;
+
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase().trim();
+      result = result.filter(
+        (p) =>
+          p.fullName.toLowerCase().includes(q) ||
+          p.bio?.toLowerCase().includes(q) ||
+          p.specialties.some((s) => s.toLowerCase().includes(q)),
+      );
+    }
+
+    if (activeSpecialties.size > 0) {
+      result = result.filter((p) =>
+        p.specialties.some((s) => activeSpecialties.has(s)),
+      );
+    }
+
+    if (activeLanguages.size > 0) {
+      result = result.filter((p) =>
+        p.languages.some((l) => activeLanguages.has(l)),
+      );
+    }
+
+    if (priceSort !== "none") {
+      result = [...result].sort((a, b) => {
+        const pa = a.sessionPriceCents ?? Infinity;
+        const pb = b.sessionPriceCents ?? Infinity;
+        return priceSort === "asc" ? pa - pb : pb - pa;
+      });
+    } else if (recommendedSpecialties.size > 0) {
+      result = [...result].sort(
+        (a, b) =>
+          getRecommendationScore(b, recommendedSpecialties) -
+          getRecommendationScore(a, recommendedSpecialties),
+      );
+    }
+
+    return result;
+  }, [psychologists, searchQuery, activeSpecialties, activeLanguages, priceSort, recommendedSpecialties]);
+
+  const hasActiveFilters =
+    searchQuery.trim().length > 0 ||
+    activeSpecialties.size > 0 ||
+    activeLanguages.size > 0 ||
+    priceSort !== "none";
 
   const selectedPsychologist = useMemo(
     () =>
@@ -115,6 +219,27 @@ export function PatientPsychologistsPage() {
   }, [loadPsychologists]);
 
   useEffect(() => {
+    if (!patientId) return;
+
+    queueMicrotask(async () => {
+      try {
+        const onboarding = await fetchPatientOnboarding(patientId);
+        const terms = [
+          onboarding?.mainConcern,
+          ...(onboarding?.emotionalGoals ?? []),
+          ...(onboarding?.therapyPreferences ?? []),
+          onboarding?.supportStyle,
+        ]
+          .filter(Boolean)
+          .map((value) => normalizeText(String(value)));
+        setRecommendedSpecialties(new Set(terms));
+      } catch (e) {
+        console.error("Failed to load onboarding recommendations", e);
+      }
+    });
+  }, [patientId]);
+
+  useEffect(() => {
     if (psychologistId) {
       queueMicrotask(() => {
         setSelectedPsychologistId(psychologistId);
@@ -157,6 +282,10 @@ export function PatientPsychologistsPage() {
           title: "Nueva solicitud de cita",
           body: "Una persona solicitó un horario. Revisa la solicitud y coordina el pago directamente.",
         }),
+        sendAppointmentEventNotification({
+          appointmentId,
+          event: "requested",
+        }),
       ]);
       setBookedId(appointmentId);
     } catch (e) {
@@ -173,6 +302,31 @@ export function PatientPsychologistsPage() {
     }
     setShowConfirm(false);
     setBookedId(null);
+  }
+
+  function toggleSpecialty(s: string) {
+    setActiveSpecialties((prev) => {
+      const next = new Set(prev);
+      if (next.has(s)) next.delete(s);
+      else next.add(s);
+      return next;
+    });
+  }
+
+  function toggleLanguage(l: string) {
+    setActiveLanguages((prev) => {
+      const next = new Set(prev);
+      if (next.has(l)) next.delete(l);
+      else next.add(l);
+      return next;
+    });
+  }
+
+  function clearFilters() {
+    setSearchQuery("");
+    setActiveSpecialties(new Set());
+    setActiveLanguages(new Set());
+    setPriceSort("none");
   }
 
   return (
@@ -197,9 +351,148 @@ export function PatientPsychologistsPage() {
         <p className="max-w-2xl text-sm leading-relaxed text-club-muted">
           {isDetailView
             ? "Conoce su enfoque, revisa horarios disponibles y reserva tu primer espacio con calma."
-            : "Explora perfiles aprobados por El Club y elige la psicóloga que se sienta más cercana para ti."}
+            : "Explora perfiles aprobados por El Club, revisa precios visibles y elige la psicóloga que se sienta más cercana para ti."}
         </p>
       </header>
+
+      {!isDetailView && !loading && psychologists.length > 0 ? (
+        <section className="space-y-3">
+          <div className="flex gap-2">
+            <div className="relative flex-1">
+              <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-club-muted" strokeWidth={1.5} />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Buscar por nombre, especialidad..."
+                className="w-full rounded-2xl border border-club-green/10 bg-white/60 py-2.5 pl-10 pr-4 text-sm text-club-ink placeholder:text-club-muted/60 outline-none transition focus:border-club-green/30 focus:bg-white/80"
+              />
+              {searchQuery ? (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery("")}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-club-muted transition hover:text-club-ink"
+                >
+                  <X className="h-3.5 w-3.5" strokeWidth={1.5} />
+                </button>
+              ) : null}
+            </div>
+            <button
+              type="button"
+              onClick={() => setShowFilters((v) => !v)}
+              className={[
+                "flex items-center gap-2 rounded-2xl border px-4 py-2.5 text-sm transition",
+                showFilters || hasActiveFilters
+                  ? "border-club-green/25 bg-club-green/10 text-club-green"
+                  : "border-club-green/10 bg-white/60 text-club-muted hover:bg-white/80",
+              ].join(" ")}
+            >
+              <SlidersHorizontal className="h-4 w-4" strokeWidth={1.5} />
+              Filtros
+              {hasActiveFilters ? (
+                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-club-green text-[10px] text-club-paper">
+                  {activeSpecialties.size + activeLanguages.size + (priceSort !== "none" ? 1 : 0)}
+                </span>
+              ) : null}
+            </button>
+          </div>
+
+          <AnimatePresence>
+            {showFilters ? (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.2 }}
+                className="overflow-hidden"
+              >
+                <div className="space-y-4 rounded-2xl border border-club-green/10 bg-white/50 p-4">
+                  {allSpecialties.length > 0 ? (
+                    <div>
+                      <p className="mb-2 text-xs font-medium text-club-muted">Especialidad</p>
+                      <div className="flex flex-wrap gap-1.5">
+                        {allSpecialties.map((s) => (
+                          <button
+                            key={s}
+                            type="button"
+                            onClick={() => toggleSpecialty(s)}
+                            className={[
+                              "rounded-full px-3 py-1 text-xs transition",
+                              activeSpecialties.has(s)
+                                ? "bg-club-green text-club-paper"
+                                : "bg-club-green/10 text-club-green hover:bg-club-green/20",
+                            ].join(" ")}
+                          >
+                            {s}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  ) : null}
+
+                  {allLanguages.length > 0 ? (
+                    <div>
+                      <p className="mb-2 text-xs font-medium text-club-muted">Idioma</p>
+                      <div className="flex flex-wrap gap-1.5">
+                        {allLanguages.map((l) => (
+                          <button
+                            key={l}
+                            type="button"
+                            onClick={() => toggleLanguage(l)}
+                            className={[
+                              "rounded-full px-3 py-1 text-xs transition",
+                              activeLanguages.has(l)
+                                ? "bg-club-green text-club-paper"
+                                : "bg-club-green/10 text-club-green hover:bg-club-green/20",
+                            ].join(" ")}
+                          >
+                            {l}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  ) : null}
+
+                  <div>
+                    <p className="mb-2 text-xs font-medium text-club-muted">Precio</p>
+                    <div className="flex gap-1.5">
+                      {([
+                        ["none", "Sin orden"],
+                        ["asc", "Menor a mayor"],
+                        ["desc", "Mayor a menor"],
+                      ] as const).map(([value, label]) => (
+                        <button
+                          key={value}
+                          type="button"
+                          onClick={() => setPriceSort(value)}
+                          className={[
+                            "rounded-full px-3 py-1 text-xs transition",
+                            priceSort === value
+                              ? "bg-club-green text-club-paper"
+                              : "bg-club-green/10 text-club-green hover:bg-club-green/20",
+                          ].join(" ")}
+                        >
+                          {label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {hasActiveFilters ? (
+                    <button
+                      type="button"
+                      onClick={clearFilters}
+                      className="text-xs text-club-rose transition hover:text-club-rose/80"
+                    >
+                      Limpiar filtros
+                    </button>
+                  ) : null}
+                </div>
+              </motion.div>
+            ) : null}
+          </AnimatePresence>
+        </section>
+      ) : null}
 
       {error ? (
         <p className="rounded-2xl border border-red-200/80 bg-red-50/40 px-4 py-3 text-sm text-red-800">
@@ -236,13 +529,30 @@ export function PatientPsychologistsPage() {
           <section className="grid gap-4">
             {isDetailView && selectedPsychologist ? (
               <PsychologistFullProfile psychologist={selectedPsychologist} />
+            ) : filteredPsychologists.length === 0 ? (
+              <div className="flex flex-col items-center gap-3 rounded-3xl border border-club-green/10 bg-white/50 px-6 py-12 text-center">
+                <SearchX className="h-8 w-8 text-club-muted/50" strokeWidth={1.5} />
+                <p className="text-sm text-club-muted">
+                  No encontramos psicólogas con esos filtros.
+                </p>
+                <button
+                  type="button"
+                  onClick={clearFilters}
+                  className="rounded-2xl border border-club-green/15 bg-white/70 px-4 py-2 text-sm text-club-green transition hover:bg-white/90"
+                >
+                  Limpiar filtros
+                </button>
+              </div>
             ) : (
-              psychologists.map((psychologist, index) => (
+              filteredPsychologists.map((psychologist, index) => (
                 <PsychologistOption
                   key={psychologist.userId}
                   psychologist={psychologist}
                   selected={
                     psychologist.userId === selectedPsychologist?.userId
+                  }
+                  recommended={
+                    getRecommendationScore(psychologist, recommendedSpecialties) > 0
                   }
                   index={index}
                   onSelect={() => {
@@ -387,8 +697,8 @@ function ConfirmationModal({
                 </p>
                 <p className="mt-1 text-sm leading-relaxed text-club-muted">
                   {hasWhatsApp
-                    ? `Escríbele a ${psychologist.fullName} por WhatsApp para coordinar el pago y confirmar tu cita.`
-                    : `${psychologist.fullName} se pondrá en contacto contigo para coordinar el pago y confirmar tu cita.`}
+                    ? `Escríbele a ${psychologist.fullName} por WhatsApp para coordinar si pagarás esta sesión o un paquete de sesiones.`
+                    : `${psychologist.fullName} se pondrá en contacto contigo para coordinar si pagarás esta sesión o un paquete de sesiones.`}
                 </p>
               </div>
 
@@ -495,8 +805,8 @@ function ConfirmationModal({
                 </p>
                 <p className="mt-1 text-sm leading-relaxed text-club-muted">
                   EL CLUB no procesa pagos de sesiones. Una vez confirmes, la
-                  psicóloga te compartirá sus métodos de pago y coordinarás
-                  directamente con ella.
+                  psicóloga te compartirá sus métodos de pago. Puedes acordar
+                  con ella una sesión individual o un paquete de sesiones.
                 </p>
                 {psychologist.paymentMethods?.length ? (
                   <div className="mt-2 flex flex-wrap gap-1.5">
@@ -567,11 +877,13 @@ function SummaryItem({
 function PsychologistOption({
   psychologist,
   selected,
+  recommended,
   index,
   onSelect,
 }: {
   psychologist: PsychologistProfile;
   selected: boolean;
+  recommended: boolean;
   index: number;
   onSelect: () => void;
 }) {
@@ -610,12 +922,20 @@ function PsychologistOption({
               ) : null}
             </div>
           </div>
-          {selected ? (
-            <span className="inline-flex items-center gap-1 rounded-full bg-white/70 px-3 py-1 text-xs text-club-green">
-              <Check className="h-3.5 w-3.5" strokeWidth={1.5} />
-              Seleccionada
-            </span>
-          ) : null}
+          <div className="flex flex-wrap gap-2">
+            {recommended ? (
+              <span className="inline-flex items-center gap-1 rounded-full bg-club-brass/15 px-3 py-1 text-xs text-club-brass">
+                <Sparkles className="h-3.5 w-3.5" strokeWidth={1.5} />
+                Afinidad
+              </span>
+            ) : null}
+            {selected ? (
+              <span className="inline-flex items-center gap-1 rounded-full bg-white/70 px-3 py-1 text-xs text-club-green">
+                <Check className="h-3.5 w-3.5" strokeWidth={1.5} />
+                Seleccionada
+              </span>
+            ) : null}
+          </div>
         </div>
       </button>
 
@@ -704,7 +1024,8 @@ function PsychologistFullProfile({
           <p className="mt-2 text-sm leading-relaxed text-club-muted">
             EL CLUB no procesa pagos de sesiones. Una vez solicites tu cita, la
             psicóloga te compartirá sus métodos de pago y confirmará contigo los
-            detalles.
+            detalles. Si quieres un paquete de sesiones, lo coordinas
+            directamente con ella.
           </p>
           {psychologist.paymentMethods?.length ? (
             <div className="mt-3 flex flex-wrap gap-2">
@@ -779,7 +1100,8 @@ function BookingPanel({
       </div>
       <p className="mt-2 text-sm text-club-muted">
         Elige un horario disponible. Antes de confirmar verás un resumen con
-        todos los detalles.
+        el valor de referencia y los detalles para coordinar pago individual o
+        paquete directamente con tu psicóloga.
       </p>
 
       {selectedPsychologist ? (

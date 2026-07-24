@@ -248,8 +248,8 @@ export function PsychologistDashboardPage() {
       const count = await clearAppointmentHistory(psychologistId);
       toast.success(`${count} cita${count !== 1 ? "s" : ""} eliminada${count !== 1 ? "s" : ""} del historial.`);
       await reload();
-    } catch {
-      toast.error("No se pudo limpiar el historial.");
+    } catch (e) {
+      toast.error(getErrorMessage(e, "No se pudo limpiar el historial."));
     } finally {
       setClearing(false);
     }

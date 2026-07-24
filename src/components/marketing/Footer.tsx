@@ -30,14 +30,12 @@ export function Footer() {
             >
               Instagram
             </a>
-            <a
+            <Link
               className="rounded-2xl border border-club-paper/20 px-4 py-2 text-sm transition hover:bg-white/10"
-              href="https://wa.me/"
-              target="_blank"
-              rel="noreferrer"
+              to="/comunidad"
             >
-              WhatsApp
-            </a>
+              Comunidad
+            </Link>
             <Link
               className="rounded-2xl border border-club-paper/20 px-4 py-2 text-sm transition hover:bg-white/10"
               to="/auth/admin/login"

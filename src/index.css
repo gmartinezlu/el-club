@@ -13,16 +13,44 @@
 
 :root {
   --club-cream: #eadac8;
+  --club-cream-rgb: 234 218 200;
   --club-green: #084739;
+  --club-green-rgb: 8 71 57;
   --club-brass: #b8863f;
+  --club-brass-rgb: 184 134 63;
   --club-rose: #c98577;
+  --club-rose-rgb: 201 133 119;
   --club-sand: #f4efe8;
+  --club-sand-rgb: 244 239 232;
   --club-paper: #fbf8f3;
+  --club-paper-rgb: 251 248 243;
   --club-ink: #1f2a26;
+  --club-ink-rgb: 31 42 38;
   --club-muted: #44504a;
+  --club-muted-rgb: 68 80 74;
   --font-display: "Magic Retro", ui-serif, Georgia, serif;
   --font-text: "Poppins", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
     Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+}
+
+.dark {
+  --club-cream: #1b251f;
+  --club-cream-rgb: 27 37 31;
+  --club-green: #8ed8bd;
+  --club-green-rgb: 142 216 189;
+  --club-brass: #d8b46d;
+  --club-brass-rgb: 216 180 109;
+  --club-rose: #e1a29a;
+  --club-rose-rgb: 225 162 154;
+  --club-sand: #151d19;
+  --club-sand-rgb: 21 29 25;
+  --club-paper: #0f1714;
+  --club-paper-rgb: 15 23 20;
+  --club-ink: #eef7f2;
+  --club-ink-rgb: 238 247 242;
+  --club-muted: #b6c7bf;
+  --club-muted-rgb: 182 199 191;
+  color-scheme: dark;
 }
 
 @media (prefers-reduced-motion: reduce) {
